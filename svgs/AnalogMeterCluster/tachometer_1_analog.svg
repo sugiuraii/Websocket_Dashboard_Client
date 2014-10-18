@@ -24,10 +24,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.81915143"
-     inkscape:cx="306.64991"
-     inkscape:cy="501.95672"
+     inkscape:cx="93.624585"
+     inkscape:cy="509.28137"
      inkscape:document-units="px"
-     inkscape:current-layer="layer5"
+     inkscape:current-layer="layer12"
      showgrid="false"
      inkscape:window-width="1366"
      inkscape:window-height="705"
@@ -3220,18 +3220,6 @@
          x="308"
          y="446.36218"
          style="font-size:35px;fill:#ffffff">x1000r/min</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;line-height:125%;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="528.84485"
-       y="552.92767"
-       id="text4835"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan4837"
-         x="528.84485"
-         y="552.92767"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';fill:#000000">km/L</tspan></text>
     <flowRoot
        xml:space="preserve"
        id="flowRoot4857"
@@ -3243,55 +3231,7 @@
            x="395"
            y="586.36218"
            style="font-size:70px;" /></flowRegion><flowPara
-         id="flowPara4863" /></flowRoot>    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;line-height:125%;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="387.8223"
-       y="586.93695"
-       id="text4835-7"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan4837-77"
-         x="387.8223"
-         y="586.93695"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';fill:#000000">TRIP</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;line-height:125%;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="540.86145"
-       y="588.07373"
-       id="text4835-1"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan4837-9"
-         x="540.86145"
-         y="588.07373"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';fill:#000000">km</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;line-height:125%;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="388.15149"
-       y="615.97028"
-       id="text4835-7-6"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan4837-77-8"
-         x="388.15149"
-         y="615.97028"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';fill:#000000">FUEL</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;line-height:125%;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="540.31366"
-       y="616.24384"
-       id="text4835-1-9"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan4837-9-3"
-         x="540.31366"
-         y="616.24384"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';fill:#000000">L</tspan></text>
-  </g>
+         id="flowPara4863" /></flowRoot>  </g>
   <g
      inkscape:groupmode="layer"
      id="layer3"
@@ -3845,6 +3785,12 @@
        d="M 266.1992,323.95283 254.80082,304.21025"
        id="path8319-1-5-0-1-9"
        inkscape:connector-curvature="0" />
+    <path
+       inkscape:label="RadialGridline0"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:4.09723139"
+       d="m 157.39837,512.40135 -22.79676,0"
+       id="path8319-1-5-0"
+       inkscape:connector-curvature="0" />
   </g>
   <g
      inkscape:label="Text"
@@ -4107,18 +4053,6 @@
        id="layer15"
        inkscape:label="Text_Var"
        style="display:inline">
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:35px;line-height:125%;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         x="462.21875"
-         y="650.45197"
-         id="text4835-5"
-         sodipodi:linespacing="125%"><tspan
-           sodipodi:role="line"
-           id="tspan4837-7"
-           x="462.21875"
-           y="650.45197"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:35px;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';fill:#000000">GEAR</tspan></text>
       <flowRoot
          xml:space="preserve"
          id="flowRoot4865"
@@ -4170,19 +4104,90 @@
            y="616.39954"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';fill:#000000">38.01</tspan></text>
     </g>
+    <g
+       inkscape:groupmode="layer"
+       id="layer12"
+       inkscape:label="Text_Fixed"
+       style="display:inline">
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:35px;line-height:125%;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="462.21875"
+         y="650.45197"
+         id="text4835-5"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4837-7"
+           x="462.21875"
+           y="650.45197"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:35px;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';fill:#000000">GEAR</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;line-height:125%;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="528.84485"
+         y="552.92767"
+         id="text4835"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4837"
+           x="528.84485"
+           y="552.92767"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';fill:#000000">km/L</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;line-height:125%;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="387.8223"
+         y="586.93695"
+         id="text4835-7"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4837-77"
+           x="387.8223"
+           y="586.93695"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';fill:#000000">TRIP</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;line-height:125%;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="540.86145"
+         y="588.07373"
+         id="text4835-1"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4837-9"
+           x="540.86145"
+           y="588.07373"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';fill:#000000">km</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;line-height:125%;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="388.15149"
+         y="615.97028"
+         id="text4835-7-6"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4837-77-8"
+           x="388.15149"
+           y="615.97028"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';fill:#000000">FUEL</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;line-height:125%;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="540.31366"
+         y="616.24384"
+         id="text4835-1-9"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4837-9-3"
+           x="540.31366"
+           y="616.24384"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:'Astronaut II';-inkscape-font-specification:'Astronaut II';fill:#000000">L</tspan></text>
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer8"
      inkscape:label="Needle"
-     sodipodi:insensitive="true"
      style="display:inline">
-    <path
-       inkscape:label="RadialGridline0"
-       style="display:inline;fill:none;stroke:#000000;stroke-width:4.09723139"
-       d="m 157.39837,512.40135 -22.79676,0"
-       id="path8319-1-5-0"
-       inkscape:connector-curvature="0" />
     <g
        transform="translate(-2,-280)"
        style="display:inline"

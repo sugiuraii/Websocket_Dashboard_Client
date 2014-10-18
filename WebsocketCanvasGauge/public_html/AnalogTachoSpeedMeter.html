@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="./script/libs/jquery/jquery.js"></script>
+        <script src="./script/websocket/DefiCOM_WSTest.js"></script>
+        <script src="./script/websocket/SSMCOM_WSTest.js"></script>
+        <script src="./script/websocket/FUELTRIP_WSTest.js"></script>
+        <script>
+            var defi_ws = new DefiCOM_Websocket();
+            var ssm_ws = new SSMCOM_Websocket();
+            var fueltrip_ws = new FUELTRIP_Websocket();
+            
+            defi_ws.onVALpacketReceived = function(val)
+            {
+                for (var key in val)
+                {
+                    if(key === "Boost")
+                    {
+                        $("#gauge_frame1")[0].contentWindow.boost = val[key];
+                    }
+                    else if(key === "Tacho")
+                    {
+                        $("#gauge_frame1")[0].contentWindow.tacho = val[key];
+                    }
+                }
+                $("#gauge_frame1")[0].contentWindow.value_update();
+            };
+            defi_ws.onERRpacketReceived = function(msg)
+            {
+                $('#div_message').append(msg + "<br>");
+            };
+            defi_ws.onRESpacketReceived = function(msg)
+            {
+                $('#div_message').append(msg + "<br>");
+            };
+            defi_ws.onWebsocketError = function(msg)
+            {
+                $('#div_message').append(msg + "<br>");
+            };
+            defi_ws.onWebsocketOpen = function()
+            {
+                $('#div_message').append('* Connection started<br/>');
+                setTimeout(
+                function(){
+                defi_ws.SendDefiWSSend("Boost","true");
+                defi_ws.SendDefiWSSend("Tacho","true");
+                },5000);
+            };
+            defi_ws.onWebsocketClose = function()
+            {
+                $('#div_message').append('* Connection closed<br/>');
+            };
+            
+            ssm_ws.onVALpacketReceived = function(val)
+            {
+                for (var key in val)
+                {
+                    if(key === "Coolant_Temperature")
+                    {
+                        $("#gauge_frame1")[0].contentWindow.watertemp = val[key];
+                    }
+                    else if (key === "Vehicle_Speed")
+                    {
+                        $("#gauge_frame1")[0].contentWindow.speed = val[key];
+                    }
+                    else if(key === "Neutral_Position_Switch")
+                    {
+                        if(val[key].toLowerCase() === "false")
+                            $("#gauge_frame1")[0].contentWindow.neutral_sw = false;
+                        else
+                            $("#gauge_frame1")[0].contentWindow.neutral_sw = true;
+                    }
+
+                    $("#gauge_frame1")[0].contentWindow.value_update();
+                }
+            };
+            ssm_ws.onERRpacketReceived = function(msg)
+            {
+                $('#div_message').append(msg + "<br>");
+            };
+            ssm_ws.onRESpacketReceived = function(msg)
+            {
+                $('#div_message').append(msg + "<br>");
+            };
+            ssm_ws.onWebsocketError = function(msg)
+            {
+                $('#div_message').append(msg + "<br>");
+            };
+            ssm_ws.onWebsocketOpen = function()
+            {
+                $('#div_message').append('* Connection started<br/>');
+                setTimeout(
+                function(){
+                ssm_ws.SendSSMCOMRead("Coolant_Temperature","SLOW","true");
+                ssm_ws.SendSSMCOMRead("Vehicle_Speed","FAST","true");
+                ssm_ws.SendSSMCOMRead("Vehicle_Speed","SLOW","true");
+                ssm_ws.SendSSMCOMRead("Switch_P0x062","FAST","true");
+                ssm_ws.SendSSMCOMRead("Switch_P0x062","SLOW","true");
+                },5000);
+            };
+            ssm_ws.onWebsocketClose = function()
+            {
+                $('#div_message').append('* Connection closed<br/>');
+            };
+            
+            fueltrip_ws.onMomentFUELTRIPpacketReceived = function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
+            {
+                $("#gauge_frame1")[0].contentWindow.fuel = total_gas;
+                $("#gauge_frame1")[0].contentWindow.trip = total_trip;
+                $("#gauge_frame1")[0].contentWindow.gas_milage = total_gasmilage;
+                $("#gauge_frame1")[0].contentWindow.value_update();
+            };
+            
+            /*
+            function onTestClick()
+            {
+                $("#gauge_frame1")[0].contentWindow.tacho = 1000;
+                $("#gauge_frame1")[0].contentWindow.speed = 20;
+                $("#gauge_frame1")[0].contentWindow.watertemp = 80;
+                $("#gauge_frame1")[0].contentWindow.gearpos = 3;
+                $("#gauge_frame1")[0].contentWindow.trip = 850;
+                $("#gauge_frame1")[0].contentWindow.fuel = 35.01;
+                $("#gauge_frame1")[0].contentWindow.gas_milage = 12.00;
+                $("#gauge_frame1")[0].contentWindow.boost = -0.2;
+                $("#gauge_frame1")[0].contentWindow.value_update();
+            };
+            */
+           
+            function connectWebSocket()
+            {
+                defi_ws.URL = "ws://"+location.hostname+":2012/";
+                defi_ws.Connect();
+                ssm_ws.URL = "ws://"+location.hostname+":2013/";
+                ssm_ws.Connect();
+                fueltrip_ws.URL = "ws://"+location.hostname+":2014/";
+                fueltrip_ws.Connect();
+            };
+            
+            function reset_fuel_trip()
+            {
+                if(window.confirm('Reset fuel and trip?'))
+                {
+                    fueltrip_ws.SendReset();
+                };
+            };
+            
+            onload = function()
+            {
+                 $("#gauge_frame1")[0].contentWindow.initialize();
+                 connectWebSocket();
+            };
+            
+        </script>
+        <style>
+            iframe.meter { 
+                    position:static;
+                    border: none;
+                    z-index:0;
+                    -webkit-transform:scale(0.5,0.5);
+                    -moz-transform:scale(0.5,0.5);
+                    -ms-transform:scale(0.5,0.5);
+                    transform:scale(0.5,0.5);
+                    -webkit-transform-origin: 0 0;
+                    -moz-transform-origin: 0 0;
+                    -ms-transform-origin: 0 0;
+                    transform-origin: 0 0;
+                }
+        </style>
+    </head>
+    <body>
+        
+        <iframe class="meter" id="gauge_frame1" src="./parts/AnalogMeterCluster/AnalogMeterCluster.html" scrolling="no" width="1060" height="600" seamless> </iframe><br>
+        <div id="div_message" style="position: absolute;top:650px"></div>
+        <button onclick="reset_fuel_trip()" style="position:absolute;top:0px;left:0px;z-index:1">Reset</button>
+    </body>
+</html>

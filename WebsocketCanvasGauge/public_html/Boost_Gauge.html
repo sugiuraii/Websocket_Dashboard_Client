@@ -70,7 +70,7 @@ and open the template in the editor.
             
             function connectWebSocket()
             {
-                defi_ws.URL = "ws://localhost:2012/";
+                defi_ws.URL = "ws://"+location.hostname+":2012/";
                 defi_ws.Connect();
             };
             
