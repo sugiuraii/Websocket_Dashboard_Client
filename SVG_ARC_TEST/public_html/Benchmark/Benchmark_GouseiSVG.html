@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="../script/jquery.js"></script>
+        <script src="Stats.js"></script>
+        <script>
+            var FPS = 60;
+            var stats;
+            var value=0;
+            
+            onload = function()
+            {
+                // Stats
+                stats = new Stats();
+                // 右上に設定
+                stats.getDomElement().style.position = "fixed";
+                stats.getDomElement().style.left     = "5px";
+                stats.getDomElement().style.top      = "5px";
+                $("#fps_view").append(stats.getDomElement());
+                initialize_gauge();
+                
+                //Set animation functions
+                setInterval(function(){
+                if(value>120)
+                    {
+                        value=0;
+                    }
+                    $("#gauge_frame1")[0].contentWindow.set_value(value);
+                    value+=2;
+
+                    stats.update();
+                },1000/FPS);
+                
+            };
+            
+            initialize_gauge = function()
+            {
+                $("#gauge_frame1")[0].contentWindow.value_max = 120;
+                $("#gauge_frame1")[0].contentWindow.value_min = 0;
+                $("#gauge_frame1")[0].contentWindow.title_str = "WATER TEMP";
+                $("#gauge_frame1")[0].contentWindow.unit_str = "C";
+                $("#gauge_frame1")[0].contentWindow.scale_str1 ="0";
+                $("#gauge_frame1")[0].contentWindow.scale_str2 ="30";
+                $("#gauge_frame1")[0].contentWindow.scale_str3 = "60";
+                $("#gauge_frame1")[0].contentWindow.scale_str4 = "90";
+                $("#gauge_frame1")[0].contentWindow.scale_str5 = "120";
+                $("#gauge_frame1")[0].contentWindow.redzone_offset_angle = "315";
+                $("#gauge_frame1")[0].contentWindow.redzone_full_angle = "45";
+                $("#gauge_frame1")[0].contentWindow.value_label_rounded = "0";
+                $("#gauge_frame1")[0].contentWindow.background_initialize();
+            };
+            
+
+        </script>
+        <style>
+            iframe { border: none; }
+            body { background-color: #DDDDDD; font: 30px sans-serif; }
+        </style>
+    </head>
+    <body>
+        <div id="fps_view"></div>
+        <iframe id="gauge_frame1" src="./SemiCircular_Gauge1_Gousei.html" scrolling="no" height="175" width="240" seamless> </iframe><br>
+    </body>
+</html>

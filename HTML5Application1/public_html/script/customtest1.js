@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 var _bar1;
+var value;
+var FPS=60;
 
 onload = function() {
     _bar1 = new CustomProgressBar_canvas("bar1","fukuchan.jpg");
@@ -11,12 +13,25 @@ onload = function() {
     _bar1.invert_direction = true;
     _bar1.min = 0;
     _bar1.max = 100;
+    
+    value=0;
+    
+    setInterval(function(){
+                if(value>100)
+                    {
+                        value=0;
+                    }
+                    value+=1;
+                    
+                _bar1.value = value;
+                _bar1.draw();
+
+
+                },1000/FPS);
+    
 };
 
 function rangeChange () {
-        var val = document.getElementById("value_slider").value;
-        _bar1.value = val;
-        _bar1.draw();
 }
 
 
