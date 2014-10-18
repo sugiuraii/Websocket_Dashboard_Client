@@ -4,13 +4,10 @@
  * and open the template in the editor.
  */
 
-var CircularProgressBar_canvas = function(canvas_id, image_name)
+var CircularProgressBar_canvas = function(canvas, img)
 {
     // Local value and instances
-    var canvas = document.getElementById(canvas_id);
     var context = canvas.getContext('2d');
-    var img = new Image();
-    img.src = image_name;
     var curr_value;
         
     // Properties and Default values
@@ -68,6 +65,7 @@ var CircularProgressBar_canvas = function(canvas_id, image_name)
         context.moveTo(circle_center_x, circle_center_y);
         context.arc(circle_center_x, circle_center_y, radius, start_angle, end_angle, anticlockwise);
         context.closePath();
+        //context.stroke();
         context.clip();
 
         context.drawImage(img, offset_x, offset_y);

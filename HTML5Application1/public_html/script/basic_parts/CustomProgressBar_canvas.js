@@ -4,13 +4,9 @@
  * and open the template in the editor.
  */
 
-var CustomProgressBar_canvas = function(canvas_id, image_name)
+var CustomProgressBar_canvas = function(canvas, img)
 {
-    //Local variable and instances
-    var canvas = document.getElementById(canvas_id);
     var context = canvas.getContext('2d');
-    var img = new Image();
-    img.src = image_name;
     var curr_value;
     
     // Properties and Default values

@@ -10,18 +10,52 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <script src="script/basic_parts/CircularProgressBar_canvas.js"></script>
-        <script src="script/circulartest1.js"></script>
-        <link href="css/main.css" rel="stylesheet" type="text/css">
-    </head>    
+        <style>
+            @font-face {
+            font-family: 'Coolvetica';
+            font-style: normal;
+            src: url(../fonts/Coolvetica-Regular.ttf) format('truetype');
+            }
+            canvas.redzone{
+                
+            }
+        </style>
+        <script>
+            var _redzone_bar1;
+            
+            onload = function() {
+                var redzone_canvas = document.getElementById("redzone_bar1");
+                var redzone_img = new Image();
+                redzone_img.src = "./img/SemiCircular_Gauge1_Redzone_Bar.png";
+
+                _redzone_bar1 = new CircularProgressBar_canvas(redzone_canvas,redzone_img);
+                // Properties and Default values
+                _redzone_bar1.offset_angle = 315;
+                _redzone_bar1.full_angle = 45;
+                _redzone_bar1.anticlockwise = false;
+                _redzone_bar1.min = 0;
+                _redzone_bar1.max = 100;
+
+                _redzone_bar1.circle_center_x = 800;
+                _redzone_bar1.circle_center_y = 770;    
+                _redzone_bar1.circle_radius = 650;
+
+                _redzone_bar1.offset_x = 0;
+                _redzone_bar1.offset_y = 0;
+                _redzone_bar1.value = 100;
+                
+                redzone_img.onload = function(){
+                    _redzone_bar1.draw();
+                };
+            };
+    </script>
+    </head>
     <body>
-        <div style="position:absolute;left:0px;top:0px">
-            <img src="test_bg.svg" width="240" height="175" alt="" style="position:absolute;z-index:0">
-            <img src="test_grid.svg" width="240" height="175" alt="" style="position:absolute;z-index:2">
-            <object id="bar1" data="test_val_bar.svg" type="image/svg+xml" width="240" height="175" style="position:absolute;z-index:3"></object>            
-        </div>
-        <div style="position:absolute;left:0px;top:200px">
-            <h3 style="font-family: Coolvetica"> Value </h3><br>
-            <input id="value_slider" type="range" min="0" max="100" onChange="rangeChange()">
+        <div style="position:relative;-webkit-transform:scale(0.2);">          
+            <img src="./img/SemiCircular_Gauge1_Back.png" alt="" style="width:1597px;height:auto;position:absolute;z-index:0">
+            <canvas id="redzone_bar1" width="1597" height="1167" style="width:1597px;height:auto;position:absolute;z-index:1"></canvas>
+            <img src="./img/SemiCircular_Gauge1_Grid.png" alt="" style="width:1597px;height:auto;position:absolute;z-index:2">
+            <canvas id="value_bar1" width="1597" height="1167" style="width:1597px;height:auto;position:absolute;z-index:3"></canvas>            
         </div>
     </body>
 </html>

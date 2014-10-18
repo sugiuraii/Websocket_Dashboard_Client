@@ -8,7 +8,12 @@ var value;
 var FPS=60;
 
 onload = function() {
-    _bar1 = new CustomProgressBar_canvas("bar1","fukuchan.jpg");
+    //Local variable and instances
+    var canvas = document.getElementById("bar1");
+    var img = new Image();
+    img.src = "./img/SemiCircular_Gauge1_Back.png";
+
+    _bar1 = new CustomProgressBar_canvas(canvas, img);
     _bar1.vertical = false;
     _bar1.invert_direction = true;
     _bar1.min = 0;
