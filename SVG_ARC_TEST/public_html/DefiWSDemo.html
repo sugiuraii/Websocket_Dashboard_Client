@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="../script/jquery.js"></script>
+        <script>
+            
+            initialize_gauge = function()
+            {
+                $("#gauge_frame1")[0].contentWindow.value_max = 3.0;
+                $("#gauge_frame1")[0].contentWindow.value_min = -1.0;
+                $("#gauge_frame1")[0].contentWindow.title_str = "BOOST";
+                $("#gauge_frame1")[0].contentWindow.unit_str = "kgF/cm2";
+                $("#gauge_frame1")[0].contentWindow.scale_str1 ="-1.0";
+                $("#gauge_frame1")[0].contentWindow.scale_str2 ="0";
+                $("#gauge_frame1")[0].contentWindow.scale_str3 = "1.0";
+                $("#gauge_frame1")[0].contentWindow.scale_str4 = "2.0";
+                $("#gauge_frame1")[0].contentWindow.scale_str5 = "3.0";
+                $("#gauge_frame1")[0].contentWindow.redzone_offset_angle = "315";
+                $("#gauge_frame1")[0].contentWindow.redzone_full_angle = "45";
+                $("#gauge_frame1")[0].contentWindow.value_label_rounded = "1";
+                $("#gauge_frame1")[0].contentWindow.background_initialize();
+            };
+            /*
+            function slider1_onchange()
+            {
+               var slider_val = $("#slider1").val();
+               $("#gauge_frame1")[0].contentWindow.set_value(slider_val);
+            };
+            */
+        </script>
+        <style>
+            iframe { border: none; }
+        </style>
+    </head>
+    <body>
+        <input type="button" id="connectButton" value="Connect" onclick="connectWebSocket()"/>
+        <input type="button" id="disconnectButton" value="Disconnect" onclick="disconnectWebSocket()"/>
+        <input type="text" id="messageInput" />
+        <input type="button" id="sendButton" value="Send" onclick="sendMessage()"/>
+        <br>
+        <iframe id="gauge_frame1" src="./SemiCircular_Gauge1.html" scrolling="no" height="175" width="240" seamless> </iframe><br>
+    </body>
+</html>
