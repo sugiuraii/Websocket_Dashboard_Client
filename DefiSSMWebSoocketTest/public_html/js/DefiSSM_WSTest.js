@@ -100,3 +100,38 @@ window.onload = function () {
     $('#disconnectButton').attr("disabled", "disabled");
 };
 
+function input_DEFI_WS_SEND(){
+    var obj={
+      mode : "DEFI_WS_SEND",
+      code : $('#deficode_select').val(),
+      flag : $('#deficode_flag').val()
+    };
+    
+    var jsonstr = JSON.stringify(obj);
+    
+    $('#sendmessagecontent_box').val(jsonstr);
+};
+
+function input_DEFI_WS_INTERVAL(){
+    var obj={
+      mode : "DEFI_WS_INTERVAL",
+      interval : $('#interval_DEFI_WS_INTERVAL').val()
+    };
+    
+    var jsonstr = JSON.stringify(obj);
+    
+    $('#sendmessagecontent_box').val(jsonstr);
+};
+
+function input_SSM_COM_READ(){
+    var obj={
+      mode : "SSM_COM_READ",
+      code : $('#ssmcomcode_select').val(),
+      read_mode : $('ssmcode_readmode').val(),
+      flag : $('#ssmcode_flag').val()
+    };
+    
+    var jsonstr = JSON.stringify(obj);
+    
+    $('#sendmessagecontent_box').val(jsonstr);
+};

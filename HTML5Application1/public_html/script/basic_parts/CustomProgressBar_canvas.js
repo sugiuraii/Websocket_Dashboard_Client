@@ -29,7 +29,7 @@ var CustomProgressBar_canvas = function(canvas, img)
         
         var canvas_max_x = canvas.width;
         var canvas_max_y = canvas.height;
-        var percent = (curr_value - this.min)*(this.max - this.min)/100;
+        var percent = (curr_value - this.min)/(this.max - this.min)*100;
         
         var rect_start_x,rect_start_y,rect_width,rect_height;
         

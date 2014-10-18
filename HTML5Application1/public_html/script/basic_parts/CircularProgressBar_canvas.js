@@ -43,7 +43,7 @@ var CircularProgressBar_canvas = function(canvas, img)
         var offset_x = this.offset_x;
         var offset_y = this.offset_y;
         var radius = this.circle_radius;
-        var percent = (curr_value - this.min)*(this.max - this.min)/100;
+        var percent = (curr_value - this.min)/(this.max - this.min)*100;
         var start_angle, end_angle;
         var anticlockwise = this.anticlockwise;
         
