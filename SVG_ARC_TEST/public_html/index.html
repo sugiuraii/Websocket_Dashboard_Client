@@ -11,12 +11,28 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width">
         <script src="script/jquery.js"></script>
         <script>
+            
+            onload = function()
+            {
+                document.getElementById("gauge_frame1").contentWindow.value_max = 3.0;
+                document.getElementById("gauge_frame1").contentWindow.value_min = -1.0;
+                document.getElementById("gauge_frame1").contentWindow.title_str = "BOOST";
+                document.getElementById("gauge_frame1").contentWindow.unit_str = "kgF/cm2";
+                document.getElementById("gauge_frame1").contentWindow.scale_str1 ="-1.0";
+                document.getElementById("gauge_frame1").contentWindow.scale_str2 ="0";
+                document.getElementById("gauge_frame1").contentWindow.scale_str3 = "1.0";
+                document.getElementById("gauge_frame1").contentWindow.scale_str4 = "2.0";
+                document.getElementById("gauge_frame1").contentWindow.scale_str5 = "3.0";
+                document.getElementById("gauge_frame1").contentWindow.redzone_offset_angle = "315";
+                document.getElementById("gauge_frame1").contentWindow.redzone_full_angle = "45";
+                document.getElementById("gauge_frame1").contentWindow.value_label_rounded = "1";
+                document.getElementById("gauge_frame1").contentWindow.background_initialize();
+            };
+            
             function slider1_onchange()
             {
-                var slider_val = $("#slider1").val();
+               var slider_val = $("#slider1").val();
                document.getElementById("gauge_frame1").contentWindow.set_value(slider_val);
-               document.getElementById("gauge_frame2").contentWindow.set_value(slider_val/2);
-
             };
         </script>
         <style>
@@ -26,7 +42,6 @@ and open the template in the editor.
     <body>
         <input type="button" id="connectButton" value="Connect" onclick="connectWebSocket()"/> <input type="button" id="disconnectButton" value="Disconnect" onclick="disconnectWebSocket()"/> <input type="text" id="messageInput" /> <input type="button" id="sendButton" value="Send" onclick="sendMessage()"/> <br>
         <iframe id="gauge_frame1" src="./SemiCircular_Gauge1.html" scrolling="no" height="175" width="240" seamless> </iframe><br>
-        <iframe id="gauge_frame2" src="./SemiCircular_Gauge1.html" scrolling="no" height="175" width="240" seamless> </iframe><br>        
-        <input id="slider1" type="range" max="2" min="-1" step="0.01" onChange="slider1_onchange()" />
+        <input id="slider1" type="range" max="3.0" min="-1.0" step="0.01" onChange="slider1_onchange()" />
     </body>
 </html>

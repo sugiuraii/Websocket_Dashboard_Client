@@ -5,8 +5,6 @@
  */
 
 var svg_obj;
-var svg_obj2;
-var svg_obj3;
 
 var ws;
 var noSupportMessage = "Your browser cannot support WebSocket!";
@@ -123,17 +121,7 @@ onload = function()
     svg_obj.anticlockwise = false;
     svg_obj.max = 2;
     svg_obj.min = -1;
-    
-    svg_obj2 = new CircularCustomProgressBar_svg("svg_test1","layer5");
-    svg_obj2.circle_center_x = 122+178.9375;
-    svg_obj2.circle_center_y = 115+157;
-    svg_obj2.circle_radius_x = 120;
-    svg_obj2.circle_radius_y = 120;
-    svg_obj2.offset_angle = 315;
-    svg_obj2.full_angle = 45;
-    svg_obj2.value = 100;
-    svg_obj2.anticlockwise = false;
-    svg_obj2.update();
+
 };
 
 function meter_valuechange(val)
