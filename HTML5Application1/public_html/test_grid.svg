@@ -1,0 +1,820 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="239.5625"
+   height="175.03125"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="test_bg.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\WpfApplication1\描画SVG\Digi_Tacho\DigiTachi_Back.png"
+   inkscape:export-xdpi="58.349998"
+   inkscape:export-ydpi="58.349998"
+   version="1.1">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient3203">
+      <stop
+         style="stop-color:#131a20;stop-opacity:1;"
+         offset="0"
+         id="stop3205" />
+      <stop
+         id="stop3215"
+         offset="0.15031824"
+         style="stop-color:#232c32;stop-opacity:1;" />
+      <stop
+         id="stop3211"
+         offset="0.28092229"
+         style="stop-color:#bdd6ec;stop-opacity:1;" />
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0.49269104"
+         id="stop3213" />
+      <stop
+         style="stop-color:#cbdff0;stop-opacity:1;"
+         offset="0.75805265"
+         id="stop3272" />
+      <stop
+         style="stop-color:#1a1a1a;stop-opacity:1;"
+         offset="1"
+         id="stop3207" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4089">
+      <stop
+         style="stop-color:#00fff0;stop-opacity:1;"
+         offset="0"
+         id="stop4091" />
+      <stop
+         id="stop4105"
+         offset="0.19933924"
+         style="stop-color:#00ff00;stop-opacity:0.99607843;" />
+      <stop
+         id="stop4097"
+         offset="0.43343624"
+         style="stop-color:#ffff00;stop-opacity:0.99215686;" />
+      <stop
+         style="stop-color:#ffff00;stop-opacity:0.99215686;"
+         offset="0.85758197"
+         id="stop4103" />
+      <stop
+         style="stop-color:#ff0000;stop-opacity:0.99607843;"
+         offset="0.87810516"
+         id="stop4101" />
+      <stop
+         style="stop-color:#ff0000;stop-opacity:1;"
+         offset="1"
+         id="stop4093" />
+    </linearGradient>
+    <inkscape:path-effect
+       effect="skeletal"
+       id="path-effect3538"
+       prop_scale="1"
+       pattern="m -62,-3 1,0"
+       is_visible="true"
+       copytype="single_stretched"
+       scale_y_rel="false"
+       spacing="0"
+       normal_offset="0"
+       tang_offset="0"
+       prop_units="false"
+       vertical_pattern="false"
+       fuse_tolerance="0" />
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <filter
+       height="2.749732"
+       y="-0.87486595"
+       width="1.7087522"
+       x="-0.35437608"
+       id="filter3516"
+       inkscape:collect="always"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         id="feGaussianBlur3518"
+         stdDeviation="66.656451"
+         inkscape:collect="always" />
+    </filter>
+    <inkscape:perspective
+       id="perspective3503"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <linearGradient
+       id="linearGradient3164">
+      <stop
+         id="stop3166"
+         offset="0"
+         style="stop-color:#f8f8f8;stop-opacity:1;" />
+      <stop
+         id="stop3168"
+         offset="1"
+         style="stop-color:#f1fff1;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3522">
+      <stop
+         id="stop3524"
+         offset="0"
+         style="stop-color:#182e38;stop-opacity:1;" />
+      <stop
+         id="stop3526"
+         offset="1"
+         style="stop-color:#000000;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3271"
+       inkscape:collect="always">
+      <stop
+         id="stop3273"
+         offset="0"
+         style="stop-color:#000000;stop-opacity:1;" />
+      <stop
+         id="stop3275"
+         offset="1"
+         style="stop-color:#000000;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3522"
+       id="linearGradient3521"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.49263738,0,0,0.55796313,179.25292,-205.6886)"
+       x1="230"
+       y1="791.86218"
+       x2="234"
+       y2="597.86218" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3271"
+       id="linearGradient3523"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.49263738,0,0,0.55796313,179.25292,-205.6886)"
+       x1="252.5"
+       y1="465.86218"
+       x2="259.5"
+       y2="1202.8622" />
+    <inkscape:perspective
+       id="perspective2926"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <filter
+       color-interpolation-filters="sRGB"
+       inkscape:collect="always"
+       id="filter3266-1"
+       x="-0.53229982"
+       width="2.0645995"
+       y="-0.98672152"
+       height="2.973443">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.4252499"
+         id="feGaussianBlur3268-7" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       inkscape:collect="always"
+       id="filter3262-4"
+       x="-0.98672152"
+       width="2.973443"
+       y="-0.53229982"
+       height="2.0645995">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.4252499"
+         id="feGaussianBlur3264-0" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       inkscape:collect="always"
+       id="filter3258-9"
+       x="-0.98672152"
+       width="2.973443"
+       y="-0.53229982"
+       height="2.0645995">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.4252499"
+         id="feGaussianBlur3260-4" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       inkscape:collect="always"
+       id="filter3254-8"
+       x="-0.53229982"
+       width="2.0645995"
+       y="-0.98672146"
+       height="2.9734428">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.4252499"
+         id="feGaussianBlur3256-8" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       inkscape:collect="always"
+       id="filter3250-2"
+       x="-0.32293564"
+       width="1.6458713"
+       y="-0.32293564"
+       height="1.6458713">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.4252497"
+         id="feGaussianBlur3252-4" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       inkscape:collect="always"
+       id="filter3246-5"
+       x="-0.32293564"
+       width="1.6458713"
+       y="-0.32293564"
+       height="1.6458713">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.4252497"
+         id="feGaussianBlur3248-5" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       inkscape:collect="always"
+       id="filter3242-1"
+       x="-1.6441199"
+       width="4.28824"
+       y="-0.26518062"
+       height="1.5303613">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.4252498"
+         id="feGaussianBlur3244-7" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       inkscape:collect="always"
+       id="filter3238-1"
+       x="-0.26518062"
+       width="1.5303613"
+       y="-1.6441199"
+       height="4.28824">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.4252498"
+         id="feGaussianBlur3240-1" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       inkscape:collect="always"
+       id="filter3234-5"
+       x="-0.26518062"
+       width="1.5303613"
+       y="-1.6441199"
+       height="4.28824">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.4252498"
+         id="feGaussianBlur3236-2" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3203-6"
+       id="linearGradient3352-7"
+       x1="72.738014"
+       y1="484.46875"
+       x2="529.26196"
+       y2="484.46875"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient3203-6">
+      <stop
+         style="stop-color:#131a20;stop-opacity:1;"
+         offset="0"
+         id="stop3205-1" />
+      <stop
+         id="stop3215-4"
+         offset="0.15031824"
+         style="stop-color:#232c32;stop-opacity:1;" />
+      <stop
+         id="stop3211-2"
+         offset="0.28092229"
+         style="stop-color:#bdd6ec;stop-opacity:1;" />
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0.49269104"
+         id="stop3213-3" />
+      <stop
+         style="stop-color:#cbdff0;stop-opacity:1;"
+         offset="0.75805265"
+         id="stop3272-2" />
+      <stop
+         style="stop-color:#1a1a1a;stop-opacity:1;"
+         offset="1"
+         id="stop3207-2" />
+    </linearGradient>
+    <linearGradient
+       gradientTransform="matrix(0.396,0,0,0.396,180.21891,36.568807)"
+       y2="484.46875"
+       x2="529.26196"
+       y1="484.46875"
+       x1="72.738014"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3183"
+       xlink:href="#linearGradient3203-6"
+       inkscape:collect="always" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient33859"
+       id="radialGradient33865"
+       cx="502"
+       cy="435.36218"
+       fx="502"
+       fy="435.36218"
+       r="201"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.99751244,0,0,0.99751244,1.748756,2.58299)" />
+    <linearGradient
+       id="linearGradient33859">
+      <stop
+         id="stop33867"
+         offset="0"
+         style="stop-color:#000000;stop-opacity:0;" />
+      <stop
+         style="stop-color:#333333;stop-opacity:0;"
+         offset="0.58999997"
+         id="stop33877" />
+      <stop
+         id="stop33879"
+         offset="0.60000002"
+         style="stop-color:#999999;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0.85000002"
+         id="stop33875" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0.89999998"
+         id="stop33873" />
+      <stop
+         style="stop-color:#dddddd;stop-opacity:1;"
+         offset="1"
+         id="stop33863" />
+    </linearGradient>
+    <radialGradient
+       r="201"
+       fy="435.36218"
+       fx="502"
+       cy="435.36218"
+       cx="502"
+       gradientTransform="matrix(0.96268657,0,0,0.96268657,-181.26865,177.23252)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient37181"
+       xlink:href="#linearGradient33859"
+       inkscape:collect="always" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient33859-8"
+       id="radialGradient33865-4"
+       cx="502"
+       cy="435.36218"
+       fx="502"
+       fy="435.36218"
+       r="201"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient33859-8">
+      <stop
+         id="stop33867-8"
+         offset="0"
+         style="stop-color:#000000;stop-opacity:0;" />
+      <stop
+         style="stop-color:#333333;stop-opacity:0;"
+         offset="0.77438962"
+         id="stop33877-2" />
+      <stop
+         id="stop33879-4"
+         offset="0.8131091"
+         style="stop-color:#999999;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0.92380953"
+         id="stop33875-5" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0.92380953"
+         id="stop33873-5" />
+      <stop
+         style="stop-color:#dddddd;stop-opacity:1;"
+         offset="1"
+         id="stop33863-1" />
+    </linearGradient>
+    <radialGradient
+       r="201"
+       fy="435.36218"
+       fx="502"
+       cy="435.36218"
+       cx="502"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient37448"
+       xlink:href="#linearGradient33859-8"
+       inkscape:collect="always" />
+    <radialGradient
+       r="201"
+       fy="435.36218"
+       fx="502"
+       cy="435.36218"
+       cx="502"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient37448-1"
+       xlink:href="#linearGradient33859-8-1"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient33859-8-1">
+      <stop
+         id="stop33867-8-5"
+         offset="0"
+         style="stop-color:#000000;stop-opacity:0;" />
+      <stop
+         style="stop-color:#333333;stop-opacity:0;"
+         offset="0.87988079"
+         id="stop33877-2-2" />
+      <stop
+         id="stop33879-4-7"
+         offset="0.89661556"
+         style="stop-color:#999999;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0.93927014"
+         id="stop33875-5-6" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0.96818912"
+         id="stop33873-5-1" />
+      <stop
+         style="stop-color:#dddddd;stop-opacity:1;"
+         offset="1"
+         id="stop33863-1-4" />
+    </linearGradient>
+    <radialGradient
+       r="201"
+       fy="435.36218"
+       fx="502"
+       cy="435.36218"
+       cx="502"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient37495"
+       xlink:href="#linearGradient33859-8-1"
+       inkscape:collect="always" />
+    <radialGradient
+       r="201"
+       fy="435.36218"
+       fx="502"
+       cy="435.36218"
+       cx="502"
+       gradientTransform="matrix(0.96268657,0,0,0.96268657,-181.26865,177.23252)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient37181-2"
+       xlink:href="#linearGradient33859-3"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient33859-3">
+      <stop
+         id="stop33867-2"
+         offset="0"
+         style="stop-color:#000000;stop-opacity:0;" />
+      <stop
+         style="stop-color:#333333;stop-opacity:0;"
+         offset="0.58999997"
+         id="stop33877-21" />
+      <stop
+         id="stop33879-6"
+         offset="0.60000002"
+         style="stop-color:#999999;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0.85000002"
+         id="stop33875-8" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0.89999998"
+         id="stop33873-57" />
+      <stop
+         style="stop-color:#dddddd;stop-opacity:1;"
+         offset="1"
+         id="stop33863-6" />
+    </linearGradient>
+    <radialGradient
+       r="201"
+       fy="435.36218"
+       fx="502"
+       cy="435.36218"
+       cx="502"
+       gradientTransform="matrix(0.38122388,0,0,0.38122388,108.43652,106.75289)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient37542"
+       xlink:href="#linearGradient33859-3"
+       inkscape:collect="always" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2"
+     inkscape:cx="97.682601"
+     inkscape:cy="94.077677"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer4"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="Grid"
+     style="display:inline"
+     transform="translate(-178.9375,-157)"
+     sodipodi:insensitive="true">
+    <path
+       style="fill:#000000;fill-opacity:0.14492756;stroke:url(#linearGradient3183);stroke-width:1.18799996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:none;display:inline"
+       d="m 299.41491,183.50956 c -49.61979,0 -89.9087,40.22286 -90.01575,89.81775 l 11.8305,0 c 0.10721,-43.06423 35.09606,-77.98725 78.18525,-77.98725 43.0892,0 78.07804,34.923 78.18525,77.98725 l 11.8305,0 c -0.10705,-49.59488 -40.39597,-89.81774 -90.01575,-89.81775 z"
+       id="path2568"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001"
+       inkscape:connector-curvature="0" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline"
+       id="rect3354"
+       width="12.276"
+       height="1.98"
+       x="209.12691"
+       y="271.54025"
+       ry="0"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline"
+       id="rect3356"
+       width="12.276"
+       height="1.98"
+       x="377.22891"
+       y="271.54025"
+       ry="0"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline"
+       id="rect3360"
+       width="12.276"
+       height="1.98"
+       x="-194.89445"
+       y="298.3259"
+       ry="0"
+       transform="matrix(0,-1,1,0,0,0)"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline"
+       id="rect3364"
+       width="12.276"
+       height="1.98"
+       x="96.853333"
+       y="403.3663"
+       ry="0"
+       transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline"
+       id="rect3366"
+       width="12.276"
+       height="1.98"
+       x="314.1673"
+       y="-19.93033"
+       ry="0"
+       transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,0,0)"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline"
+       id="rect3370"
+       width="6.2049818"
+       height="1.0008036"
+       x="296.52151"
+       y="136.7036"
+       ry="0"
+       transform="matrix(0.92387954,0.38268342,-0.38268342,0.92387954,0,0)"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline"
+       id="rect3374"
+       width="6.2049813"
+       height="1.0008036"
+       x="281.97165"
+       y="-172.8309"
+       ry="0"
+       transform="matrix(0.38268342,0.92387954,-0.92387954,0.38268342,0,0)"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline"
+       id="rect3378"
+       width="6.2049813"
+       height="1.0008036"
+       x="52.809391"
+       y="-381.4165"
+       ry="0"
+       transform="matrix(-0.38268342,0.92387954,-0.92387954,-0.38268342,0,0)"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline"
+       id="rect3382"
+       width="6.2049813"
+       height="1.0008036"
+       x="-256.7251"
+       y="-366.86664"
+       ry="0"
+       transform="matrix(-0.92387954,0.38268342,-0.38268342,-0.92387954,0,0)"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline;filter:url(#filter3234-5)"
+       id="rect2446"
+       width="31"
+       height="5"
+       x="76.358757"
+       y="289.48306"
+       ry="0"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001"
+       transform="matrix(0.396,0,0,0.396,178.88884,156.90495)" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline;filter:url(#filter3238-1)"
+       id="rect2448"
+       width="31"
+       height="5"
+       x="500.85876"
+       y="289.48306"
+       ry="0"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001"
+       transform="matrix(0.396,0,0,0.396,178.88884,156.90495)" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline;filter:url(#filter3242-1)"
+       id="rect2450"
+       width="31"
+       height="5"
+       x="-399.81223"
+       y="298.25"
+       ry="0"
+       transform="matrix(0,-0.396,0.396,0,180.21891,36.568807)"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline;filter:url(#filter3246-5)"
+       id="rect2452"
+       width="31"
+       height="5"
+       x="-11.925825"
+       y="631.50055"
+       ry="0"
+       transform="matrix(0.28001429,-0.28001429,0.28001429,0.28001429,180.21891,36.568807)"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline;filter:url(#filter3250-2)"
+       id="rect2454"
+       width="31"
+       height="5"
+       x="406.25055"
+       y="206.17583"
+       ry="0"
+       transform="matrix(0.28001429,0.28001429,-0.28001429,0.28001429,180.21891,36.568807)"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline;filter:url(#filter3254-8)"
+       id="rect2456"
+       width="15.669147"
+       height="2.5272818"
+       x="292.99667"
+       y="434.05356"
+       ry="0"
+       transform="matrix(0.36585628,0.15154263,-0.15154263,0.36585628,180.21891,36.568807)"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline;filter:url(#filter3258-9)"
+       id="rect2458"
+       width="15.669146"
+       height="2.5272818"
+       x="452.57495"
+       y="-51.32478"
+       ry="0"
+       transform="matrix(0.15154263,0.36585628,-0.36585628,0.15154263,180.21891,36.568807)"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline;filter:url(#filter3262-4)"
+       id="rect2460"
+       width="15.669146"
+       height="2.5272818"
+       x="222.19952"
+       y="-507.37796"
+       ry="0"
+       transform="matrix(-0.15154263,0.36585628,-0.36585628,-0.15154263,180.21891,36.568807)"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline;filter:url(#filter3266-1)"
+       id="rect2462"
+       width="15.669146"
+       height="2.5272818"
+       x="-263.1788"
+       y="-666.95624"
+       ry="0"
+       transform="matrix(-0.36585628,0.15154263,-0.15154263,-0.36585628,180.21891,36.568807)"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot2465"
+       style="font-size:45px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;display:inline;font-family:Coolvetica;-inkscape-font-specification:Coolvetica"
+       transform="matrix(0.396,0,0,0.396,288.01469,-64.496317)"
+       inkscape:export-filename="C:\Documents and Settings\kuniaki\My Documents\Visual Studio 2008\Projects\DefiSubaruMonitor\描画SVG\AF_Bar\flowRoot2480-7.png"
+       inkscape:export-xdpi="35.700001"
+       inkscape:export-ydpi="35.700001"><flowRegion
+         id="flowRegion2467"><rect
+           id="rect2469"
+           width="178"
+           height="121"
+           x="9"
+           y="573.36218"
+           style="font-size:45px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;font-family:Coolvetica;-inkscape-font-specification:Coolvetica" /></flowRegion><flowPara
+         id="flowPara2471"> </flowPara></flowRoot>  </g>
+</svg>

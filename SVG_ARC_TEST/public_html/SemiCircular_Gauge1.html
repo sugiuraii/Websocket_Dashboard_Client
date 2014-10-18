@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <script src="script/jquery.js"></script>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="script/jquery.js"></script>
+        <script src="script/basic_parts/SVG_CustomProgressBar.js"></script>
+        <script src="script/basic_parts/SVG_CircularCustomProgressBar.js"></script>
+        <style>
+            @font-face {
+                font-family: 'Coolvetica';
+                src: url('./Font/Coolvetica-Regular.ttf');
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            var svg_obj;
+            var svg_obj2;
+            onload = function()
+            {
+                svg_obj = new CircularCustomProgressBar_svg("svg_test1","layer6");
+                svg_obj.circle_center_x = 122+178.9375;
+                svg_obj.circle_center_y = 115+157;
+                svg_obj.circle_radius_x = 80;
+                svg_obj.circle_radius_y = 80;
+                svg_obj.offset_angle = 180;
+                svg_obj.full_angle = 180;
+                svg_obj.anticlockwise = false;
+                svg_obj.max = 2;
+                svg_obj.min = -1;
+
+                svg_obj2 = new CircularCustomProgressBar_svg("svg_test1","layer5");
+                svg_obj2.circle_center_x = 122+178.9375;
+                svg_obj2.circle_center_y = 115+157;
+                svg_obj2.circle_radius_x = 120;
+                svg_obj2.circle_radius_y = 120;
+                svg_obj2.offset_angle = 315;
+                svg_obj2.full_angle = 45;
+                svg_obj2.value = 100;
+                svg_obj2.anticlockwise = false;
+                svg_obj2.update();
+            };
+
+            function set_value(new_value)
+            {
+               svg_obj.value = new_value;
+               svg_obj.update();
+               $("#num_label1").text(new_value)
+            };
+        </script>
+        <object id="svg_test1" data="./test1xy.svg" type="image/svg+xml" width="240" height="175" style="position: absolute; left: 0px; bottom: 0px; z-index:0"></object>
+        <div id="num_label1" align="center" style="font-size: 60px; left:83px;top:70px; position: absolute;z-index: 1;color: white;user-select: none;font-family:'Coolvetica';text-shadow: 0px 0px 2px #fff">0.0</div>
+    </body>
+</html>

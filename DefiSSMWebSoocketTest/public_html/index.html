@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>DefiSSMCOM WebSocket Test</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="js/libs/jquery/jquery.js"></script>
+        <script src="js/DefiSSM_WSTest.js"></script>
+    </head>
+    <body>
+        <div><h2>DefiSSMCOM WebSocket Test</h2></div>
+        <hr>
+        Server hostname : <input type="text" required="required" id="serveraddress_box" /> 
+        Port : <input type="number" required="required" id="serverportNo_box" />
+         <input type="button" id="connectButton" value="Connect" onclick="connectWebSocket()"/>
+         <input type="button" id="disconnectButton" value="Disconnect" onclick="disconnectWebSocket()"/><br>
+         <hr>
+         <input type="text" id="sendmessagecontent_box" size="150" /><input type="button" id="sendButton" value="Send" onclick="sendMessage()"/><br>
+
+         <hr>
+         <h3>VAL packet</h3>
+         <div id="div_val_data"></div>
+         <hr>
+         <h3>ERR packet</h3>
+         <div id="div_err_data"></div>
+         <hr>
+         <h3>RES packet</h3>
+         <div id="div_res_data"></div>
+         <hr>
+         <h3>Websocket message</h3>
+         <div id="div_ws_message"></div>
+         <hr>
+    </body>
+</html>

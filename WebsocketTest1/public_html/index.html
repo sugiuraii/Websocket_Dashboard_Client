@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+    <script type="text/javascript">
+
+        var wsUrl = "ws://localhost:2012";    //WebSocketサーバーのURL
+        var webSocket = null;                    //WebSocketオブジェクト
+
+        var mainDiv = document.getElementById("main"); //結果表示用の要素
+
+        //WebSocketオブジェクト作成
+        if (typeof WebSocket != "undefined"){
+            //Chromeで動作確認
+            webSocket = new WebSocket(wsUrl);
+        }
+        else if (typeof MozWebSocket != "undefined"){
+            //FireFoxで動作確認
+            webSocket = new MozWebSocket(wsUrl);
+        }
+        else {
+            mainDiv.innerHTML += "don't use WebSocket<br />";
+        }
+
+        //イベントハンドラの設定
+        if (webSocket){
+
+            //接続
+            webSocket.onopen = function() {
+                mainDiv.innerHTML += "onopen<br />";
+                webSocket.send("Open!");
+            };
+
+            //メッセージ受信
+            webSocket.onmessage = function(event) {
+                mainDiv.innerHTML += "onmessage: " + event.data + "<br />";
+            };
+
+            //切断
+            webSocket.onclose = function() {
+                mainDiv.innerHTML += "onclose<br />";
+            };
+        }
+        </script>
+
+    </head>
+    <body>
+        <div id="main">
+        </div>
+    </body>
+
+   
+</html>
