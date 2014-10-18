@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-var DefiCOM_Websocket = function(url)
+var SSMCOM_Websocket = function()
 {
     this._ws;
     this.URL;
@@ -19,11 +19,12 @@ var DefiCOM_Websocket = function(url)
     };
 };
 
-DefiSSMCOM_Websocket.prototype.SendDefiWSSend = function(code,flag)
+SSMCOM_Websocket.prototype.SendSSMCOMRead = function(code, mode, flag)
 {
     var obj={
-      mode : "DEFI_WS_SEND",
+      mode : "SSM_COM_READ",
       code : code,
+      read_mode : mode,
       flag : flag
     };
     
@@ -31,11 +32,11 @@ DefiSSMCOM_Websocket.prototype.SendDefiWSSend = function(code,flag)
     this._ws.send(jsonstr);
 };
 
-DefiSSMCOM_Websocket.prototype.SendDefiWSInterval = function(interval)
+SSMCOM_Websocket.prototype.SendSSMSlowreadInterval = function(interval)
 {
     var obj={
-      mode : "DEFI_WS_INTERVAL",
-      interval : $('#interval_DEFI_WS_INTERVAL').val()
+      mode : "SSM_SLOWREAD_INTERVAL",
+      interval : interval
     };
     
     var jsonstr = JSON.stringify(obj);
@@ -43,7 +44,7 @@ DefiSSMCOM_Websocket.prototype.SendDefiWSInterval = function(interval)
     this._ws.send(jsonstr);    
 };
 
-DefiSSMCOM_Websocket.prototype._parseIncomingMessage = function(message){
+SSMCOM_Websocket.prototype._parseIncomingMessage = function(message){
     var received_json_object = JSON.parse(message);
     switch(received_json_object.mode)
     {
@@ -61,7 +62,7 @@ DefiSSMCOM_Websocket.prototype._parseIncomingMessage = function(message){
     };
 };
 
-DefiSSMCOM_WebSocket.prototype.Connect = function() { 
+SSMCOM_Websocket.prototype.Connect = function() { 
     var support = "MozWebSocket" in window ? 'MozWebSocket' : ("WebSocket" in window ? 'WebSocket' : null);
 
     if (support === null) {
@@ -70,21 +71,23 @@ DefiSSMCOM_WebSocket.prototype.Connect = function() {
     };
     this._ws = new window[support](this.URL); 
     
+    // store self reference in order to register event handler.
+    var self = this;
     // when data is comming from the server, this metod is called
-    ws.onmessage = function (evt) {
-        this._parseIncomingMessage(evt.data);
+    this._ws.onmessage = function (evt) {
+        self._parseIncomingMessage(evt.data);
     };
     // when the connection is established, this method is called
-    ws.onopen = function () {
-        this.onWebsocketOpen();
+    this._ws.onopen = function () {
+        self.onWebsocketOpen();
     };
     // when the connection is closed, this method is called
-    ws.onclose = function () {
-        this.onWebsocketClose();
+    this._ws.onclose = function () {
+        self.onWebsocketClose();
     };
 };
 
-DefiSSMCOM_WebSocket.prototype.Close = function()
+SSMCOM_Websocket.prototype.Close = function()
 {
     if(this._ws){
         this._ws.close();

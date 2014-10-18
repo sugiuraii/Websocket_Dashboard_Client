@@ -6,56 +6,83 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>DefiSSMCOM WebSocket Test</title>
+        <title>SSMCOM WebSocket Test</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <script src="js/libs/jquery/jquery.js"></script>
-        <script src="js/DefiSSM_WSTest.js"></script>
+        <script src="js/SSMCOM_WSTest.js"></script>
+        <script>
+            var ssm_ws = new SSMCOM_Websocket();
+            ssm_ws.onVALpacketReceived = function(val)
+            {
+                //clear
+                $('#div_val_data').html("");
+                for (var key in val)
+                {
+                    $('#div_val_data').append(key + " : " + val[key] + "<br>" );
+                }
+            };
+            ssm_ws.onERRpacketReceived = function(msg)
+            {
+                $('#div_err_data').append(msg + "<br>");
+            };
+            ssm_ws.onRESpacketReceived = function(msg)
+            {
+                $('#div_res_data').append(msg + "<br>");
+            };
+            ssm_ws.onWebsocketError = function(msg)
+            {
+                $('#div_ws_message').append(msg + "<br>");
+            };
+            ssm_ws.onWebsocketOpen = function()
+            {
+                $('#div_ws_message').append('* Connection open<br/>');
+
+                $('#sendmessagecontent_box').removeAttr("disabled");
+                $('#sendButton').removeAttr("disabled");
+                $('#connectButton').attr("disabled", "disabled");
+                $('#disconnectButton').removeAttr("disabled");  
+            };
+            ssm_ws.onWebsocketClose = function()
+            {
+                $('#div_ws_message').append('* Connection closed<br/>');
+                
+                $('#sendmessagecontent_box').attr("disabled", "disabled");
+                $('#sendButton').attr("disabled", "disabled");
+                $('#connectButton').removeAttr("disabled");
+                $('#disconnectButton').attr("disabled", "disabled");
+            };
+            
+            function connectWebSocket()
+            {
+                ssm_ws.URL = $("#serverURL_box").val();
+                ssm_ws.Connect();
+            };
+            
+            function disconnectWebSocket()
+            {
+                ssm_ws.Close();
+            };
+            
+            function input_SSM_COM_READ()
+            {
+                ssm_ws.SendSSMCOMRead($('#ssmcomcode_select').val(), $('#ssmcode_readmode').val(), $('#ssmcode_flag').val());
+            };
+            
+            function input_SSMCOM_SLOWREAD_INTERVAL()
+            {
+                ssm_ws.SendSSMSlowreadInterval($('#interval_SSMCOM_SLOWREAD_INTERVAL').val());
+            };
+        </script>
     </head>
     <body>
         <div><h2>DefiSSMCOM WebSocket Test</h2></div>
         <hr>
-        Server hostname : <input type="text" required="required" id="serveraddress_box" /> 
-        Port : <input type="number" required="required" id="serverportNo_box" />
+        Server URL : <input type="text" required="required" id="serverURL_box" /> 
          <input type="button" id="connectButton" value="Connect" onclick="connectWebSocket()"/>
          <input type="button" id="disconnectButton" value="Disconnect" onclick="disconnectWebSocket()"/><br>
          <hr>
-         <input type="text" id="sendmessagecontent_box" size="150" /><input type="button" id="sendButton" value="Send" onclick="sendMessage()"/><br>
         
-         <h4>DEFI_WS_SEND</h4>
-         <ul>
-             <li>DefiCode<br>
-                <select id="deficode_select">
-                    <option value="Boost">Boost</option>
-                    <option value="Tacho">Tacho</option>
-                    <option value="Oil_Pres">Oil_Pres</option>
-                    <option value="Fuel_Pres">Fuel_Pres</option>
-                    <option value="Ext_Temp">Ext_Temp</option>
-                    <option value="Oil_Temp">Oil_Temp</option>
-                    <option value="Water_Temp">Water_Temp</option>
-                </select>
-             </li>
-             <li>Flag<br>
-                <select id="deficode_flag">
-                    <option value="true">true</option>
-                    <option value="false">false</option>
-                </select>
-             </li>
-             <li>
-                 <input type="button" id="button_DEFI_WS_SEND" value="input DEFI_WS_SEND" onclick="input_DEFI_WS_SEND()"/>
-             </li>
-         </ul>
-         
-         <h4>DEFI_WS_INTERVAL</h4>
-         <ul>
-             <li>
-                <input type="number"  id="interval_DEFI_WS_INTERVAL">
-             </li>
-            <li>
-                 <input type="button" id="button_DEFI_WS_INTERVAL" value="input DEFI_WS_INTERVAL" onclick="input_DEFI_WS_INTERVAL()"/>
-             </li>
-         </ul>
-         
          <h4>SSM_COM_READ</h4>
          <ul>
              <li>SSMCode<br>
@@ -187,9 +214,9 @@ and open the template in the editor.
                  <input type="button" id="button_SSMCOM_SLOWREAD_INTERVAL" value="input SSMCOM_SLOWREAD_INTERVAL" onclick="input_SSMCOM_SLOWREAD_INTERVAL()"/>
              </li>
          </ul>
-         
-         
+                  
          <hr>
+         
          <h3>VAL packet</h3>
          <div id="div_val_data"></div>
          <hr>

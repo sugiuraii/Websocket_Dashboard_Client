@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>DefiSSMCOM WebSocket Test</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="js/libs/jquery/jquery.js"></script>
+        <script src="js/DefiSSM_WSTest.js"></script>
+        <script>
+            var defi_ws = new DefiCOM_Websocket();
+            
+            fun
+            
+        </script>
+    </head>
+    <body>
+        <div><h2>DefiSSMCOM WebSocket Test</h2></div>
+        <hr>
+        Server hostname : <input type="text" required="required" id="serveraddress_box" /> 
+        Port : <input type="number" required="required" id="serverportNo_box" />
+         <input type="button" id="connectButton" value="Connect" onclick="connectWebSocket()"/>
+         <input type="button" id="disconnectButton" value="Disconnect" onclick="disconnectWebSocket()"/><br>
+         <hr>
+         <input type="text" id="sendmessagecontent_box" size="150" /><input type="button" id="sendButton" value="Send" onclick="sendMessage()"/><br>
+        
+         <h4>DEFI_WS_SEND</h4>
+         <ul>
+             <li>DefiCode<br>
+                <select id="deficode_select">
+                    <option value="Boost">Boost</option>
+                    <option value="Tacho">Tacho</option>
+                    <option value="Oil_Pres">Oil_Pres</option>
+                    <option value="Fuel_Pres">Fuel_Pres</option>
+                    <option value="Ext_Temp">Ext_Temp</option>
+                    <option value="Oil_Temp">Oil_Temp</option>
+                    <option value="Water_Temp">Water_Temp</option>
+                </select>
+             </li>
+             <li>Flag<br>
+                <select id="deficode_flag">
+                    <option value="true">true</option>
+                    <option value="false">false</option>
+                </select>
+             </li>
+             <li>
+                 <input type="button" id="button_DEFI_WS_SEND" value="input DEFI_WS_SEND" onclick="input_DEFI_WS_SEND()"/>
+             </li>
+         </ul>
+         
+         <h4>DEFI_WS_INTERVAL</h4>
+         <ul>
+             <li>
+                <input type="number"  id="interval_DEFI_WS_INTERVAL">
+             </li>
+            <li>
+                 <input type="button" id="button_DEFI_WS_INTERVAL" value="input DEFI_WS_INTERVAL" onclick="input_DEFI_WS_INTERVAL()"/>
+             </li>
+         </ul>
+         
+         <h4>SSM_COM_READ</h4>
+         <ul>
+             <li>SSMCode<br>
+                <select id="ssmcomcode_select">
+                    <option value="Engine_Load">Engine_Load</option>
+                    <option value="Coolant_Temperature">Coolant_Temperature</option>
+                    <option value="Air_Fuel_Correction_1">Air_Fuel_Correction_1</option>
+                    <option value="Air_Fuel_Learning_1">Air_Fuel_Learning_1</option>
+                    <option value="Air_Fuel_Correction_2">Air_Fuel_Correction_2</option>
+                    <option value="Air_Fuel_Learning_2">Air_Fuel_Learning_2</option>
+                    <option value="Manifold_Absolute_Pressure">Manifold_Absolute_Pressure</option>
+                    <option value="Engine_Speed">Engine_Speed</option>
+                    <option value="Vehicle_Speed">Vehicle_Speed</option>
+                    <option value="Ignition_Timing">Ignition_Timing</option>
+                    <option value="Intake_Air_Temperature">Intake_Air_Temperature</option>
+                    <option value="Mass_Air_Flow">Mass_Air_Flow</option>
+                    <option value="Throttle_Opening_Angle">Throttle_Opening_Angle</option>
+                    <option value="Front_O2_Sensor_1">Front_O2_Sensor_1</option>
+                    <option value="Rear_O2_Sensor">Rear_O2_Sensor</option>
+                    <option value="Front_O2_Sensor_2">Front_O2_Sensor_2</option>
+                    <option value="Battery_Voltage">Battery_Voltage</option>
+                    <option value="Air_Flow_Sensor_Voltage">Air_Flow_Sensor_Voltage</option>
+                    <option value="Throttle_Sensor_Voltage">Throttle_Sensor_Voltage</option>
+                    <option value="Differential_Pressure_Sensor_Voltage">Differential_Pressure_Sensor_Voltage</option>
+                    <option value="Fuel_Injection_1_Pulse_Width">Fuel_Injection_1_Pulse_Width</option>
+                    <option value="Fuel_Injection_2_Pulse_Width">Fuel_Injection_2_Pulse_Width</option>
+                    <option value="Knock_Correction">Knock_Correction</option>
+                    <option value="Atmospheric_Pressure">Atmospheric_Pressure</option>
+                    <option value="Manifold_Relative_Pressure">Manifold_Relative_Pressure</option>
+                    <option value="Pressure_Differential_Sensor">Pressure_Differential_Sensor</option>
+                    <option value="Fuel_Tank_Pressure">Fuel_Tank_Pressure</option>
+                    <option value="CO_Adjustment">CO_Adjustment</option>
+                    <option value="Learned_Ignition_Timing">Learned_Ignition_Timing</option>
+                    <option value="Accelerator_Opening_Angle">Accelerator_Opening_Angle</option>
+                    <option value="Fuel_Temperature">Fuel_Temperature</option>
+                    <option value="Front_O2_Heater_1">Front_O2_Heater_1</option>
+                    <option value="Rear_O2_Heater_Current">Rear_O2_Heater_Current</option>
+                    <option value="Front_O2_Heater_2">Front_O2_Heater_2</option>
+                    <option value="Fuel_Level">Fuel_Level</option>
+                    <option value="Primary_Wastegate_Duty_Cycle">Primary_Wastegate_Duty_Cycle</option>
+                    <option value="Secondary_Wastegate_Duty_Cycle">Secondary_Wastegate_Duty_Cycle</option>
+                    <option value="CPC_Valve_Duty_Ratio">CPC_Valve_Duty_Ratio</option>
+                    <option value="Tumble_Valve_Position_Sensor_Right">Tumble_Valve_Position_Sensor_Right</option>
+                    <option value="Tumble_Valve_Position_Sensor_Left">Tumble_Valve_Position_Sensor_Left</option>
+                    <option value="Idle_Speed_Control_Valve_Duty_Ratio">Idle_Speed_Control_Valve_Duty_Ratio</option>
+                    <option value="Air_Fuel_Lean_Correction">Air_Fuel_Lean_Correction</option>
+                    <option value="Air_Fuel_Heater_Duty">Air_Fuel_Heater_Duty</option>
+                    <option value="Idle_Speed_Control_Valve_Step">Idle_Speed_Control_Valve_Step</option>
+                    <option value="Number_of_Ex_Gas_Recirc_Steps">Number_of_Ex_Gas_Recirc_Steps</option>
+                    <option value="Alternator_Duty">Alternator_Duty</option>
+                    <option value="Fuel_Pump_Duty">Fuel_Pump_Duty</option>
+                    <option value="Intake_VVT_Advance_Angle_Right">Intake_VVT_Advance_Angle_Right</option>
+                    <option value="Intake_VVT_Advance_Angle_Left">Intake_VVT_Advance_Angle_Left</option>
+                    <option value="Intake_OCV_Duty_Right">Intake_OCV_Duty_Right</option>
+                    <option value="Intake_OCV_Duty_Left">Intake_OCV_Duty_Left</option>
+                    <option value="Intake_OCV_Current_Right">Intake_OCV_Current_Right</option>
+                    <option value="Intake_OCV_Current_Left">Intake_OCV_Current_Left</option>
+                    <option value="Air_Fuel_Sensor_1_Current">Air_Fuel_Sensor_1_Current</option>
+                    <option value="Air_Fuel_Sensor_2_Current">Air_Fuel_Sensor_2_Current</option>
+                    <option value="Air_Fuel_Sensor_1_Resistance">Air_Fuel_Sensor_1_Resistance</option>
+                    <option value="Air_Fuel_Sensor_2_Resistance">Air_Fuel_Sensor_2_Resistance</option>
+                    <option value="Air_Fuel_Sensor_1">Air_Fuel_Sensor_1</option>
+                    <option value="Air_Fuel_Sensor_2">Air_Fuel_Sensor_2</option>
+                    <option value="Gear_Position">Gear_Position</option>
+                    <option value="A_F_Sensor_1_Heater_Current">A_F_Sensor_1_Heater_Current</option>
+                    <option value="A_F_Sensor_2_Heater_Current">A_F_Sensor_2_Heater_Current</option>
+                    <option value="Roughness_Monitor_Cylinder_1">Roughness_Monitor_Cylinder_1</option>
+                    <option value="Roughness_Monitor_Cylinder_2">Roughness_Monitor_Cylinder_2</option>
+                    <option value="Air_Fuel_Correction_3">Air_Fuel_Correction_3</option>
+                    <option value="Air_Fuel_Learning_3">Air_Fuel_Learning_3</option>
+                    <option value="Rear_O2_Heater_Voltage">Rear_O2_Heater_Voltage</option>
+                    <option value="Air_Fuel_Adjustment_Voltage">Air_Fuel_Adjustment_Voltage</option>
+                    <option value="Roughness_Monitor_Cylinder_3">Roughness_Monitor_Cylinder_3</option>
+                    <option value="Roughness_Monitor_Cylinder_4">Roughness_Monitor_Cylinder_4</option>
+                    <option value="Throttle_Motor_Duty">Throttle_Motor_Duty</option>
+                    <option value="Throttle_Motor_Voltage">Throttle_Motor_Voltage</option>
+                    <option value="Sub_Throttle_Sensor">Sub_Throttle_Sensor</option>
+                    <option value="Main_Throttle_Sensor">Main_Throttle_Sensor</option>
+                    <option value="Sub_Accelerator_Sensor">Sub_Accelerator_Sensor</option>
+                    <option value="Main_Accelerator_Sensor">Main_Accelerator_Sensor</option>
+                    <option value="Brake_Booster_Pressure">Brake_Booster_Pressure</option>
+                    <option value="Fuel_Pressure_High">Fuel_Pressure_High</option>
+                    <option value="Exhaust_Gas_Temperature">Exhaust_Gas_Temperature</option>
+                    <option value="Cold_Start_Injector">Cold_Start_Injector</option>
+                    <option value="SCV_Step">SCV_Step</option>
+                    <option value="Memorised_Cruise_Speed">Memorised_Cruise_Speed</option>
+                    <option value="Exhaust_VVT_Advance_Angle_Right">Exhaust_VVT_Advance_Angle_Right</option>
+                    <option value="Exhaust_VVT_Advance_Angle_Left">Exhaust_VVT_Advance_Angle_Left</option>
+                    <option value="Exhaust_OCV_Duty_Right">Exhaust_OCV_Duty_Right</option>
+                    <option value="Exhaust_OCV_Duty_Left">Exhaust_OCV_Duty_Left</option>
+                    <option value="Exhaust_OCV_Current_Right">Exhaust_OCV_Current_Right</option>
+                    <option value="Exhaust_OCV_Current_Left">Exhaust_OCV_Current_Left</option>
+                    <option value="Switch_P0x061">Switch_P0x061</option>
+                    <option value="Switch_P0x062">Switch_P0x062</option>
+                    <option value="Switch_P0x063">Switch_P0x063</option>
+                    <option value="Switch_P0x064">Switch_P0x064</option>
+                    <option value="Switch_P0x065">Switch_P0x065</option>
+                    <option value="Switch_P0x066">Switch_P0x066</option>
+                    <option value="Switch_P0x067">Switch_P0x067</option>
+                    <option value="Switch_P0x068">Switch_P0x068</option>
+                    <option value="Switch_P0x069">Switch_P0x069</option>
+                    <option value="Switch_P0x120">Switch_P0x120</option>
+                    <option value="Switch_P0x121">Switch_P0x121</option>
+                </select>
+             </li>
+             <li>Read_mode<br>
+                <select id="ssmcode_readmode">
+                    <option value="FAST">FAST</option>
+                    <option value="SLOW">SLOW</option>
+                </select>
+             </li>
+             <li>Flag<br>
+                <select id="ssmcode_flag">
+                    <option value="true">true</option>
+                    <option value="false">false</option>
+                </select>
+             </li>
+             <li>
+                 <input type="button" id="button_SSM_COM_READ" value="input SSM_COM_READ" onclick="input_SSM_COM_READ()"/>
+             </li>
+         </ul>
+         
+        <h4>SSMCOM_SLOWREAD_INTERVAL</h4>
+         <ul>
+             <li>
+                <input type="number"  id="interval_SSMCOM_SLOWREAD_INTERVAL">
+             </li>
+            <li>
+                 <input type="button" id="button_SSMCOM_SLOWREAD_INTERVAL" value="input SSMCOM_SLOWREAD_INTERVAL" onclick="input_SSMCOM_SLOWREAD_INTERVAL()"/>
+             </li>
+         </ul>
+         
+         
+         <hr>
+         <h3>VAL packet</h3>
+         <div id="div_val_data"></div>
+         <hr>
+         <h3>ERR packet</h3>
+         <div id="div_err_data"></div>
+         <hr>
+         <h3>RES packet</h3>
+         <div id="div_res_data"></div>
+         <hr>
+         <h3>Websocket message</h3>
+         <div id="div_ws_message"></div>
+         <hr>
+    </body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>FUELTRIP WebSocket Test</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="js/libs/jquery/jquery.js"></script>
+        <script src="js/FUELTRIP_WSTest.js"></script>
+        <script>
+            var fuel_ws = new FUELTRIP_Websocket();
+            fuel_ws.onMomentFUELTRIPpacketReceived = function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
+            {
+                //clear
+                $('#div_moment_fueltrip_data').html("");
+
+                $('#div_moment_fueltrip_data').append("Moment GasMilage : " + moment_gasmilage + "<br>" );
+                $('#div_moment_fueltrip_data').append("Total Gas : " + total_gas + "<br>" );
+                $('#div_moment_fueltrip_data').append("Total Trip : " + total_trip + "<br>" );
+                $('#div_moment_fueltrip_data').append("Total GasMilage : " + total_gasmilage + "<br>" );
+            };
+            fuel_ws.onSectFUELTRIPpacketReceived = function(sect_span, sect_trip, sect_gas, sect_gasmilage)
+            {
+                //clear
+                $('#div_sect_fueltrip_data').html("");
+
+                $('#div_sect_fueltrip_data').append("Sect Span : " + sect_span + "<br>" );
+                $('#div_sect_fueltrip_data').append("Sect Trip : " + sect_trip + "<br>" );
+                $('#div_sect_fueltrip_data').append("Sect Gas : " + sect_gas + "<br>" );
+                $('#div_sect_fueltrip_data').append("Sect GasMilage : " + sect_gasmilage + "<br>" );
+            };
+            
+            fuel_ws.onERRpacketReceived = function(msg)
+            {
+                $('#div_err_data').append(msg + "<br>");
+            };
+            fuel_ws.onRESpacketReceived = function(msg)
+            {
+                $('#div_res_data').append(msg + "<br>");
+            };
+            fuel_ws.onWebsocketError = function(msg)
+            {
+                $('#div_ws_message').append(msg + "<br>");
+            };
+            fuel_ws.onWebsocketOpen = function()
+            {
+                $('#div_ws_message').append('* Connection open<br/>');
+
+                $('#sendmessagecontent_box').removeAttr("disabled");
+                $('#sendButton').removeAttr("disabled");
+                $('#connectButton').attr("disabled", "disabled");
+                $('#disconnectButton').removeAttr("disabled");  
+            };
+            fuel_ws.onWebsocketClose = function()
+            {
+                $('#div_ws_message').append('* Connection closed<br/>');
+                
+                $('#sendmessagecontent_box').attr("disabled", "disabled");
+                $('#sendButton').attr("disabled", "disabled");
+                $('#connectButton').removeAttr("disabled");
+                $('#disconnectButton').attr("disabled", "disabled");
+            };
+            
+            function connectWebSocket()
+            {
+                fuel_ws.URL = $("#serverURL_box").val();
+                fuel_ws.Connect();
+            };
+            
+            function disconnectWebSocket()
+            {
+                fuel_ws.Close();
+            };
+            
+            function input_SECT_SPAN()
+            {
+                fuel_ws.SendSectSpan($('#span_SECT_SPAN').val());
+            };
+            
+            function input_SECT_STOREMAX()
+            {
+                fuel_ws.SendSectStoreMax($('#storemax_SECT_STOREMAX').val());
+            };
+        </script>
+    </head>
+    <body>
+        <div><h2>FUELTRIP WebSocket Test</h2></div>
+        <hr>
+        Server URL : <input type="text" required="required" id="serverURL_box" /> 
+         <input type="button" id="connectButton" value="Connect" onclick="connectWebSocket()"/>
+         <input type="button" id="disconnectButton" value="Disconnect" onclick="disconnectWebSocket()"/><br>
+         <hr>
+        
+        <h4>SECT SPAN</h4>
+        <ul>
+             <li>
+                <input type="number"  id="span_SECT_SPAN">
+             </li>
+            <li>
+                 <input type="button" id="button_SECT_SPAN" value="send SECT_SPAN" onclick="input_SECT_SPAN()"/>
+             </li>
+         </ul>
+        <h4>SECT STOREMAX</h4>
+        <ul>
+             <li>
+                <input type="number"  id="storemax_SECT_STOREMAX">
+             </li>
+            <li>
+                 <input type="button" id="button_SECT_STOREMAX" value="send SECT_STOREMAX" onclick="input_SECT_STOREMAX()"/>
+             </li>
+         </ul>
+        
+         <hr>
+         
+         <h3>MOMENT FUELTRIP packet</h3>
+         <div id="div_moment_fueltrip_data"></div>
+         <hr>
+         <h3>SECT FUELTRIP packet</h3>
+         <div id="div_sect_fueltrip_data"></div>
+         <hr>
+         <h3>ERR packet</h3>
+         <div id="div_err_data"></div>
+         <hr>
+         <h3>RES packet</h3>
+         <div id="div_res_data"></div>
+         <hr>
+         <h3>Websocket message</h3>
+         <div id="div_ws_message"></div>
+         <hr>
+    </body>
+</html>
