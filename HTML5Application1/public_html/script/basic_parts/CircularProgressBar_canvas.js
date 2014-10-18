@@ -50,12 +50,12 @@ var CircularProgressBar_canvas = function(canvas, img)
         if(anticlockwise)
         {
             start_angle = Math.PI/180*this.offset_angle;
-            end_angle = Math.PI/180*(this.offset_angle - this.full_angle/100*percent);
+            end_angle = Math.PI/180*(this.offset_angle - this.full_angle*(percent/100));
         }
         else
         {
             start_angle = Math.PI/180*this.offset_angle;
-            end_angle = Math.PI/180*(this.offset_angle + this.full_angle/100*percent);
+            end_angle = Math.PI/180*(this.offset_angle + this.full_angle*(percent/100));
         }
         context.save();
 
