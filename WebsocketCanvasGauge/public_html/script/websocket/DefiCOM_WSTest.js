@@ -4,12 +4,11 @@
  * and open the template in the editor.
  */
 
-var FUELTRIP_Websocket = function()
+var DefiCOM_Websocket = function()
 {
     this._ws;
     this.URL;
-    this.onMomentFUELTRIPpacketReceived = function(moment_gasmilage, total_gas, total_trip, total_gasmilage){};
-    this.onSectFUELTRIPpacketReceived = function(sect_span, sect_trip, sect_gas, sect_gasmilage){};
+    this.onVALpacketReceived = function(val){};
     this.onERRpacketReceived = function(msg){};
     this.onRESpacketReceived = function(msg){};
     this.onWebsocketOpen = function(){};
@@ -20,21 +19,23 @@ var FUELTRIP_Websocket = function()
     };
 };
 
-FUELTRIP_Websocket.prototype.SendSectSpan = function(sect_span)
+DefiCOM_Websocket.prototype.SendDefiWSSend = function(code,flag)
 {
     var obj={
-      mode : "SECT_SPAN",
-      sect_span : sect_span
+      mode : "DEFI_WS_SEND",
+      code : code,
+      flag : flag
     };
     
     var jsonstr = JSON.stringify(obj);
     this._ws.send(jsonstr);
 };
 
-FUELTRIP_Websocket.prototype.SendReset = function()
+DefiCOM_Websocket.prototype.SendDefiWSInterval = function(interval)
 {
     var obj={
-      mode : "RESET"
+      mode : "DEFI_WS_INTERVAL",
+      interval : interval
     };
     
     var jsonstr = JSON.stringify(obj);
@@ -42,33 +43,12 @@ FUELTRIP_Websocket.prototype.SendReset = function()
     this._ws.send(jsonstr);    
 };
 
-FUELTRIP_Websocket.prototype.SendSectStoreMax = function(storemax)
-{
-    var obj={
-      mode : "SECT_STOREMAX",
-      storemax : storemax
-    };
-    
-    var jsonstr = JSON.stringify(obj);
-    
-    this._ws.send(jsonstr);    
-};
-
-FUELTRIP_Websocket.prototype._parseIncomingMessage = function(message){
+DefiCOM_Websocket.prototype._parseIncomingMessage = function(message){
     var received_json_object = JSON.parse(message);
     switch(received_json_object.mode)
     {
-        case ("MOMENT_FUELTRIP") :
-            this.onMomentFUELTRIPpacketReceived(received_json_object.moment_gasmilage,
-            received_json_object.total_gas,
-            received_json_object.total_trip,
-            received_json_object.total_gasmilage);
-            break;
-        case ("SECT_FUELTRIP") :
-            this.onSectFUELTRIPpacketReceived(received_json_object.sect_span,
-            received_json_object.sect_trip,
-            received_json_object.sect_gas,
-            received_json_object.sect_gasmilage);
+        case ("VAL") :
+            this.onVALpacketReceived(received_json_object.val);
             break;
         case("ERR"):
             this.onERRpacketReceived(received_json_object.msg);
@@ -81,7 +61,7 @@ FUELTRIP_Websocket.prototype._parseIncomingMessage = function(message){
     };
 };
 
-FUELTRIP_Websocket.prototype.Connect = function() { 
+DefiCOM_Websocket.prototype.Connect = function() { 
     var support = "MozWebSocket" in window ? 'MozWebSocket' : ("WebSocket" in window ? 'WebSocket' : null);
 
     if (support === null) {
@@ -106,7 +86,7 @@ FUELTRIP_Websocket.prototype.Connect = function() {
     };
 };
 
-FUELTRIP_Websocket.prototype.Close = function()
+DefiCOM_Websocket.prototype.Close = function()
 {
     if(this._ws){
         this._ws.close();

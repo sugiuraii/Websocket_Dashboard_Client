@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>GasMilage Graph</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="./script/libs/jquery/jquery.js"></script>
+        <script src="./script/websocket/FUELTRIP_WSTest.js"></script>
+        <script>
+            var fueltrip_ws = new FUELTRIP_Websocket();
+            fueltrip_ws.onMomentFUELTRIPpacketReceived = function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
+            {
+                $("#gauge_frame1")[0].contentWindow.total_fuel = total_gas;
+                $("#gauge_frame1")[0].contentWindow.total_trip = total_trip;
+                $("#gauge_frame1")[0].contentWindow.total_gasmilage = total_gasmilage;
+                $("#gauge_frame1")[0].contentWindow.milage_0 = moment_gasmilage;
+                $("#gauge_frame1")[0].contentWindow.value_update();
+            };
+            
+            fueltrip_ws.onSectFUELTRIPpacketReceived = function(sect_span, sect_trip, sect_gas, sect_gasmilage)
+            {
+                var num_sects = sect_gasmilage.length;
+                var i;
+                var sect_gasmilage_zerofill = sect_gasmilage.concat();
+
+                for (i = 0; i < 6 - num_sects; i++)
+                {
+                    sect_gasmilage_zerofill.unshift(0);
+                }
+                $("#gauge_frame1")[0].contentWindow.milage_30 = sect_gasmilage_zerofill[0];
+                $("#gauge_frame1")[0].contentWindow.milage_25 = sect_gasmilage_zerofill[1];
+                $("#gauge_frame1")[0].contentWindow.milage_20 = sect_gasmilage_zerofill[2];
+                $("#gauge_frame1")[0].contentWindow.milage_15 = sect_gasmilage_zerofill[3];
+                $("#gauge_frame1")[0].contentWindow.milage_10 = sect_gasmilage_zerofill[4];
+                $("#gauge_frame1")[0].contentWindow.milage_5 = sect_gasmilage_zerofill[5];              
+                $("#gauge_frame1")[0].contentWindow.value_update();
+            };
+            
+            fueltrip_ws.onERRpacketReceived = function(msg)
+            {
+                $('#div_message').append(msg + "<br>");
+            };
+            fueltrip_ws.onRESpacketReceived = function(msg)
+            {
+                $('#div_message').append(msg + "<br>");
+            };
+            fueltrip_ws.onWebsocketError = function(msg)
+            {
+                $('#div_message').append(msg + "<br>");
+            };
+            fueltrip_ws.onWebsocketOpen = function()
+            {
+                $('#div_message').append('* Connection started<br/>');
+                setTimeout(
+                function(){
+                fueltrip_ws.SendSectSpan(300);
+                fueltrip_ws.SendSectStoreMax(6);
+                },5000);
+            };
+            fueltrip_ws.onWebsocketClose = function()
+            {
+                $('#div_message').append('* Connection closed<br/>');
+            };
+            initialize_gauge = function()
+            {
+                var gauge_id = "#gauge_frame1";
+                $(gauge_id)[0].contentWindow.milage_0 = 0;
+                $(gauge_id)[0].contentWindow.milage_5 = 0;
+                $(gauge_id)[0].contentWindow.milage_10 = 0;
+                $(gauge_id)[0].contentWindow.milage_15 = 0;
+                $(gauge_id)[0].contentWindow.milage_20 = 0;
+                $(gauge_id)[0].contentWindow.milage_25 = 0;
+                $(gauge_id)[0].contentWindow.milage_30 = 0;
+                $(gauge_id)[0].contentWindow.total_trip = 0;
+                $(gauge_id)[0].contentWindow.total_fuel = 0;
+                $(gauge_id)[0].contentWindow.total_gasmilage = 0;
+                
+                $(gauge_id)[0].contentWindow.initialize();
+            };
+            
+            function connectWebSocket()
+            {
+                fueltrip_ws.URL = "ws://localhost:2014/";
+                fueltrip_ws.Connect();
+            };
+            
+            function reset_fuel_trip()
+            {
+                if(window.confirm('Reset fuel and trip?'))
+                {
+                    fueltrip_ws.SendReset();
+                    initialize_gauge();
+                }
+            }
+            
+            onload = function()
+            {
+                initialize_gauge();
+                connectWebSocket();
+            };
+            
+        </script>
+        <style>
+            iframe.meter {
+                    position:absolute;
+                    border: none;
+                    -webkit-transform:scale(0.5,0.5);
+                    -moz-transform:scale(0.5,0.5);
+                    -ms-transform:scale(0.5,0.5);
+                    transform:scale(0.5,0.5);
+                    -webkit-transform-origin: 0 0;
+                    -moz-transform-origin: 0 0;
+                    -ms-transform-origin: 0 0;
+                    transform-origin: 0 0;
+                }
+        </style>
+    </head>
+    <body>
+    <iframe class="meter" style="top:10px" id="gauge_frame1" src="./parts/MilageGraph/MilageGraph.html" scrolling="no" width="1280" height="660" seamless> </iframe>
+    <div id="div_message" style="position:absolute;top:500px"></div>
+    <button onclick="reset_fuel_trip()" style="position:absolute;top:400px">Reset</button>
+    </body>
+</html>

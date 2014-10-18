@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>WaterTemp/Batt Voltage</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="./script/libs/jquery/jquery.js"></script>
+        <script src="./script/websocket/DefiCOM_WSTest.js"></script>
+        <script>
+            var defi_ws = new DefiCOM_Websocket();
+            defi_ws.onVALpacketReceived = function(val)
+            {
+                for (var key in val)
+                {
+                    if(key === "Boost")
+                    {
+                        $("#gauge_frame1")[0].contentWindow.value = val[key];
+                        $("#gauge_frame1")[0].contentWindow.value_update();
+                    }
+                }
+            };
+            defi_ws.onERRpacketReceived = function(msg)
+            {
+                $('#div_message').append(msg + "<br>");
+            };
+            defi_ws.onRESpacketReceived = function(msg)
+            {
+                $('#div_message').append(msg + "<br>");
+            };
+            defi_ws.onWebsocketError = function(msg)
+            {
+                $('#div_message').append(msg + "<br>");
+            };
+            defi_ws.onWebsocketOpen = function()
+            {
+                $('#div_message').append('* Connection started<br/>');
+                setTimeout(
+                function(){
+                defi_ws.SendDefiWSSend("Boost","true");
+                },5000);
+            };
+            defi_ws.onWebsocketClose = function()
+            {
+                $('#div_message').append('* Connection closed<br/>');
+            };
+            initialize_gauge1 = function()
+            {
+                var gauge_id = "#gauge_frame1";
+                $(gauge_id)[0].contentWindow.value_max = 2.0;
+                $(gauge_id)[0].contentWindow.value_min = -1.0;
+                $(gauge_id)[0].contentWindow.title_str = "TURBO BOOST";
+                $(gauge_id)[0].contentWindow.unit_str = "x100Pa";
+                $(gauge_id)[0].contentWindow.scale_str1 ="-1.0";
+                $(gauge_id)[0].contentWindow.scale_str2 ="-0.5";
+                $(gauge_id)[0].contentWindow.scale_str3 = "0";
+                $(gauge_id)[0].contentWindow.scale_str4 = "0.5";
+                $(gauge_id)[0].contentWindow.scale_str5 = "1.0";
+                $(gauge_id)[0].contentWindow.scale_str6 = "1.5";
+                $(gauge_id)[0].contentWindow.scale_str7 = "2.0";
+                $(gauge_id)[0].contentWindow.redzone_offset_angle = 315;
+                $(gauge_id)[0].contentWindow.redzone_full_angle = 45;
+                $(gauge_id)[0].contentWindow.value_label_rounded = 1;
+                $(gauge_id)[0].contentWindow.initialize();
+            };
+            
+            function connectWebSocket()
+            {
+                defi_ws.URL = "ws://localhost:2012/";
+                defi_ws.Connect();
+            };
+            
+            onload = function()
+            {
+                initialize_gauge1();
+                connectWebSocket();
+            };
+            
+        </script>
+        <style>
+            iframe.meter {
+                    position:absolute;
+                    border: none;
+                    -webkit-transform:scale(0.4,0.4);
+                    -moz-transform:scale(0.4,0.4);
+                    -ms-transform:scale(0.4,0.4);
+                    transform:scale(0.4,0.4);
+                    -webkit-transform-origin: 0 0;
+                    -moz-transform-origin: 0 0;
+                    -ms-transform-origin: 0 0;
+                    transform-origin: 0 0;
+                }
+        </style>
+    </head>
+    <body>
+    <iframe class="meter" style="top:10px" id="gauge_frame1" src="./parts/FullCircularGauge/FullCircularGauge.html" scrolling="no" width="799" height="794" seamless> </iframe>
+    <div id="div_message" style="position:absolute;top:500px"></div>
+    </body>
+</html>
