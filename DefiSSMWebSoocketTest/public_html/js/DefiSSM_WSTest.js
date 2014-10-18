@@ -11,7 +11,7 @@ function appendWSMessage(message) {
 };
 
 function writeVALdata(message){
-    $("div#div_val_data").append(message + "<br>" );
+    $("div#div_val_data").text(message);
 };
 
 function writeERRdata(message){
@@ -127,8 +127,19 @@ function input_SSM_COM_READ(){
     var obj={
       mode : "SSM_COM_READ",
       code : $('#ssmcomcode_select').val(),
-      read_mode : $('ssmcode_readmode').val(),
+      read_mode : $('#ssmcode_readmode').val(),
       flag : $('#ssmcode_flag').val()
+    };
+    
+    var jsonstr = JSON.stringify(obj);
+    
+    $('#sendmessagecontent_box').val(jsonstr);
+};
+
+function input_SSMCOM_SLOWREAD_INTERVAL(){
+    var obj={
+      mode : "SSM_SLOWREAD_INTERVAL",
+      interval : $('#interval_SSMCOM_SLOWREAD_INTERVAL').val()
     };
     
     var jsonstr = JSON.stringify(obj);
