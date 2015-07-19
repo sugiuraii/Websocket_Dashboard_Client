@@ -7,6 +7,7 @@ and open the template in the editor.
 <html>
     <head>
         <title>TODO supply a title</title>
+        <link rel="stylesheet" href="./css/default.css" type="text/css">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <script src="./script/libs/jquery/jquery.js"></script>
@@ -164,10 +165,12 @@ and open the template in the editor.
                     position:static;
                     border: none;
                     z-index:0;
+                    /*
                     -webkit-transform:scale(0.5,0.5);
                     -moz-transform:scale(0.5,0.5);
                     -ms-transform:scale(0.5,0.5);
                     transform:scale(0.5,0.5);
+                    */
                     -webkit-transform-origin: 0 0;
                     -moz-transform-origin: 0 0;
                     -ms-transform-origin: 0 0;
@@ -175,10 +178,12 @@ and open the template in the editor.
                 }
         </style>
     </head>
-    <body>
-        
-        <iframe class="meter" id="gauge_frame1" src="./parts/AnalogMeterCluster/AnalogMeterCluster.html" scrolling="no" width="1060" height="600" seamless> </iframe><br>
-        <div id="div_message" style="position: absolute;top:650px"></div>
-        <button onclick="reset_fuel_trip()" style="position:absolute;top:0px;left:0px;z-index:1">Reset</button>
+    <body> 
+        <center>
+            <iframe class="meter" id="gauge_frame1" src="./parts/AnalogMeterCluster/AnalogMeterCluster.html" scrolling="no" width="1060" height="600" seamless> </iframe><br>
+        </center>
+        <br>
+        <div class="debug_message" id="div_message"  style="" ></div>
+        <button class="button1" onclick="reset_fuel_trip()" style="position:absolute;top:0px;left:0px;z-index:1">Reset</button>
     </body>
 </html>

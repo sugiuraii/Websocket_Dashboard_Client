@@ -1,0 +1,50 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 2015/07/12, 18:48:23
+    Author     : kuniaki
+*/
+
+body {
+    background-color: black;
+} 
+
+button.button1 {
+    font-size: 3em;
+    font-weight: bold;
+    padding: 3px 12px;
+    color: white;
+    
+    border-style: none;
+    
+    box-shadow: 2px 2px 3px 1px #666;
+    -moz-box-shadow: 2px 2px 3px 1px #666;
+    -webkit-box-shadow: 2px 2px 3px 1px #666;
+    
+    text-shadow: 0px 0px 2px #fff;
+    
+    background: -moz-linear-gradient(bottom, #444, #666 50%, #444);
+    background: -webkit-gradient(linear, left bottom, left top, from(#444), color-stop(0.5, #666), to(#444));
+    
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+/*
+button.button1:hover {
+    opacity: 0.8;
+}
+*/
+
+div.debug_message
+{
+    background: black;
+    color:white;
+    height:300px;
+    width:1060px;
+    overflow:scroll;
+}

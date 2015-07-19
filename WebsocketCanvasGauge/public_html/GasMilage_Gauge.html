@@ -9,6 +9,7 @@ and open the template in the editor.
         <title>GasMilage Graph</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./css/default.css" type="text/css">
         <script src="./script/libs/jquery/jquery.js"></script>
         <script src="./script/websocket/FUELTRIP_WSTest.js"></script>
         <script>
@@ -107,12 +108,12 @@ and open the template in the editor.
         </script>
         <style>
             iframe.meter {
-                    position:absolute;
+                    position:static;
                     border: none;
-                    -webkit-transform:scale(0.5,0.5);
-                    -moz-transform:scale(0.5,0.5);
-                    -ms-transform:scale(0.5,0.5);
-                    transform:scale(0.5,0.5);
+                    -webkit-transform:scale(0.9,0.9);
+                    -moz-transform:scale(0.9,0.9);
+                    -ms-transform:scale(0.9,0.9);
+                    transform:scale(0.9,0.9);
                     -webkit-transform-origin: 0 0;
                     -moz-transform-origin: 0 0;
                     -ms-transform-origin: 0 0;
@@ -121,8 +122,9 @@ and open the template in the editor.
         </style>
     </head>
     <body>
-    <iframe class="meter" style="top:10px" id="gauge_frame1" src="./parts/MilageGraph/MilageGraph.html" scrolling="no" width="1280" height="660" seamless> </iframe>
-    <div id="div_message" style="position:absolute;top:500px"></div>
-    <button onclick="reset_fuel_trip()" style="position:absolute;top:400px">Reset</button>
+        <button class="button1" onclick="reset_fuel_trip()">Reset</button>
+        <iframe class="meter" style="top:10px" id="gauge_frame1" src="./parts/MilageGraph/MilageGraph.html" scrolling="no" width="1280" height="660" seamless> </iframe>
+        <br>
+        <div class="debug_message" id="div_message"></div>
     </body>
 </html>
