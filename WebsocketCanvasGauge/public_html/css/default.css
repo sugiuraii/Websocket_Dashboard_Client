@@ -7,12 +7,25 @@ and open the template in the editor.
     Created on : 2015/07/12, 18:48:23
     Author     : kuniaki
 */
-
+body:before {
+	z-index: 0;
+	content: "";
+	display: block;
+	position: absolute;
+        top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: -moz-linear-gradient(top, rgba(0,0,0,1),rgba(0,0,0,0.8) 50%, rgba(0,0,0,0.5));
+        background: -webkit-gradient(linear, center top, center bottom, from(rgba(0,0,0,1)),color-stop(0.5, rgba(0,0,0,0.8)), to(rgba(0,0,0,0.5)));
+}
 body {
     background-color: black;
+    background-image: url("../img/metal_mesh/side-slanting-mesh.png");
 } 
 
 button.button1 {
+    z-index: 1;
     font-size: 3em;
     font-weight: bold;
     padding: 3px 12px;
@@ -42,9 +55,14 @@ button.button1:hover {
 
 div.debug_message
 {
-    background: black;
+    z-index: 10;
+    position:absolute;
+    background: rgba(0,0,0,0.8);
+    visibility: hidden;
+    top: 100px;
+    left: 100px;
     color:white;
-    height:300px;
-    width:1060px;
+    height:30vw;
+    width:80vw;
     overflow:scroll;
 }
