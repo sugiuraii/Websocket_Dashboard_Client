@@ -94,3 +94,7 @@ SSMCOM_Websocket.prototype.Close = function()
     };
 };
 
+SSMCOM_Websocket.prototype.getReadyState = function()
+{
+    return this._ws.readyState;
+};

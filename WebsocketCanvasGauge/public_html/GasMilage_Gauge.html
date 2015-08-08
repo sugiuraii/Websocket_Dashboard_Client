@@ -66,7 +66,13 @@ and open the template in the editor.
             fueltrip_ws.onWebsocketClose = function()
             {
                 $('#div_message').append('* Connection closed<br/>');
+                $('#div_message').append('Reconnect after 5sec...<br/>');
+                setTimeout(
+                function(){
+                    fueltrip_ws.Connect();
+                }, 5000);                
             };
+            
             initialize_gauge = function()
             {
                 var gauge_id = "#gauge_frame1";

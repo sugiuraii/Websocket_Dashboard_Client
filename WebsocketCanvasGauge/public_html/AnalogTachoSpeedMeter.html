@@ -36,19 +36,19 @@ and open the template in the editor.
             };
             defi_ws.onERRpacketReceived = function(msg)
             {
-                $('#div_message').append(msg + "<br>");
+                appendDebugMessage("Defi", msg);
             };
             defi_ws.onRESpacketReceived = function(msg)
             {
-                $('#div_message').append(msg + "<br>");
+                appendDebugMessage("Defi", msg);
             };
             defi_ws.onWebsocketError = function(msg)
             {
-                $('#div_message').append(msg + "<br>");
+                appendDebugMessage("Defi", msg);
             };
             defi_ws.onWebsocketOpen = function()
             {
-                $('#div_message').append('* Connection started<br/>');
+                appendDebugMessage("Defi", "Connection started");
                 setTimeout(
                 function(){
                 defi_ws.SendDefiWSSend("Boost","true");
@@ -57,7 +57,12 @@ and open the template in the editor.
             };
             defi_ws.onWebsocketClose = function()
             {
-                $('#div_message').append('* Connection closed<br/>');
+                appendDebugMessage("Defi", "Connection closed");
+                appendDebugMessage("Defi", "Reconnect after 5sec...");
+                setTimeout(
+                function(){
+                    defi_ws.Connect();
+                }, 5000);                
             };
             
             ssm_ws.onVALpacketReceived = function(val)
@@ -85,19 +90,19 @@ and open the template in the editor.
             };
             ssm_ws.onERRpacketReceived = function(msg)
             {
-                $('#div_message').append(msg + "<br>");
+                appendDebugMessage("SSM", msg);
             };
             ssm_ws.onRESpacketReceived = function(msg)
             {
-                $('#div_message').append(msg + "<br>");
+                appendDebugMessage("SSM", msg);
             };
             ssm_ws.onWebsocketError = function(msg)
             {
-                $('#div_message').append(msg + "<br>");
+                appendDebugMessage("SSM", msg);
             };
             ssm_ws.onWebsocketOpen = function()
             {
-                $('#div_message').append('* Connection started<br/>');
+                appendDebugMessage("SSM", "Connection started");
                 setTimeout(
                 function(){
                 ssm_ws.SendSSMCOMRead("Coolant_Temperature","SLOW","true");
@@ -109,7 +114,12 @@ and open the template in the editor.
             };
             ssm_ws.onWebsocketClose = function()
             {
-                $('#div_message').append('* Connection closed<br/>');
+                appendDebugMessage("SSM", "Connection closed");
+                appendDebugMessage("SSM", "Reconnect after 5sec...");
+                setTimeout(
+                function(){
+                    ssm_ws.Connect();
+                }, 5000);                
             };
             
             fueltrip_ws.onMomentFUELTRIPpacketReceived = function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
@@ -120,21 +130,28 @@ and open the template in the editor.
                 $("#gauge_frame1")[0].contentWindow.value_update();
             };
             
-            /*
-            function onTestClick()
+            function appendDebugMessage(prefix,message)
             {
-                $("#gauge_frame1")[0].contentWindow.tacho = 1000;
-                $("#gauge_frame1")[0].contentWindow.speed = 20;
-                $("#gauge_frame1")[0].contentWindow.watertemp = 80;
-                $("#gauge_frame1")[0].contentWindow.gearpos = 3;
-                $("#gauge_frame1")[0].contentWindow.trip = 850;
-                $("#gauge_frame1")[0].contentWindow.fuel = 35.01;
-                $("#gauge_frame1")[0].contentWindow.gas_milage = 12.00;
-                $("#gauge_frame1")[0].contentWindow.boost = -0.2;
-                $("#gauge_frame1")[0].contentWindow.value_update();
+                var output_message = prefix + " : "  + message;
+                $('#div_message').append(output_message + '<br/>');
             };
-            */
-           
+            
+            fueltrip_ws.onWebsocketOpen = function()
+            {
+                appendDebugMessage("FUELTRIP", "Connection started");
+            };
+            
+            fueltrip_ws.onWebsocketClose = function()
+            {
+                appendDebugMessage("FUETRIP", "Connection closed");
+                appendDebugMessage("FUELTRIP", "Reconnect after 5sec...");
+                setTimeout(
+                function(){
+                    fueltrip_ws.Connect();
+                }, 5000);                
+            };
+
+            
             function connectWebSocket()
             {
                 defi_ws.URL = "ws://"+location.hostname+":2012/";
@@ -153,6 +170,64 @@ and open the template in the editor.
                 };
             };
             
+            function checkWebsocketStatus()
+            {
+                switch(defi_ws.getReadyState()) 
+                { 
+                    case 0://CONNECTING
+                        $("#defi_status").css("color","blue");
+                        break;
+                    case 1://OPEN
+                        $("#defi_status").css("color","green");
+                        break;
+                    case 2://CLOSING
+                        $("#defi_status").css("color","orange");
+                        break;
+                    case 3://CLOSED
+                        $("#defi_status").css("color","red");
+                        break;
+                    default:
+                        // this never happens
+                        break;                      
+                };
+                switch(ssm_ws.getReadyState()) 
+                    {
+                        case 0:
+                            $("#ssm_status").css("color","blue");
+                            break;
+                        case 1:
+                            $("#ssm_status").css("color","green");
+                            break;
+                        case 2:
+                            $("#ssm_status").css("color","orange");
+                            break;
+                        case 3:
+                            $("#ssm_status").css("color","red");
+                            break;
+                        default:
+                            // this never happens
+                            break;                      
+                };
+                switch(fueltrip_ws.getReadyState()) 
+                {
+                        case 0:
+                            $("#fueltrip_status").css("color","blue");
+                            break;
+                        case 1:
+                            $("#fueltrip_status").css("color","green");
+                            break;
+                        case 2:
+                            $("#fueltrip_status").css("color","orange");
+                            break;
+                        case 3:
+                            $("#fueltrip_status").css("color","red");
+                            break;
+                        default:
+                            // this never happens
+                            break;                      
+                }
+            };
+            
             function show_debug_msg()
             {
                 if($("#div_message").css("visibility") === "hidden")
@@ -165,12 +240,12 @@ and open the template in the editor.
                     //Hide debug message window
                     $("#div_message").css("visibility","hidden");
                 }
-
             }
             onload = function()
             {
                  $("#gauge_frame1")[0].contentWindow.initialize();
                  connectWebSocket();
+                 setInterval("checkWebsocketStatus()", 1000);
             };
             
         </script>
@@ -201,5 +276,11 @@ and open the template in the editor.
         <div class="debug_message" id="div_message" ></div>
         <button id="button_reset" class="button1" onclick="reset_fuel_trip()" style="position:absolute;top:0px;right:0px">Reset</button>
         <button id="button_debug" class="button1" onclick="show_debug_msg()" style="position:absolute;top:80px;right:0px">Debug</button>
+        <div class="websocket_statusBox" style="position:absolute;top:160px;right:0px">
+            <div style="color:white">Websocket Status</div> 
+            <div id="defi_status" style="color: red">Defi</div>
+            <div id="ssm_status" style="color: red">SSM</div>
+            <div id="fueltrip_status" style="color: red">FUELTRIP</div>
+        </div>
     </body>
 </html>

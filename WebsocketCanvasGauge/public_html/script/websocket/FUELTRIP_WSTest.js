@@ -113,3 +113,7 @@ FUELTRIP_Websocket.prototype.Close = function()
     };
 };
 
+FUELTRIP_Websocket.prototype.getReadyState = function()
+{
+    return this._ws.readyState;
+};

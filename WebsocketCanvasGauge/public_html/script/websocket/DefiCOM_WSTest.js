@@ -93,3 +93,7 @@ DefiCOM_Websocket.prototype.Close = function()
     };
 };
 
+DefiCOM_Websocket.prototype.getReadyState = function()
+{
+    return this._ws.readyState;
+};

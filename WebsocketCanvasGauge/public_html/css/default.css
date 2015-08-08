@@ -66,3 +66,11 @@ div.debug_message
     width:80vw;
     overflow:scroll;
 }
+
+div.websocket_statusBox
+{
+    background: rgba(0,0,0,0.8);
+    z-index: 1;
+    font-size: 1em;
+    font-weight: bold;    
+}
