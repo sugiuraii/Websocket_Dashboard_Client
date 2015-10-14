@@ -8,7 +8,7 @@ var CircularProgressBar_canvas = function(canvas, img)
 {
     // Local value and instances
     var context = canvas.getContext('2d');
-    var curr_value;
+    var curr_arcAngle;
         
     // Properties and Default values
     this.offset_angle = 0;
@@ -16,6 +16,7 @@ var CircularProgressBar_canvas = function(canvas, img)
     this.anticlockwise = false;
     this.min = 0;
     this.max = 100;
+    this.angle_resolution = 0.5;
     
     this.circle_center_x = canvas.width/2;
     this.circle_center_y = canvas.height/2;    
@@ -32,9 +33,20 @@ var CircularProgressBar_canvas = function(canvas, img)
         if ( ! canvas || ! canvas.getContext )
             return false;
         
-        if (curr_value === this.value)
+        // Calculate arc angle from value
+        var percent = (this.value - this.min)/(this.max - this.min)*100;
+        if(percent < 0)
+            percent = 0;
+        if(percent > 100)
+            percent = 100;
+        var new_arcAngle = this.full_angle*(percent/100);
+        
+        // If the angle displacement (new_arcAngle - curr_arcAngle) is below angle resolution, skip redraw
+        if (Math.abs(new_arcAngle - curr_arcAngle) < this.angle_resolution)
             return;
-        curr_value = this.value;
+        else
+            //Update curr_arcAngle
+            curr_arcAngle = new_arcAngle;
         
         var canvas_max_x = canvas.width;
         var canvas_max_y = canvas.height;
@@ -43,23 +55,19 @@ var CircularProgressBar_canvas = function(canvas, img)
         var offset_x = this.offset_x;
         var offset_y = this.offset_y;
         var radius = this.circle_radius;
+        
         var start_angle, end_angle;
         var anticlockwise = this.anticlockwise;
-        var percent = (curr_value - this.min)/(this.max - this.min)*100;
-        if(percent < 0)
-            percent = 0;
-        if(percent > 100)
-            percent = 100;
         
         if(anticlockwise)
         {
             start_angle = Math.PI/180*this.offset_angle;
-            end_angle = Math.PI/180*(this.offset_angle - this.full_angle*(percent/100));
+            end_angle = Math.PI/180*(this.offset_angle - curr_arcAngle);
         }
         else
         {
             start_angle = Math.PI/180*this.offset_angle;
-            end_angle = Math.PI/180*(this.offset_angle + this.full_angle*(percent/100));
+            end_angle = Math.PI/180*(this.offset_angle + curr_arcAngle);
         }
         context.save();
 

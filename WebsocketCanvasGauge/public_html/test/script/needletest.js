@@ -6,7 +6,7 @@
 var _bar1;
 
 onload = function() {
-    _bar1 = new NeedleGauge_canvas("bar1","needle1.png",10,5);
+    _bar1 = new NeedleGauge_canvas("bar1","../img/needle1.png",10,5);
     _bar1.anticlockwise=false;
     _bar1.full_angle=270;
     _bar1.offset_angle=135;

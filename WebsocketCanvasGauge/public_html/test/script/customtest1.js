@@ -11,13 +11,14 @@ onload = function() {
     //Local variable and instances
     var canvas = document.getElementById("bar1");
     var img = new Image();
-    img.src = "./img/SemiCircular_Gauge1_Back.png";
+    img.src = "../img/fukuchan.jpg";
 
     _bar1 = new CustomProgressBar_canvas(canvas, img);
-    _bar1.vertical = false;
+    _bar1.vertical = true;
     _bar1.invert_direction = true;
     _bar1.min = 0;
     _bar1.max = 100;
+    _bar1.pixel_resolution = 1;
     
     value=0;
     
