@@ -47,14 +47,14 @@ and open the template in the editor.
             
             function initialize()
             {
-                _tacho_bar = circularprogressbar_initialize("tacho_bar","AnalogTachoMeter_Bar.png",0, 9000, 90, 270,false,value_update);
-                _watertemp_bar = circularprogressbar_initialize("watertemp_bar","AnalogSpeedMeter_Bar.png",60,140,165,120,false,value_update);
-                _tacho_needle = needlegauge_initialize("tacho_needle","AnalogTachoMeter_Needle.png",0,9000,90,270,false,value_update);
-                _speed_needle = needlegauge_initialize("speed_needle","AnalogSpeedMeter_Needle.png",0,280,75,210,false,value_update);
-                _boost_needle = needlegauge_initialize("boost_needle","BoostMeter_Needle.png",-1.0,2.0,30,90,true,value_update);
+                _tacho_bar = circularprogressbar_initialize("tacho_bar","AnalogTachoMeter_Bar.png",0, 9000, 90, 270,false);
+                _watertemp_bar = circularprogressbar_initialize("watertemp_bar","AnalogSpeedMeter_Bar.png",60,140,165,120,false);
+                _tacho_needle = needlegauge_initialize("tacho_needle","AnalogTachoMeter_Needle.png",0,9000,90,270,false);
+                _speed_needle = needlegauge_initialize("speed_needle","AnalogSpeedMeter_Needle.png",0,280,75,210,false);
+                _boost_needle = needlegauge_initialize("boost_needle","BoostMeter_Needle.png",-1.0,2.0,30,90,true);
             }
             
-            function circularprogressbar_initialize(canvas_id, canvas_img_name, value_min, value_max, offset_angle, full_angle, anticlockwise, onload_action)
+            function circularprogressbar_initialize(canvas_id, canvas_img_name, value_min, value_max, offset_angle, full_angle, anticlockwise)
             {
                 var canvas_elem = document.getElementById(canvas_id);
                 var image_elem = new Image();
@@ -67,12 +67,14 @@ and open the template in the editor.
                 canvas_obj.anticlockwise = anticlockwise;
                 canvas_obj.min = value_min;
                 canvas_obj.max = value_max;
-                canvas_obj.onload = onload_action;
+                image_elem.onload = function(){
+                    canvas_obj.draw();
+                };
                 
                 return canvas_obj;
             }
             
-            function needlegauge_initialize(canvas_id, canvas_img_name, value_min, value_max, offset_angle, full_angle, anticlockwise, onload_action)
+            function needlegauge_initialize(canvas_id, canvas_img_name, value_min, value_max, offset_angle, full_angle, anticlockwise)
             {
                 var canvas_elem = document.getElementById(canvas_id);
                 var image_elem = new Image();
@@ -84,7 +86,10 @@ and open the template in the editor.
                 canvas_obj.anticlockwise = anticlockwise;
                 canvas_obj.min = value_min;
                 canvas_obj.max = value_max;
-                canvas_obj.onload = onload_action;
+                
+                image_elem.onload = function(){
+                    canvas_obj.draw();
+                };
                 
                 return canvas_obj;
             }
@@ -132,20 +137,20 @@ and open the template in the editor.
                 _watertemp_bar.draw();
                 _boost_needle.draw();
                 
-                if(parseFloat(this.fuel).toFixed(2) !== $("#fuel_label").text())
-                    $("#fuel_label").text(parseFloat(this.fuel).toFixed(2));
-                if(parseFloat(this.trip).toFixed(1) !== $("#trip_label").text())
-                    $("#trip_label").text(parseFloat(this.trip).toFixed(1));
-                if(parseFloat(this.gas_milage).toFixed(2) !== $("#gas_milage_label").text())
-                    $("#gas_milage_label").text(parseFloat(this.gas_milage).toFixed(2));
-                if(parseFloat(this.speed).toFixed(0) !== $("#speed_label").text())
-                    $("#speed_label").text(parseFloat(this.speed).toFixed(0));
+                if(parseFloat(fuel).toFixed(2) !== $("#fuel_label").text())
+                    $("#fuel_label").text(parseFloat(fuel).toFixed(2));
+                if(parseFloat(trip).toFixed(1) !== $("#trip_label").text())
+                    $("#trip_label").text(parseFloat(trip).toFixed(1));
+                if(parseFloat(gas_milage).toFixed(2) !== $("#gas_milage_label").text())
+                    $("#gas_milage_label").text(parseFloat(gas_milage).toFixed(2));
+                if(parseFloat(speed).toFixed(0) !== $("#speed_label").text())
+                    $("#speed_label").text(parseFloat(speed).toFixed(0));
                 if(calc_gear_pos(tacho, speed, neutral_sw) !== $("#gearpos_label").text())
                     $("#gearpos_label").text(calc_gear_pos(tacho, speed, neutral_sw));   
             };
             
             onload = function() {
-                //initialize();
+                initialize();
             };
     </script>
     </head>

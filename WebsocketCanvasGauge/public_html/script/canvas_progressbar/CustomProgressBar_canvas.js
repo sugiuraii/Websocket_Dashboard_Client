@@ -44,7 +44,7 @@ var CustomProgressBar_canvas = function(canvas, img)
             return;
         else
             //Update curr_arcAngle
-            curr_Barpixel = new_Barpixel;
+            curr_Barpixel = Math.floor(new_Barpixel/this.pixel_resolution) * this.pixel_resolution;
 
         var rect_start_x,rect_start_y,rect_width,rect_height;
         

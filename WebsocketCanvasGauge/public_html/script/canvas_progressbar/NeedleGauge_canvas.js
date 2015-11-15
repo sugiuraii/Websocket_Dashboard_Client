@@ -42,7 +42,7 @@ var NeedleGauge_canvas = function(canvas, img)
             return;
         else
             //Update curr_arcAngle
-            curr_rotAngle = new_rotAngle;
+            curr_rotAngle = Math.floor(new_rotAngle/this.angle_resolution) * this.angle_resolution;;
                 
         var canvas_max_x = canvas.width;
         var canvas_max_y = canvas.height;

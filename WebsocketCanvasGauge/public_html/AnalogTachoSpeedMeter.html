@@ -243,7 +243,6 @@ and open the template in the editor.
             }
             onload = function()
             {
-                 $("#gauge_frame1")[0].contentWindow.initialize();
                  connectWebSocket();
                  setInterval("checkWebsocketStatus()", 1000);
             };

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+       <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="../../script/canvas_progressbar/CustomProgressBar_canvas.js"></script>
+        <script src="../../script/libs/jquery/jquery.js"></script>
+        <style>
+            @font-face {
+                font-family: 'Coolvetica';
+                font-style: normal;
+                src: url(../../Fonts/Coolvetica-Regular.ttf) format('truetype');
+            }
+            @font-face {
+                font-family: 'Astronaut';
+                font-style: normal;
+                src: url(../../Fonts/Astronaut1.ttf) format('truetype');
+            }
+            div.meter{
+                position:relative;
+            }
+            div.speed_label
+            {
+                position:absolute;
+                width: 600px;
+                height: 320px;
+                text-align: right;
+                margin: 0 auto; 
+                font-size: 380px;
+                color: white;
+                font-family:'Coolvetica';
+                text-shadow: 0px 0px 20px #fff;
+                z-index : 2;
+            }
+            div.gear_label
+            {
+                position:absolute;
+                width: 200px;
+                height: 200px;
+                text-align: right;
+                margin: 0 auto; 
+                font-size: 250px;
+                color: white;
+                font-family:'Astronaut';
+                text-shadow: 0px 0px 20px #fff;
+                z-index : 2;
+            }
+        </style>
+        <script>
+            var _tacho_bar;
+            
+            this.tacho = 0;
+            this.speed = 0;            
+            this.neutral_sw = true;
+            
+            function initialize()
+            {
+                _tacho_bar = customprogressbar_initialize("tacho_bar","DigiTachoBar.png",0, 9000, false, false);
+            }
+            
+            function customprogressbar_initialize(canvas_id, canvas_img_name, value_min, value_max, vertical, invert_direction)
+            {
+                var customprogressbar_canvas = document.getElementById(canvas_id);
+                var customprogressbar_img = new Image();
+                customprogressbar_img.src = canvas_img_name;
+
+                var customprogressbarobj = new CustomProgressBar_canvas(customprogressbar_canvas, customprogressbar_img);
+                customprogressbarobj.vertical = vertical;
+                customprogressbarobj.invert_direction = invert_direction;
+                customprogressbarobj.min = value_min;
+                customprogressbarobj.max = value_max;
+                customprogressbarobj.pixel_resolution = 16;
+                
+                customprogressbar_img.onload = function(){
+                    customprogressbarobj.draw();
+                };
+                
+                return customprogressbarobj;
+            }
+            
+            function calc_gear_pos(tacho, speed, neutral_sw)
+            {
+                if (neutral_sw)
+                    return "N";
+
+                //0除算防止（車両停止時）
+                if (speed <= 0)
+                    return "-";
+
+                var gear_ratio = 1 / 3.9 * tacho * 60 * 0.001992 / speed;
+
+                if (gear_ratio > 4.27)
+                    return "-";
+                else if (gear_ratio > 3.01)
+                    return 1;
+                else if (gear_ratio > 2.07)
+                    return 2;
+                else if (gear_ratio > 1.55)
+                    return 3;
+                else if (gear_ratio > 1.2)
+                    return 4;
+                else if (gear_ratio > 0.95)
+                    return 5;
+                else if (gear_ratio > 0.73)
+                    return 6;
+                else
+                    return "-";  
+            };
+            
+            value_update = function()
+            {
+                _tacho_bar.value = tacho;
+                _tacho_bar.draw();
+                if(parseFloat(speed).toFixed(0) !== $("#speed_label").text())
+                    $("#speed_label").text(parseFloat(speed).toFixed(0));
+                if(calc_gear_pos(tacho, speed, neutral_sw) !== $("#gearpos_label").text())
+                    $("#gearpos_label").text(calc_gear_pos(tacho, speed, neutral_sw));
+            };
+            
+            onload = function() {
+                initialize();
+            };
+        </script>
+    </head>
+    <body>
+        <div class="meter">
+            <img src="DigiTachoBack.png" alt="" style="position:absolute;z-index:0">
+            <canvas id="tacho_bar" width="1154" height="492" style="position:absolute;z-index:1;top:13px;left:20px"></canvas>
+            <div id="speed_label" class="speed_label" style="top:280px;left:370px;text-align: right">0</div>
+            <div id="gearpos_label" class="gear_label" style="top:-25px;left:20px;text-align: center">N</div>
+        </div>
+    </body>
+</html>

@@ -19,14 +19,10 @@ and open the template in the editor.
             
             function onTestClick()
             {
-                $("#gauge_frame1")[0].contentWindow.tacho = 1000;
-                $("#gauge_frame1")[0].contentWindow.speed = 20;
-                $("#gauge_frame1")[0].contentWindow.watertemp = 80;
-                $("#gauge_frame1")[0].contentWindow.gearpos = 3;
-                $("#gauge_frame1")[0].contentWindow.trip = 850;
-                $("#gauge_frame1")[0].contentWindow.fuel = 35.01;
-                $("#gauge_frame1")[0].contentWindow.gas_milage = 12.00;
-                $("#gauge_frame1")[0].contentWindow.boost = -0.2;
+                $("#gauge_frame1")[0].contentWindow.tacho = 3050;
+                $("#gauge_frame1")[0].contentWindow.speed = 80;
+                //$("#gauge_frame1")[0].contentWindow.gearpos = 3;
+                $("#gauge_frame1")[0].contentWindow.neutral_sw = false;
                 $("#gauge_frame1")[0].contentWindow.value_update();
             };
             
@@ -46,6 +42,6 @@ and open the template in the editor.
     <body>
         <input type="button" id="testButton" value="Test" onclick="onTestClick()"/>
         <br>
-        <iframe class="meter" id="gauge_frame1" src="../parts/AnalogMeterCluster/AnalogMeterCluster.html" scrolling="no" width="1060" height="600" seamless> </iframe><br>
+        <iframe class="meter" id="gauge_frame1" src="../parts/DigiTachoBar/DigiTachoBar.html" scrolling="no" width="1200" height="606" seamless> </iframe><br>
     </body>
 </html>

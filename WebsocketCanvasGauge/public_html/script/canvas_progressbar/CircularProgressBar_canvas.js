@@ -46,7 +46,7 @@ var CircularProgressBar_canvas = function(canvas, img)
             return;
         else
             //Update curr_arcAngle
-            curr_arcAngle = new_arcAngle;
+            curr_arcAngle = Math.floor(new_arcAngle/this.angle_resolution) * this.angle_resolution;
         
         var canvas_max_x = canvas.width;
         var canvas_max_y = canvas.height;
