@@ -11,9 +11,16 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="./css/default.css" type="text/css">
         <script src="./script/libs/jquery/jquery.js"></script>
-        <script src="./script/websocket/FUELTRIP_WSTest.js"></script>
+        <script src="./script/websocket/FUELTRIPWebsocket.js"></script>
+        <script src="./script/meterpanel-common.js"></script>
+
         <script>
+            var defi_ws = null;
+            var ssm_ws = null;
             var fueltrip_ws = new FUELTRIP_Websocket();
+            
+            setMeterDefault(defi_ws, ssm_ws, fueltrip_ws);
+            
             fueltrip_ws.onMomentFUELTRIPpacketReceived = function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
             {
                 $("#gauge_frame1")[0].contentWindow.total_fuel = total_gas;
@@ -42,18 +49,6 @@ and open the template in the editor.
                 $("#gauge_frame1")[0].contentWindow.value_update();
             };
             
-            fueltrip_ws.onERRpacketReceived = function(msg)
-            {
-                $('#div_message').append(msg + "<br>");
-            };
-            fueltrip_ws.onRESpacketReceived = function(msg)
-            {
-                $('#div_message').append(msg + "<br>");
-            };
-            fueltrip_ws.onWebsocketError = function(msg)
-            {
-                $('#div_message').append(msg + "<br>");
-            };
             fueltrip_ws.onWebsocketOpen = function()
             {
                 $('#div_message').append('* Connection started<br/>');
@@ -89,36 +84,11 @@ and open the template in the editor.
                 
                 $(gauge_id)[0].contentWindow.initialize();
             };
-            
-            function connectWebSocket()
-            {
-                fueltrip_ws.URL = "ws://"+location.hostname+":2014/";
-                fueltrip_ws.Connect();
-            };
-            
-            function reset_fuel_trip()
-            {
-                if(window.confirm('Reset fuel and trip?'))
-                {
-                    fueltrip_ws.SendReset();
-                    initialize_gauge();
-                }
-            }
-            
-            function show_debug_msg()
-            {
-                if($("#div_message").css("visibility") === "hidden")
-                {
-                    $("#div_message").css("visibility","visible");
-                }
-                else
-                    $("#div_message").css("visibility","hidden");
-            }
-            
+                        
             onload = function()
             {
                 initialize_gauge();
-                connectWebSocket();
+                connectWebSocket(defi_ws, ssm_ws, fueltrip_ws);
             };
             
         </script>
