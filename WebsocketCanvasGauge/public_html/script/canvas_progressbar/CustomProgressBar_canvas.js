@@ -15,6 +15,7 @@ var CustomProgressBar_canvas = function(canvas, img)
     this.min = 0;
     this.max = 100;
     this.pixel_resolution = 1;
+    this.invert_fill = false;
     
     this.value = this.min;
     
@@ -33,6 +34,10 @@ var CustomProgressBar_canvas = function(canvas, img)
             percent = 0;
         if(percent > 100)
             percent = 100;
+        
+        if(this.invert_fill)
+            percent = 100 - percent;
+        
         var new_Barpixel;
         if(this.vertical)
             new_Barpixel = canvas_max_y*percent/100;

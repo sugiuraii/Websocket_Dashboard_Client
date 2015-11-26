@@ -18,6 +18,8 @@ var CircularProgressBar_canvas = function(canvas, img)
     this.max = 100;
     this.angle_resolution = 0.5;
     
+    this.invert_fill = false;
+    
     this.circle_center_x = canvas.width/2;
     this.circle_center_y = canvas.height/2;    
     this.circle_radius = canvas.width/2;
@@ -39,8 +41,12 @@ var CircularProgressBar_canvas = function(canvas, img)
             percent = 0;
         if(percent > 100)
             percent = 100;
-        var new_arcAngle = this.full_angle*(percent/100);
         
+        if(this.invert_fill)
+            percent = 100 - percent;
+        
+        var new_arcAngle = this.full_angle*(percent/100);
+
         // If the angle displacement (new_arcAngle - curr_arcAngle) is below angle resolution, skip redraw
         if (Math.abs(new_arcAngle - curr_arcAngle) < this.angle_resolution)
             return;

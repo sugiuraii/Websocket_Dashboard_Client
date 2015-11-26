@@ -78,6 +78,9 @@ and open the template in the editor.
         </style>
         <script>
             var _redzone_bar1;
+            var _yellowzone_bar1;
+            var _greenzone_bar1;
+            
             var _value_bar1;
             
             this.value_max = 2.0;
@@ -93,12 +96,32 @@ and open the template in the editor.
             this.scale_str7 = "2.0";
             this.redzone_offset_angle = 315;
             this.redzone_full_angle = 45;
+            this.greenzone_offset_angle = 90;
+            this.greenzone_full_angle = 90;
+            this.yellowzone_offset_angle = 270;
+            this.yellowzone_full_angle = 45;
+
+            this.invert_fill = false;
+            
             this.value_label_rounded = 1;
+            
+            this.redzone_enable = true;
+            this.yellowzone_enable = false;
+            this.greenzone_enable = false;
+            
+            this.angle_resolution = 1;
+            
             this.value=0.5;
 
             function initialize()
             {
-                redzone_bar_initialize();
+                if(this.redzone_enable)
+                    redzone_bar_initialize();
+                if(this.yellowzone_enable)
+                    yellowzone_bar_initialize();
+                if(this.greenzone_enable)
+                    greenzone_bar_initialize();
+                
                 textlayer_initialize();
                 value_bar_initialize();
             }
@@ -144,6 +167,62 @@ and open the template in the editor.
                 };
             }
             
+            function greenzone_bar_initialize()
+            {
+                var greenzone_canvas = document.getElementById("greenzone_bar1");
+                var greenzone_img = new Image();
+                greenzone_img.src = "FullCircularGauge_GreenZone_Bar.png";
+
+                _greenzone_bar1 = new CircularProgressBar_canvas(greenzone_canvas,greenzone_img);
+                // Properties and Default values
+                _greenzone_bar1.offset_angle = greenzone_offset_angle;
+                _greenzone_bar1.full_angle = greenzone_full_angle;
+                _greenzone_bar1.anticlockwise = false;
+                _greenzone_bar1.min = 0;
+                _greenzone_bar1.max = 1;
+                _greenzone_bar1.value = 1; // GreenZone bar : draw with full angle
+
+                //fixed value
+                _greenzone_bar1.circle_center_x = 400;
+                _greenzone_bar1.circle_center_y = 385;    
+                _greenzone_bar1.circle_radius = 325;
+
+                _greenzone_bar1.offset_x = 0;
+                _greenzone_bar1.offset_y = 0;
+                
+                greenzone_img.onload = function(){
+                    _greenzone_bar1.draw();
+                };
+            }
+            
+            function yellowzone_bar_initialize()
+            {
+                var yellowzone_canvas = document.getElementById("yellowzone_bar1");
+                var yellowzone_img = new Image();
+                yellowzone_img.src = "FullCircularGauge_YellowZone_Bar.png";
+
+                _yellowzone_bar1 = new CircularProgressBar_canvas(yellowzone_canvas,yellowzone_img);
+                // Properties and Default values
+                _yellowzone_bar1.offset_angle = yellowzone_offset_angle;
+                _yellowzone_bar1.full_angle = yellowzone_full_angle;
+                _yellowzone_bar1.anticlockwise = false;
+                _yellowzone_bar1.min = 0;
+                _yellowzone_bar1.max = 1;
+                _yellowzone_bar1.value = 1; // YellowZone bar : draw with full angle
+
+                //fixed value
+                _yellowzone_bar1.circle_center_x = 400;
+                _yellowzone_bar1.circle_center_y = 385;    
+                _yellowzone_bar1.circle_radius = 325;
+
+                _yellowzone_bar1.offset_x = 0;
+                _yellowzone_bar1.offset_y = 0;
+                
+                yellowzone_img.onload = function(){
+                    _yellowzone_bar1.draw();
+                };
+            }
+            
             function value_bar_initialize()
             {
                 var value_canvas = document.getElementById("value_bar1");
@@ -165,6 +244,9 @@ and open the template in the editor.
                 _value_bar1.offset_x = 0;
                 _value_bar1.offset_y = 0;
                 _value_bar1.value = _value_bar1.min;
+                _value_bar1.invert_fill = this.invert_fill;
+                
+                _value_bar1.angle_resolution = this.angle_resolution;
                 
                 value_img.onload = function(){
                     _value_bar1.draw();
@@ -189,7 +271,10 @@ and open the template in the editor.
     <body>
         <div class="meter">          
             <img src="FullCircularGauge_Back.png" alt="" style="position:absolute;z-index:0">
+            <canvas id="greenzone_bar1" width="799" height="794" style="position:absolute;z-index:1"></canvas>
+            <canvas id="yellowzone_bar1" width="799" height="794" style="position:absolute;z-index:1"></canvas>
             <canvas id="redzone_bar1" width="799" height="794" style="position:absolute;z-index:1"></canvas>
+           
             <img src="FullCircularGauge_Grid.png" alt="" style="position:absolute;z-index:2">
             <canvas id="value_bar1" width="799" height="794" style="position:absolute;z-index:3"></canvas>
             <img src="FullCircularGauge_Shaft.png" alt="" style="position:absolute;z-index:4">

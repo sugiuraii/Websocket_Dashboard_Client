@@ -89,6 +89,7 @@ and open the template in the editor.
             {
                 initialize_gauge();
                 connectWebSocket(defi_ws, ssm_ws, fueltrip_ws);
+                setInterval("checkWebsocketStatus(defi_ws, ssm_ws, fueltrip_ws)", 1000);
             };
             
         </script>
@@ -114,6 +115,10 @@ and open the template in the editor.
         </center>
         <br>
         <div class="debug_message" id="div_message"></div>
+        <div class="websocket_statusBox" style="position:absolute;top:160px;right:0px">
+            <div style="color:white">Websocket Status</div> 
+            <div id="fueltrip_status" style="color: red">FUELTRIP</div>
+        </div>
         
         <button id="button_reset" class="button1" onclick="reset_fuel_trip()" style="position:absolute;top:0px;right:0px">Reset</button>
         <button id="button_debug" class="button1" onclick="show_debug_msg()" style="position:absolute;top:80px;right:0px">Debug</button>
