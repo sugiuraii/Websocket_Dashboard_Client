@@ -45,6 +45,8 @@ and open the template in the editor.
                 function(){
                 defi_ws.SendDefiWSSend("Boost","true");
                 defi_ws.SendDefiWSSend("Tacho","true");
+                defi_ws.SendDefiWSInterval(localStorage.defiWSInterval);
+                $("#spinner_defiWSinterval").val(localStorage.defiWSInterval);
                 },5000);
             };            
             ssm_ws.onVALpacketReceived = function(val)
@@ -330,6 +332,13 @@ and open the template in the editor.
                 setInterval("checkWebsocketStatus(defi_ws, ssm_ws, fueltrip_ws)", 1000);
             };
             
+            function onDefiWSIntervalChange()
+            {
+                var interval = $("#spinner_defiWSinterval").val();
+                defi_ws.SendDefiWSInterval(interval);
+                localStorage.defiWSInterval = interval;
+            }
+            
         </script>
         <style>
             iframe.meter { 
@@ -359,6 +368,7 @@ and open the template in the editor.
             <div id="defi_status" style="color: red">Defi</div>
             <div id="ssm_status" style="color: red">SSM</div>
             <div id="fueltrip_status" style="color: red">FUELTRIP</div>
+            <div style="color:white">DefiWSInterval<br><input style="background:black;color:white" id="spinner_defiWSinterval" type="number" min="0" max="10" step="1" value ="0" onchange="onDefiWSIntervalChange()"/> </div>
         </div>
     </body>
 </html>
