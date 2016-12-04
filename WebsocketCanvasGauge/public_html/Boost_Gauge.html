@@ -17,7 +17,7 @@ and open the template in the editor.
             {
                 for (var key in val)
                 {
-                    if(key === "Boost")
+                    if(key === "Manifold_Absolute_Pressure")
                     {
                         $("#gauge_frame1")[0].contentWindow.value = val[key];
                         $("#gauge_frame1")[0].contentWindow.value_update();
@@ -41,7 +41,7 @@ and open the template in the editor.
                 $('#div_message').append('* Connection started<br/>');
                 setTimeout(
                 function(){
-                defi_ws.SendDefiWSSend("Boost","true");
+                defi_ws.SendDefiWSSend("Manifold_Absolute_Pressure","true");
                 },5000);
             };
             defi_ws.onWebsocketClose = function()

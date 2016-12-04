@@ -26,11 +26,11 @@ and open the template in the editor.
             {
                 for (var key in val)
                 {
-                    if(key === "Boost")
+                    if(key === "Manifold_Absolute_Pressure")
                     {
                         $("#gauge_frame1")[0].contentWindow.boost = val[key];
                     }
-                    else if(key === "Tacho")
+                    else if(key === "Engine_Speed")
                     {
                         $("#gauge_frame1")[0].contentWindow.tacho = val[key];
                     }
@@ -42,8 +42,8 @@ and open the template in the editor.
                 appendDebugMessage("Defi", "Connection started");
                 setTimeout(
                 function(){
-                defi_ws.SendDefiWSSend("Boost","true");
-                defi_ws.SendDefiWSSend("Tacho","true");
+                defi_ws.SendDefiWSSend("Manifold_Absolute_Pressure","true");
+                defi_ws.SendDefiWSSend("Engine_Speed","true");
                 defi_ws.SendDefiWSInterval(localStorage.defiWSInterval);
                 $("#spinner_defiWSinterval").val(localStorage.defiWSInterval);
                 },5000);
