@@ -22,20 +22,14 @@ and open the template in the editor.
             
             setMeterDefault(defi_ws, ssm_ws, fueltrip_ws);
             
-            defi_ws.onVALpacketReceived = function(val)
+            defi_ws.onVALpacketReceived["Manifold_Absolute_Pressure"] = function(value)
             {
-                for (var key in val)
-                {
-                    if(key === "Manifold_Absolute_Pressure")
-                    {
-                        $("#frame_boost")[0].contentWindow.value = val[key];
-                    }
-                    else if(key === "Engine_Speed")
-                    {
-                        $("#frame_tacho")[0].contentWindow.tacho = val[key];
-                    }
-                }
+                $("#frame_boost")[0].contentWindow.value = value;
                 $("#frame_boost")[0].contentWindow.value_update();
+            };
+            defi_ws.onVALpacketReceived["Engine_Speed"] = function(value)
+            {
+                $("#frame_tacho")[0].contentWindow.tacho = value;
                 $("#frame_tacho")[0].contentWindow.value_update();
             };
             defi_ws.onWebsocketOpen = function()
@@ -48,44 +42,40 @@ and open the template in the editor.
                 defi_ws.SendDefiWSInterval(localStorage.defiWSInterval);
                 $("#spinner_defiWSinterval").val(localStorage.defiWSInterval);
                 },5000);
-            };            
-            ssm_ws.onVALpacketReceived = function(val)
+            };
+            
+            ssm_ws.onVALpacketReceived["Coolant_Temperature"] = function(value)
             {
-                for (var key in val)
-                {
-                    if(key === "Coolant_Temperature")
-                    {
-                        $("#frame_watertemp")[0].contentWindow.value = val[key];
-                    }
-                    else if (key === "Vehicle_Speed")
-                    {
-                        $("#frame_tacho")[0].contentWindow.speed = val[key];
-                        
-                    }
-                    else if(key === "Neutral_Position_Switch")
-                    {
-                        if(val[key].toLowerCase() === "false")
-                            $("#frame_tacho")[0].contentWindow.neutral_sw = false;
-                        else
-                            $("#frame_tacho")[0].contentWindow.neutral_sw = true;
-                    }
-                    else if (key === "Battery_Voltage")
-                    {
-                        $("#frame_volt")[0].contentWindow.value = val[key];
-                    }
-                    else if (key === "Throttle_Opening_Angle")
-                    {
-                        $("#frame_throttle")[0].contentWindow.value = val[key];
-                    }
-                    else if (key === "Air_Fuel_Sensor_1")
-                    {
-                        $("#frame_AF")[0].contentWindow.value = val[key]*14.7;
-                    }
-                }
-                $("#frame_tacho")[0].contentWindow.value_update();
+                $("#frame_watertemp")[0].contentWindow.value = value;
                 $("#frame_watertemp")[0].contentWindow.value_update();
+            };
+            ssm_ws.onVALpacketReceived["Vehicle_Speed"] = function(value)
+            {
+                $("#frame_tacho")[0].contentWindow.speed = value;
+                $("#frame_tacho")[0].contentWindow.value_update();
+            };
+            ssm_ws.onVALpacketReceived["Neutral_Position_Switch"] = function(value)
+            {
+                if(value.toLowerCase() === "false")
+                    $("#frame_tacho")[0].contentWindow.neutral_sw = false;
+                else
+                    $("#frame_tacho")[0].contentWindow.neutral_sw = true;
+                
+                $("#frame_tacho")[0].contentWindow.value_update();
+            };
+            ssm_ws.onVALpacketReceived["Battery_Voltage"] = function(value)
+            {
+                $("#frame_volt")[0].contentWindow.value = value;
                 $("#frame_volt")[0].contentWindow.value_update();
+            };
+            ssm_ws.onVALpacketReceived["Throttle_Opening_Angle"] = function(value)
+            {
+                $("#frame_throttle")[0].contentWindow.value = value;
                 $("#frame_throttle")[0].contentWindow.value_update();
+            };
+            ssm_ws.onVALpacketReceived["Air_Fuel_Sensor_1"] = function(value)
+            {
+                $("#frame_AF")[0].contentWindow.value = value*14.7;
                 $("#frame_AF")[0].contentWindow.value_update();
             };
             ssm_ws.onWebsocketOpen = function()
@@ -115,6 +105,7 @@ and open the template in the editor.
                 fueltrip_ws.SendSectStoreMax(6);
                 },5000);
             };
+            
             fueltrip_ws.onMomentFUELTRIPpacketReceived = function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
             {
                 var gauge_id = "#frame_gasmilage";

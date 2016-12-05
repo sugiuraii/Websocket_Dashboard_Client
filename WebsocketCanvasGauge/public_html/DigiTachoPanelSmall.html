@@ -21,20 +21,14 @@ and open the template in the editor.
             
             setMeterDefault(defi_ws, ssm_ws, null);
             
-            defi_ws.onVALpacketReceived = function(val)
+            defi_ws.onVALpacketReceived["Manifold_Absolute_Pressure"] = function(value)
             {
-                for (var key in val)
-                {
-                    if(key === "Manifold_Absolute_Pressure")
-                    {
-                        $("#frame_boost")[0].contentWindow.value = val[key];
-                    }
-                    else if(key === "Engine_Speed")
-                    {
-                        $("#frame_tacho")[0].contentWindow.tacho = val[key];
-                    }
-                }
+                $("#frame_boost")[0].contentWindow.value = value;
                 $("#frame_boost")[0].contentWindow.value_update();
+            };
+            defi_ws.onVALpacketReceived["Engine_Speed"] = function(value)
+            {
+                $("#frame_tacho")[0].contentWindow.tacho = value;
                 $("#frame_tacho")[0].contentWindow.value_update();
             };
             defi_ws.onWebsocketOpen = function()
@@ -48,23 +42,18 @@ and open the template in the editor.
                 $("#spinner_defiWSinterval").val(localStorage.defiWSInterval);
                 },5000);
             };            
-            ssm_ws.onVALpacketReceived = function(val)
+            ssm_ws.onVALpacketReceived["Vehicle_Speed"] = function(value)
             {
-                for (var key in val)
-                {
-                    if (key === "Vehicle_Speed")
-                    {
-                        $("#frame_tacho")[0].contentWindow.speed = val[key];
-                        
-                    }
-                    else if(key === "Neutral_Position_Switch")
-                    {
-                        if(val[key].toLowerCase() === "false")
-                            $("#frame_tacho")[0].contentWindow.neutral_sw = false;
-                        else
-                            $("#frame_tacho")[0].contentWindow.neutral_sw = true;
-                    }
-                }
+                $("#frame_tacho")[0].contentWindow.speed = value;
+                $("#frame_tacho")[0].contentWindow.value_update();
+            };
+            ssm_ws.onVALpacketReceived["Neutral_Position_Switch"] = function(value)
+            {
+                if(value.toLowerCase() === "false")
+                    $("#frame_tacho")[0].contentWindow.neutral_sw = false;
+                else
+                    $("#frame_tacho")[0].contentWindow.neutral_sw = true;
+                
                 $("#frame_tacho")[0].contentWindow.value_update();
             };
             ssm_ws.onWebsocketOpen = function()

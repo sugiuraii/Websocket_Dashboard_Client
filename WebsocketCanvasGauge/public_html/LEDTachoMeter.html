@@ -21,20 +21,9 @@ and open the template in the editor.
             var fueltrip_ws = new FUELTRIP_Websocket();
             
             setMeterDefault(defi_ws, ssm_ws, fueltrip_ws);
-            
-            defi_ws.onVALpacketReceived = function(val)
+            defi_ws.onVALpacketReceived["Engine_Speed"] = function(value)
             {
-                for (var key in val)
-                {
-                    /*if(key === "Manifold_Absolute_Pressure")
-                    {
-                        $("#gauge_frame1")[0].contentWindow.boost = val[key];
-                    }
-                    else*/ if(key === "Engine_Speed")
-                    {
-                        $("#gauge_frame1")[0].contentWindow.tacho = val[key];
-                    }
-                }
+                $("#gauge_frame1")[0].contentWindow.tacho = value;
                 $("#gauge_frame1")[0].contentWindow.value_update();
             };
             defi_ws.onWebsocketOpen = function()
@@ -47,29 +36,25 @@ and open the template in the editor.
                 defi_ws.SendDefiWSInterval(localStorage.defiWSInterval);
                 $("#spinner_defiWSinterval").val(localStorage.defiWSInterval);
                 },5000);
-            };            
-            ssm_ws.onVALpacketReceived = function(val)
+            };
+            ssm_ws.onVALpacketReceived["Coolant_Temperature"] = function(value)
             {
-                for (var key in val)
-                {
-                    if(key === "Coolant_Temperature")
-                    {
-                        $("#gauge_frame1")[0].contentWindow.watertemp = val[key];
-                    }
-                    else if (key === "Vehicle_Speed")
-                    {
-                        $("#gauge_frame1")[0].contentWindow.speed = val[key];
-                    }
-                    else if(key === "Neutral_Position_Switch")
-                    {
-                        if(val[key].toLowerCase() === "false")
-                            $("#gauge_frame1")[0].contentWindow.neutral_sw = false;
-                        else
-                            $("#gauge_frame1")[0].contentWindow.neutral_sw = true;
-                    }
+                $("#gauge_frame1")[0].contentWindow.watertemp = value;
+                $("#gauge_frame1")[0].contentWindow.value_update();
+            };
+            ssm_ws.onVALpacketReceived["Vehicle_Speed"] = function(value)
+            {
+                $("#gauge_frame1")[0].contentWindow.speed = value;
+                $("#gauge_frame1")[0].contentWindow.value_update();
+            };
+            ssm_ws.onVALpacketReceived["Neutral_Position_Switch"] = function(value)
+            {
+                if(value.toLowerCase() === "false")
+                    $("#gauge_frame1")[0].contentWindow.neutral_sw = false;
+                else
+                    $("#gauge_frame1")[0].contentWindow.neutral_sw = true;
 
-                    $("#gauge_frame1")[0].contentWindow.value_update();
-                }
+                $("#gauge_frame1")[0].contentWindow.value_update();
             };
             ssm_ws.onWebsocketOpen = function()
             {

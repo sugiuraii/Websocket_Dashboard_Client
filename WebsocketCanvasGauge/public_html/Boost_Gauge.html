@@ -13,16 +13,10 @@ and open the template in the editor.
         <script src="./script/websocket/DefiCOMWebsocket.js"></script>
         <script>
             var defi_ws = new DefiCOM_Websocket();
-            defi_ws.onVALpacketReceived = function(val)
+            defi_ws.onVALpacketReceived["Manifold_Absolute_Pressure"] = function(val)
             {
-                for (var key in val)
-                {
-                    if(key === "Manifold_Absolute_Pressure")
-                    {
-                        $("#gauge_frame1")[0].contentWindow.value = val[key];
-                        $("#gauge_frame1")[0].contentWindow.value_update();
-                    }
-                }
+                $("#gauge_frame1")[0].contentWindow.value = val;
+                $("#gauge_frame1")[0].contentWindow.value_update();
             };
             defi_ws.onERRpacketReceived = function(msg)
             {

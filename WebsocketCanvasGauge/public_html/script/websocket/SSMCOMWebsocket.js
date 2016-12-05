@@ -49,7 +49,8 @@ SSMCOM_Websocket.prototype._parseIncomingMessage = function(message){
     switch(received_json_object.mode)
     {
         case ("VAL") :
-            this.onVALpacketReceived(received_json_object.val);
+            for (var key in received_json_object.val)
+                this.onVALpacketReceived[key](received_json_object.val[key]);
             break;
         case("ERR"):
             this.onERRpacketReceived(received_json_object.msg);

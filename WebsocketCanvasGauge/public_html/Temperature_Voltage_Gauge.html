@@ -13,21 +13,15 @@ and open the template in the editor.
         <script src="./script/websocket/SSMCOMWebsocket.js"></script>
         <script>
             var ssm_ws = new SSMCOM_Websocket();
-            ssm_ws.onVALpacketReceived = function(val)
+            ssm_ws.onVALpacketReceived["Coolant_Temperature"] = function(value)
             {
-                for (var key in val)
-                {
-                    if(key === "Coolant_Temperature")
-                    {
-                        $("#gauge_frame1")[0].contentWindow.value = val[key];
-                        $("#gauge_frame1")[0].contentWindow.value_update();
-                    }
-                    else if (key === "Battery_Voltage")
-                    {
-                        $("#gauge_frame2")[0].contentWindow.value = val[key];
-                        $("#gauge_frame2")[0].contentWindow.value_update();
-                    }
-                }
+                $("#gauge_frame1")[0].contentWindow.value = value;
+                $("#gauge_frame1")[0].contentWindow.value_update();
+            };
+            ssm_ws.onVALpacketReceived["Battery_Voltage"] = function(value)
+            {
+                $("#gauge_frame2")[0].contentWindow.value = value;
+                $("#gauge_frame2")[0].contentWindow.value_update();
             };
             ssm_ws.onERRpacketReceived = function(msg)
             {
