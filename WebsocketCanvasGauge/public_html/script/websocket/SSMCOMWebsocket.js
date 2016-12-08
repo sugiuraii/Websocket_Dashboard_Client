@@ -4,10 +4,18 @@
  * and open the template in the editor.
  */
 
+var ELM327COM_Websocket = function()
+{
+    var newobj = new SSMCOM_Websocket();
+    newobj.ModePrefix = "ELM327";
+    return newobj;
+};
+
 var SSMCOM_Websocket = function()
 {
     this._ws;
     this.URL;
+    this.ModePrefix = "SSM";
     this.onVALpacketReceived = function(val){};
     this.onERRpacketReceived = function(msg){};
     this.onRESpacketReceived = function(msg){};
@@ -22,7 +30,7 @@ var SSMCOM_Websocket = function()
 SSMCOM_Websocket.prototype.SendSSMCOMRead = function(code, mode, flag)
 {
     var obj={
-      mode : "SSM_COM_READ",
+      mode : this.ModePrefix + "_COM_READ",
       code : code,
       read_mode : mode,
       flag : flag
@@ -35,7 +43,7 @@ SSMCOM_Websocket.prototype.SendSSMCOMRead = function(code, mode, flag)
 SSMCOM_Websocket.prototype.SendSSMSlowreadInterval = function(interval)
 {
     var obj={
-      mode : "SSM_SLOWREAD_INTERVAL",
+      mode : this.ModePrefix + "_SLOWREAD_INTERVAL",
       interval : interval
     };
     

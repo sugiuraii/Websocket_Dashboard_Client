@@ -3,11 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+var ArduinoCOM_Websocket = function()
+{
+    var newobj = new DefiCOM_Websocket();
+    newobj.ModePrefix = "ARDUINO";
+    return newobj;
+};
 
 var DefiCOM_Websocket = function()
 {
     this._ws;
     this.URL;
+    this.ModePrefix = "DEFI";
     this.onVALpacketReceived = function(val){};
     this.onERRpacketReceived = function(msg){};
     this.onRESpacketReceived = function(msg){};
@@ -22,7 +29,7 @@ var DefiCOM_Websocket = function()
 DefiCOM_Websocket.prototype.SendDefiWSSend = function(code,flag)
 {
     var obj={
-      mode : "DEFI_WS_SEND",
+      mode : this.ModePrefix + "_WS_SEND",
       code : code,
       flag : flag
     };
@@ -34,7 +41,7 @@ DefiCOM_Websocket.prototype.SendDefiWSSend = function(code,flag)
 DefiCOM_Websocket.prototype.SendDefiWSInterval = function(interval)
 {
     var obj={
-      mode : "DEFI_WS_INTERVAL",
+      mode : this.ModePrefix + "_WS_INTERVAL",
       interval : interval
     };
     
