@@ -8,6 +8,7 @@ var FUELTRIP_Websocket = function()
 {
     this._ws;
     this.URL;
+    this.ModePrefix = "FUELTRIP";
     this.onMomentFUELTRIPpacketReceived = function(moment_gasmilage, total_gas, total_trip, total_gasmilage){};
     this.onSectFUELTRIPpacketReceived = function(sect_span, sect_trip, sect_gas, sect_gasmilage){};
     this.onERRpacketReceived = function(msg){};

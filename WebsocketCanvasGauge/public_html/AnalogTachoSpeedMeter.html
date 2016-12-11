@@ -16,45 +16,32 @@ and open the template in the editor.
         <script src="./script/websocket/FUELTRIPWebsocket.js"></script>
         <script src="./script/meterpanel-common.js"></script>
         <script>
-            var defi_ws = new DefiCOM_Websocket();
-            var ssm_ws = new SSMCOM_Websocket();
-            var fueltrip_ws = new FUELTRIP_Websocket();
-            
-            setMeterDefault(defi_ws, ssm_ws, fueltrip_ws);
-            
-            defi_ws.onVALpacketReceived["Manifold_Absolute_Pressure"] = function(value)
+            var gaugeControl = new GaugeControl();
+
+            gaugeControl.EnableDefiWebSocket();
+            gaugeControl.RegisterDefiParameterCode("Manifold_Absolute_Pressure", function(value)
             {
                 $("#gauge_frame1")[0].contentWindow.boost = value;
                 $("#gauge_frame1")[0].contentWindow.value_update();
-            };
-            defi_ws.onVALpacketReceived["Engine_Speed"] = function(value)
+            });
+            gaugeControl.RegisterDefiParameterCode("Engine_Speed", function(value)
             {
                 $("#gauge_frame1")[0].contentWindow.tacho = value;
                 $("#gauge_frame1")[0].contentWindow.value_update();
-            };
-
-            defi_ws.onWebsocketOpen = function()
-            {
-                appendDebugMessage("Defi", "Connection started");
-                setTimeout(
-                function(){
-                defi_ws.SendDefiWSSend("Manifold_Absolute_Pressure","true");
-                defi_ws.SendDefiWSSend("Engine_Speed","true");
-                defi_ws.SendDefiWSInterval(localStorage.defiWSInterval);
-                $("#spinner_defiWSinterval").val(localStorage.defiWSInterval);
-                },5000);
-            };            
-            ssm_ws.onVALpacketReceived["Coolant_Temperature"] = function(value)
+            });
+            
+            gaugeControl.EnableSSMWebSocket();
+            gaugeControl.RegisterSSMParameterCode("Coolant_Temperature","Slow", function(value)
             {
                 $("#gauge_frame1")[0].contentWindow.watertemp = value;
                 $("#gauge_frame1")[0].contentWindow.value_update();
-            };
-            ssm_ws.onVALpacketReceived["Vehicle_Speed"] = function(value)
+            });
+            gaugeControl.RegisterSSMParameterCode("Vehicle_Speed","Slow+Fast", function(value)
             {
                 $("#gauge_frame1")[0].contentWindow.speed = value;
                 $("#gauge_frame1")[0].contentWindow.value_update();
-            };
-            ssm_ws.onVALpacketReceived["Neutral_Position_Switch"] = function(value)
+            });
+            gaugeControl.RegisterSSMParameterCode("Neutral_Position_Switch","Slow+Fast", function(value)
             {
                 if(value.toLowerCase() === "false")
                     $("#gauge_frame1")[0].contentWindow.neutral_sw = false;
@@ -62,45 +49,20 @@ and open the template in the editor.
                     $("#gauge_frame1")[0].contentWindow.neutral_sw = true;
 
                 $("#gauge_frame1")[0].contentWindow.value_update();
-            };
-            ssm_ws.onWebsocketOpen = function()
-            {
-                appendDebugMessage("SSM", "Connection started");
-                setTimeout(
-                function(){
-                ssm_ws.SendSSMCOMRead("Coolant_Temperature","SLOW","true");
-                ssm_ws.SendSSMCOMRead("Vehicle_Speed","FAST","true");
-                ssm_ws.SendSSMCOMRead("Vehicle_Speed","SLOW","true");
-                ssm_ws.SendSSMCOMRead("Switch_P0x062","FAST","true");
-                ssm_ws.SendSSMCOMRead("Switch_P0x062","SLOW","true");
-                },5000);
-            };
-
-            fueltrip_ws.onWebsocketOpen = function()
-            {
-                appendDebugMessage("FUELTRIP", "Connection started");
-            };
-            fueltrip_ws.onMomentFUELTRIPpacketReceived = function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
+            });
+            gaugeControl.EnableFUELTRIPWebSocket();
+            gaugeControl.RegisterFUELTRIPPacketRecivedEvent(function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
             {
                 $("#gauge_frame1")[0].contentWindow.fuel = total_gas;
                 $("#gauge_frame1")[0].contentWindow.trip = total_trip;
                 $("#gauge_frame1")[0].contentWindow.gas_milage = total_gasmilage;
                 $("#gauge_frame1")[0].contentWindow.value_update();
-            };                            
-            
+            });
             onload = function()
-            {
-                 connectWebSocket(defi_ws, ssm_ws, fueltrip_ws);
-                 setInterval("checkWebsocketStatus(defi_ws, ssm_ws, fueltrip_ws)", 1000);
-            };
-            
-            function onDefiWSIntervalChange()
-            {
-                var interval = $("#spinner_defiWSinterval").val();
-                defi_ws.SendDefiWSInterval(interval);
-                localStorage.defiWSInterval = interval;
-            }
-            
+            {                
+                 gaugeControl.ConnectWebSocket();
+                 setInterval("gaugeControl.CheckWebSocketStatus()", 1000);
+            };            
         </script>
         <style>
             iframe.meter { 
@@ -127,14 +89,14 @@ and open the template in the editor.
         </center>
         <br>
         <div class="debug_message" id="div_message" ></div>
-        <button id="button_reset" class="button1" onclick="reset_fuel_trip()" style="position:absolute;top:0px;right:0px">Reset</button>
-        <button id="button_debug" class="button1" onclick="show_debug_msg()" style="position:absolute;top:80px;right:0px">Debug</button>
+        <button id="button_reset" class="button1" onclick="gaugeControl.ResetFuelTrip()" style="position:absolute;top:0px;right:0px">Reset</button>
+        <button id="button_debug" class="button1" onclick="gaugeControl.ShowDebugMessage()" style="position:absolute;top:80px;right:0px">Debug</button>
         <div class="websocket_statusBox" style="position:absolute;top:160px;right:0px">
             <div style="color:white">Websocket Status</div> 
             <div id="defi_status" style="color: red">Defi</div>
             <div id="ssm_status" style="color: red">SSM</div>
             <div id="fueltrip_status" style="color: red">FUELTRIP</div>
-            <div style="color:white">DefiWSInterval<br><input style="background:black;color:white" id="spinner_defiWSinterval" type="number" min="0" max="10" step="1" value ="0" onchange="onDefiWSIntervalChange()"/> </div>
+            <div style="color:white">DefiWSInterval<br><input style="background:black;color:white" id="spinner_defiWSinterval" type="number" min="0" max="10" step="1" value ="0" onchange="gaugeControl.DefiArduinoWSIntervalChange()"/> </div>
         </div>
     </body>
 </html>

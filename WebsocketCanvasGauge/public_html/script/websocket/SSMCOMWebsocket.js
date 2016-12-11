@@ -16,7 +16,7 @@ var SSMCOM_Websocket = function()
     this._ws;
     this.URL;
     this.ModePrefix = "SSM";
-    this.onVALpacketReceived = function(val){};
+    this.onVALpacketReceived = {};
     this.onERRpacketReceived = function(msg){};
     this.onRESpacketReceived = function(msg){};
     this.onWebsocketOpen = function(){};
@@ -27,7 +27,7 @@ var SSMCOM_Websocket = function()
     };
 };
 
-SSMCOM_Websocket.prototype.SendSSMCOMRead = function(code, mode, flag)
+SSMCOM_Websocket.prototype.SendCOMRead = function(code, mode, flag)
 {
     var obj={
       mode : this.ModePrefix + "_COM_READ",
@@ -40,7 +40,7 @@ SSMCOM_Websocket.prototype.SendSSMCOMRead = function(code, mode, flag)
     this._ws.send(jsonstr);
 };
 
-SSMCOM_Websocket.prototype.SendSSMSlowreadInterval = function(interval)
+SSMCOM_Websocket.prototype.SendSlowreadInterval = function(interval)
 {
     var obj={
       mode : this.ModePrefix + "_SLOWREAD_INTERVAL",
@@ -52,13 +52,29 @@ SSMCOM_Websocket.prototype.SendSSMSlowreadInterval = function(interval)
     this._ws.send(jsonstr);    
 };
 
+/*
+SSMCOM_Websocket.prototype.SendReset = function()
+{
+    var obj={
+      mode : "RESET"
+    };
+    
+    var jsonstr = JSON.stringify(obj);
+    
+    this._ws.send(jsonstr);    
+};
+*/
+
 SSMCOM_Websocket.prototype._parseIncomingMessage = function(message){
     var received_json_object = JSON.parse(message);
     switch(received_json_object.mode)
     {
         case ("VAL") :
             for (var key in received_json_object.val)
-                this.onVALpacketReceived[key](received_json_object.val[key]);
+            {
+                if(key in this.onVALpacketReceived)
+                    this.onVALpacketReceived[key](received_json_object.val[key]);
+            }
             break;
         case("ERR"):
             this.onERRpacketReceived(received_json_object.msg);

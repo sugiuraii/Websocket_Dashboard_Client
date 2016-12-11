@@ -15,7 +15,7 @@ var DefiCOM_Websocket = function()
     this._ws;
     this.URL;
     this.ModePrefix = "DEFI";
-    this.onVALpacketReceived = function(val){};
+    this.onVALpacketReceived = {};
     this.onERRpacketReceived = function(msg){};
     this.onRESpacketReceived = function(msg){};
     this.onWebsocketOpen = function(){};
@@ -26,7 +26,7 @@ var DefiCOM_Websocket = function()
     };
 };
 
-DefiCOM_Websocket.prototype.SendDefiWSSend = function(code,flag)
+DefiCOM_Websocket.prototype.SendWSSend = function(code,flag)
 {
     var obj={
       mode : this.ModePrefix + "_WS_SEND",
@@ -38,7 +38,7 @@ DefiCOM_Websocket.prototype.SendDefiWSSend = function(code,flag)
     this._ws.send(jsonstr);
 };
 
-DefiCOM_Websocket.prototype.SendDefiWSInterval = function(interval)
+DefiCOM_Websocket.prototype.SendWSInterval = function(interval)
 {
     var obj={
       mode : this.ModePrefix + "_WS_INTERVAL",
@@ -50,13 +50,27 @@ DefiCOM_Websocket.prototype.SendDefiWSInterval = function(interval)
     this._ws.send(jsonstr);    
 };
 
+/*
+DefiCOM_Websocket.prototype.SendReset = function()
+{
+    var obj={
+      mode : "RESET"
+    };
+    
+    var jsonstr = JSON.stringify(obj);
+    
+    this._ws.send(jsonstr);    
+};
+*/
+
 DefiCOM_Websocket.prototype._parseIncomingMessage = function(message){
     var received_json_object = JSON.parse(message);
     switch(received_json_object.mode)
     {
         case ("VAL") :
             for (var key in received_json_object.val)
-                this.onVALpacketReceived[key](received_json_object.val[key]);
+                if(key in this.onVALpacketReceived)
+                    this.onVALpacketReceived[key](received_json_object.val[key]);
             break;
         case("ERR"):
             this.onERRpacketReceived(received_json_object.msg);
