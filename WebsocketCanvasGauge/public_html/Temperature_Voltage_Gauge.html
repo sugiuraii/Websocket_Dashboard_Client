@@ -11,45 +11,20 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="./script/libs/jquery/jquery.js"></script>
         <script src="./script/websocket/SSMCOMWebsocket.js"></script>
+        <script src="./script/meterpanel-common.js"></script>
         <script>
-            var ssm_ws = new SSMCOM_Websocket();
-            ssm_ws.onVALpacketReceived["Coolant_Temperature"] = function(value)
+            var gaugeControl = new GaugeControl();
+            gaugeControl.EnableSSMWebSocket();
+            gaugeControl.RegisterSSMParameterCode("Coolant_Temperature","Slow",function(value)
             {
                 $("#gauge_frame1")[0].contentWindow.value = value;
                 $("#gauge_frame1")[0].contentWindow.value_update();
-            };
-            ssm_ws.onVALpacketReceived["Battery_Voltage"] = function(value)
+            });
+            gaugeControl.RegisterSSMParameterCode("Battery_Voltage","Slow",function(value)
             {
                 $("#gauge_frame2")[0].contentWindow.value = value;
                 $("#gauge_frame2")[0].contentWindow.value_update();
-            };
-            ssm_ws.onERRpacketReceived = function(msg)
-            {
-                $('#div_message').append(msg + "<br>");
-            };
-            ssm_ws.onRESpacketReceived = function(msg)
-            {
-                $('#div_message').append(msg + "<br>");
-            };
-            ssm_ws.onWebsocketError = function(msg)
-            {
-                $('#div_message').append(msg + "<br>");
-            };
-            ssm_ws.onWebsocketOpen = function()
-            {
-                $('#div_message').append('* Connection started<br/>');
-                setTimeout(
-                function(){
-                //ssm_ws.SendSSMCOMRead("Coolant_Temperature","FAST","true");
-                //ssm_ws.SendSSMCOMRead("Battery_Voltage","FAST","true");
-                ssm_ws.SendSSMCOMRead("Coolant_Temperature","SLOW","true");
-                ssm_ws.SendSSMCOMRead("Battery_Voltage","SLOW","true");
-                },5000);
-            };
-            ssm_ws.onWebsocketClose = function()
-            {
-                $('#div_message').append('* Connection closed<br/>');
-            };
+            });
             initialize_gauge1 = function()
             {
                 var gauge_id = "#gauge_frame1";
@@ -84,28 +59,12 @@ and open the template in the editor.
                 $(gauge_id)[0].contentWindow.redzone_full_angle = 22.5;
                 $(gauge_id)[0].contentWindow.value_label_rounded = 1;
                 $(gauge_id)[0].contentWindow.initialize();
-            };
-            
-            
-            function onTestClick()
-            {
-                $("#gauge_frame1")[0].contentWindow.value = 75;
-                $("#gauge_frame1")[0].contentWindow.value_update();
-                $("#gauge_frame2")[0].contentWindow.value = 11.2;
-                $("#gauge_frame2")[0].contentWindow.value_update();
-            };
-            
-            function connectWebSocket()
-            {
-                ssm_ws.URL = "ws://"+location.hostname+":2013/";
-                ssm_ws.Connect();
-            };
-            
+            };            
             onload = function()
             {
                 initialize_gauge1();
                 initialize_gauge2();
-                connectWebSocket();
+                gaugeControl.ConnectWebSocket();
             };
             
         </script>

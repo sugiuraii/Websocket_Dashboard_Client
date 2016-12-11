@@ -11,37 +11,15 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="./script/libs/jquery/jquery.js"></script>
         <script src="./script/websocket/DefiCOMWebsocket.js"></script>
+        <script src="./script/meterpanel-common.js"></script>
         <script>
-            var defi_ws = new DefiCOM_Websocket();
-            defi_ws.onVALpacketReceived["Manifold_Absolute_Pressure"] = function(val)
+            var gaugeControl = new GaugeControl();
+            gaugeControl.EnableDefiWebSocket();
+            gaugeControl.RegisterDefiParameterCode("Manifold_Absolute_Pressure",function(val)
             {
                 $("#gauge_frame1")[0].contentWindow.value = val;
                 $("#gauge_frame1")[0].contentWindow.value_update();
-            };
-            defi_ws.onERRpacketReceived = function(msg)
-            {
-                $('#div_message').append(msg + "<br>");
-            };
-            defi_ws.onRESpacketReceived = function(msg)
-            {
-                $('#div_message').append(msg + "<br>");
-            };
-            defi_ws.onWebsocketError = function(msg)
-            {
-                $('#div_message').append(msg + "<br>");
-            };
-            defi_ws.onWebsocketOpen = function()
-            {
-                $('#div_message').append('* Connection started<br/>');
-                setTimeout(
-                function(){
-                defi_ws.SendDefiWSSend("Manifold_Absolute_Pressure","true");
-                },5000);
-            };
-            defi_ws.onWebsocketClose = function()
-            {
-                $('#div_message').append('* Connection closed<br/>');
-            };
+            });
             initialize_gauge1 = function()
             {
                 var gauge_id = "#gauge_frame1";
@@ -61,17 +39,10 @@ and open the template in the editor.
                 $(gauge_id)[0].contentWindow.value_label_rounded = 1;
                 $(gauge_id)[0].contentWindow.initialize();
             };
-            
-            function connectWebSocket()
-            {
-                defi_ws.URL = "ws://"+location.hostname+":2012/";
-                defi_ws.Connect();
-            };
-            
             onload = function()
             {
                 initialize_gauge1();
-                connectWebSocket();
+                gaugeControl.ConnectWebSocket();
             };
             
         </script>

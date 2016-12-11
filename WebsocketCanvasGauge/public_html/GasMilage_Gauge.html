@@ -15,22 +15,18 @@ and open the template in the editor.
         <script src="./script/meterpanel-common.js"></script>
 
         <script>
-            var defi_ws = null;
-            var ssm_ws = null;
-            var fueltrip_ws = new FUELTRIP_Websocket();
+            var gaugeControl = new GaugeControl();
+            gaugeControl.EnableFUELTRIPWebSocket();
             
-            setMeterDefault(defi_ws, ssm_ws, fueltrip_ws);
-            
-            fueltrip_ws.onMomentFUELTRIPpacketReceived = function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
+            gaugeControl.RegisterFUELTRIPPacketRecivedEvent("MOMENT", function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
             {
                 $("#gauge_frame1")[0].contentWindow.total_fuel = total_gas;
                 $("#gauge_frame1")[0].contentWindow.total_trip = total_trip;
                 $("#gauge_frame1")[0].contentWindow.total_gasmilage = total_gasmilage;
                 $("#gauge_frame1")[0].contentWindow.milage_0 = moment_gasmilage;
                 $("#gauge_frame1")[0].contentWindow.value_update();
-            };
-            
-            fueltrip_ws.onSectFUELTRIPpacketReceived = function(sect_span, sect_trip, sect_gas, sect_gasmilage)
+            });
+            gaugeControl.RegisterFUELTRIPPacketRecivedEvent("SECT", function(sect_span, sect_trip, sect_gas, sect_gasmilage)
             {
                 var num_sects = sect_gasmilage.length;
                 var i;
@@ -47,26 +43,7 @@ and open the template in the editor.
                 $("#gauge_frame1")[0].contentWindow.milage_10 = sect_gasmilage_zerofill[4];
                 $("#gauge_frame1")[0].contentWindow.milage_5 = sect_gasmilage_zerofill[5];              
                 $("#gauge_frame1")[0].contentWindow.value_update();
-            };
-            
-            fueltrip_ws.onWebsocketOpen = function()
-            {
-                $('#div_message').append('* Connection started<br/>');
-                setTimeout(
-                function(){
-                fueltrip_ws.SendSectSpan(300);
-                fueltrip_ws.SendSectStoreMax(6);
-                },5000);
-            };
-            fueltrip_ws.onWebsocketClose = function()
-            {
-                $('#div_message').append('* Connection closed<br/>');
-                $('#div_message').append('Reconnect after 5sec...<br/>');
-                setTimeout(
-                function(){
-                    fueltrip_ws.Connect();
-                }, 5000);                
-            };
+            });
             
             initialize_gauge = function()
             {
@@ -88,8 +65,8 @@ and open the template in the editor.
             onload = function()
             {
                 initialize_gauge();
-                connectWebSocket(defi_ws, ssm_ws, fueltrip_ws);
-                setInterval("checkWebsocketStatus(defi_ws, ssm_ws, fueltrip_ws)", 1000);
+                gaugeControl.ConnectWebSocket();
+                setInterval("gaugeControl.CheckWebSocketStatus()", 1000);
             };
             
         </script>
@@ -120,8 +97,8 @@ and open the template in the editor.
             <div id="fueltrip_status" style="color: red">FUELTRIP</div>
         </div>
         
-        <button id="button_reset" class="button1" onclick="reset_fuel_trip()" style="position:absolute;top:0px;right:0px">Reset</button>
-        <button id="button_debug" class="button1" onclick="show_debug_msg()" style="position:absolute;top:80px;right:0px">Debug</button>
+        <button id="button_reset" class="button1" onclick="gaugeControl.ResetFuelTrip()" style="position:absolute;top:0px;right:0px">Reset</button>
+        <button id="button_debug" class="button1" onclick="gaugeControl.ShowDebugMessage()" style="position:absolute;top:80px;right:0px">Debug</button>
 
     </body>
 </html>

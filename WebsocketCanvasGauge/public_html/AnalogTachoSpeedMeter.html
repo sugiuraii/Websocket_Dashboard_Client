@@ -51,7 +51,7 @@ and open the template in the editor.
                 $("#gauge_frame1")[0].contentWindow.value_update();
             });
             gaugeControl.EnableFUELTRIPWebSocket();
-            gaugeControl.RegisterFUELTRIPPacketRecivedEvent(function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
+            gaugeControl.RegisterFUELTRIPPacketRecivedEvent("MOMENT", function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
             {
                 $("#gauge_frame1")[0].contentWindow.fuel = total_gas;
                 $("#gauge_frame1")[0].contentWindow.trip = total_trip;

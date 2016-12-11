@@ -101,10 +101,15 @@ GaugeControl.prototype = {
             this._appendDebugMessage("ELM327", "ParameterCode Register is required. But Websocket is not enabled."); 
 
     },
-    RegisterFUELTRIPPacketRecivedEvent : function(receivedEventHandler)
+    RegisterFUELTRIPPacketRecivedEvent : function(type, receivedEventHandler)
     {
         if(this._FUELTRIP_WS !== null)
-            this._FUELTRIP_WS.onMomentFUELTRIPpacketReceived = receivedEventHandler;
+            if(type === "MOMENT")
+                this._FUELTRIP_WS.onMomentFUELTRIPpacketReceived = receivedEventHandler;
+            else if (type === "SECT")
+                this._FUELTRIP_WS.onSectFUELTRIPpacketReceived = receivedEventHandler;
+            else
+                this._appendDebugMessage("FUELTRIP", "PacketReceivedEvent Register is required. But type is nether MOMENT nor SECT."); 
         else
             this._appendDebugMessage("FUELTRIP", "PacketReceivedEvent Register is required. But Websocket is not enabled."); 
 
