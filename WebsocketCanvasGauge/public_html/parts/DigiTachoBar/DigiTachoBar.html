@@ -14,14 +14,14 @@ and open the template in the editor.
         <script src="../scripts/partscommon.js"></script>
         <style>
             @font-face {
-                font-family: 'Coolvetica';
+                font-family: 'NimbusSansL';
                 font-style: normal;
-                src: url(../../Fonts/Coolvetica-Regular.ttf) format('truetype');
+                src: url(../../Fonts/nimbus-sans/NimbusSanL-Bol.otf) format('opentype');
             }
             @font-face {
-                font-family: 'Astronaut';
+                font-family: 'Audiowide-Regular';
                 font-style: normal;
-                src: url(../../Fonts/Astronaut1.ttf) format('truetype');
+                src: url(../../Fonts/AudioWide/Audiowide-Regular.ttf) format('truetype');
             }
             div.meter{
                 position:relative;
@@ -29,13 +29,15 @@ and open the template in the editor.
             div.speed_label
             {
                 position:absolute;
+                padding:0;
                 width: 600px;
                 height: 320px;
                 text-align: right;
                 margin: 0 auto; 
-                font-size: 380px;
+                font-size: 340px;
+                letter-spacing: -0.06em;
                 color: white;
-                font-family:'Coolvetica';
+                font-family:'NimbusSansL';
                 text-shadow: 0px 0px 20px #fff;
                 z-index : 2;
             }
@@ -46,9 +48,9 @@ and open the template in the editor.
                 height: 200px;
                 text-align: right;
                 margin: 0 auto; 
-                font-size: 250px;
+                font-size: 180px;
                 color: white;
-                font-family:'Astronaut';
+                font-family:'Audiowide-Regular';
                 text-shadow: 0px 0px 20px #fff;
                 z-index : 2;
             }
@@ -83,8 +85,8 @@ and open the template in the editor.
         <div class="meter">
             <img src="DigiTachoBack.png" alt="" style="position:absolute;z-index:0">
             <canvas id="tacho_bar" width="1154" height="492" style="position:absolute;z-index:1;top:13px;left:20px"></canvas>
-            <div id="speed_label" class="speed_label" style="top:280px;left:370px;text-align: right">0</div>
-            <div id="gearpos_label" class="gear_label" style="top:-25px;left:20px;text-align: center">N</div>
+            <div id="speed_label" class="speed_label" style="top:200px;left:370px;text-align: right">0</div>
+            <div id="gearpos_label" class="gear_label" style="top:10px;left:25px;text-align: center">N</div>
         </div>
     </body>
 </html>

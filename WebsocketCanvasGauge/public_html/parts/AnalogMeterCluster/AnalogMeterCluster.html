@@ -15,18 +15,29 @@ and open the template in the editor.
         <script src="../scripts/partscommon.js"></script>
         <style>
             @font-face {
-            font-family: 'AstronautII';
+            font-family: 'Audiowide';
             font-style: normal;
-            src: url(../../Fonts/Astronaut2.ttf) format('truetype');
+            src: url(../../Fonts/AudioWide/Audiowide-Regular.ttf) format('truetype');
+            }
+            @font-face {
+            font-family: 'DSEG-Classic';
+            src: url(../../Fonts/DSEG_v030/DSEG14Classic-BoldItalic.ttf) format('truetype');
             }
             div.meter{
                 position:relative;
+            }
+            div.BigLCD_Text
+            {
+                position:absolute;
+                color: black;
+                font-family:'DSEG-Classic';
+                width:200px;
             }
             div.LCD_Text
             {
                 position:absolute;
                 color: black;
-                font-family:'AstronautII';
+                font-family:'DSEG-Classic';
                 width:200px;
             }
         </style>
@@ -69,9 +80,9 @@ and open the template in the editor.
                 _watertemp_bar.draw();
                 _boost_needle.draw();
                 
-                updatValueTextLabel(fuel, "#fuel_label", 2);
+                updatValueTextLabel(fuel, "#fuel_label", 1);
                 updatValueTextLabel(trip, "#trip_label", 1);
-                updatValueTextLabel(gas_milage, "#gas_milage_label", 2);
+                updatValueTextLabel(gas_milage, "#gas_milage_label", 1);
                 updatValueTextLabel(speed, "#speed_label", 0);
                 updateStringTextLabel(calc_gear_pos(tacho, speed, neutral_sw), "#gearpos_label");
             };
@@ -87,18 +98,20 @@ and open the template in the editor.
             <canvas id="tacho_bar" width="600" height="600" style="position:absolute;z-index:1;"></canvas>
             <canvas id="tacho_needle" width="600" height="600" style="position:absolute;z-index:2;"></canvas>
             <img src="AnalogTachoMeter_NeedleCap.png" width="600" height="600" alt="" style="position:absolute;z-index:3">
-            <div id="gas_milage_label" class="LCD_Text" style="top:300px;left:285px;text-align: right;font-size:56px;z-index:1">0.00</div>
-            <div id="trip_label" class="LCD_Text" style="top:353px;left:300px;text-align: right;font-size:48px;z-index:1">0.0</div>
-            <div id="fuel_label" class="LCD_Text" style="top:388px;left:300px;text-align: right;font-size:48px;z-index:1">0.00</div>
-            <div id="gearpos_label" class="LCD_Text" style="top:408px;left:190px;text-align: right;font-size:160px;z-index:1">N</div>
+            <div id="gas_milage_label" class="LCD_Text" style="top:323px;left:285px;text-align: right;font-size:35px;z-index:1">0.0</div>
+            <div id="trip_label" class="LCD_Text" style="top:367px;left:300px;text-align: right;font-size:32px;z-index:1">0.0</div>
+            <div id="fuel_label" class="LCD_Text" style="top:405px;left:300px;text-align: right;font-size:32px;z-index:1">0.0</div>
+            <div id="gearpos_label_back" class="BigLCD_Text" style="top:430px;left:205px;text-align: right;font-size:110px;color:grey;z-index:1">~</div>
+            <div id="gearpos_label" class="BigLCD_Text" style="top:430px;left:205px;text-align: right;font-size:110px;z-index:1">N</div>
         </div>
         <div id="speedmeter" style="position:absolute;top:0px;left:0px;z-index:0">          
             <img src="AnalogSpeedMeter_Base.png" width="600" height="600" alt="" style="position:absolute;z-index:0">
             <canvas id="watertemp_bar" width="600" height="600" style="position:absolute;z-index:1;"></canvas>
             <canvas id="speed_needle" width="600" height="600" style="position:absolute;z-index:2;"></canvas>
             <img src="AnalogSpeedMeter_NeedleCap.png" width="600" height="600" alt="" style="position:absolute;z-index:3">
-            <div id="speed_label" class="LCD_Text" style="top:355px;left:150px;text-align: right;font-size:85px;z-index:1">0</div>
-
+            <div id="speed_label_back" class="BigLCD_Text" style="top:378px;left:150px;text-align: right;font-size:55px;color:grey;z-index:1">~~~</div>
+            <div id="speed_label" class="BigLCD_Text" style="top:378px;left:150px;text-align: right;font-size:55px;z-index:1">0</div>
+            
         </div>
         <div id="boostmeter" style="position:absolute;top:80px;left:615px;z-index:0">          
             <img src="BoostMeter_Base.png" width="441" height="441" alt="" style="position:absolute;z-index:0">

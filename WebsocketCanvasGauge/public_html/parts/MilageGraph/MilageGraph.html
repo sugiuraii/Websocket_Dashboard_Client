@@ -13,9 +13,9 @@ and open the template in the editor.
         <script src="../../script/libs/jquery/jquery.js"></script>
         <style>
             @font-face {
-            font-family: 'Coolvetica';
-            font-style: normal;
-            src: url(../../Fonts/Coolvetica-Regular.ttf) format('truetype');
+                font-family: 'NimbusSansL';
+                font-style: normal;
+                src: url(../../Fonts/nimbus-sans/NimbusSanL-Bol.otf) format('opentype');
             }
             div.meter{
                 position:relative;
@@ -27,9 +27,10 @@ and open the template in the editor.
                 height: 200px;
                 text-align: right;
                 margin: 0 auto; 
-                font-size: 75px;
+                font-size: 65px;
+                letter-spacing: -0.06em;
                 color: white;
-                font-family:'Coolvetica';
+                font-family:'NimbusSansL';
                 text-shadow: 0px 0px 20px #fff;
                 z-index : 5;
             }
@@ -40,9 +41,10 @@ and open the template in the editor.
                 height: 150px;
                 text-align: right;
                 margin: 0 auto; 
-                font-size: 130px;
+                font-size: 120px;
+                letter-spacing: -0.06em;
                 color: white;
-                font-family:'Coolvetica';
+                font-family:'NimbusSansL';
                 text-shadow: 0px 0px 20px #fff;
             }
         </style>
@@ -194,7 +196,7 @@ and open the template in the editor.
                 if(parseFloat(this.total_trip).toFixed(1) !== $("#trip_label").text())
                     $("#trip_label").text(parseFloat(this.total_trip).toFixed(1));
                 if(parseFloat(this.total_gasmilage).toFixed(2) !== $("#gasmilage_label").text())
-                    $("#gasmilage_label").text(parseFloat(this.total_gasmilage).toFixed(2));
+                    $("#gasmilage_label").text(parseFloat(this.total_gasmilage).toFixed(1));
             }
             
             onload = function() {
@@ -213,9 +215,9 @@ and open the template in the editor.
             <canvas id="milagebar_25" width="60" height="480" style="position:absolute;z-index:1;top:34px;left:260px"></canvas>
             <canvas id="milagebar_30" width="60" height="480" style="position:absolute;z-index:1;top:34px;left:145px"></canvas>
 
-            <div class="tripfuel_label" style="left:1000px;top:145px" id="trip_label">2295.5</div>
-            <div class="tripfuel_label" style="left:1000px;top:260px" id="fuel_label">10.05</div>
-            <div class="gasmilage_label"  style="left:800px;top:390px" id="gasmilage_label">10.05</div>
+            <div class="tripfuel_label" style="left:1000px;top:140px" id="trip_label">2295.5</div>
+            <div class="tripfuel_label" style="left:1000px;top:255px" id="fuel_label">10.05</div>
+            <div class="gasmilage_label"  style="left:800px;top:370px" id="gasmilage_label">10.0</div>
 
             
         </div>
