@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Simple Text Meter</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="./script/libs/jquery/jquery.js"></script>
+        <script src="./script/websocket/DefiCOMWebsocket.js"></script>
+        <script src="./script/websocket/SSMCOMWebsocket.js"></script>
+        <script src="./script/websocket/FUELTRIPWebsocket.js"></script>
+        <script src="./script/meterpanel-common.js"></script>
+        <script>
+            var gaugeControl = new GaugeControl();
+            gaugeControl.EnableDefiWebSocket();
+            gaugeControl.EnableSSMWebSocket();
+            gaugeControl.RegisterDefiParameterCode("Manifold_Absolute_Pressure", function(value)
+            {
+                $("#BoostText").text(parseFloat(value).toFixed(2));
+            });
+            
+            gaugeControl.RegisterDefiParameterCode("Engine_Speed", function(value)
+            {
+                $("#TachoText").text(parseFloat(value).toFixed(0));                
+            });
+            
+            gaugeControl.RegisterSSMParameterCode("Vehicle_Speed","Slow+Fast", function(value)
+            {
+                $("#SpeedText").text(parseFloat(value).toFixed(0));
+            });
+            gaugeControl.RegisterSSMParameterCode("Coolant_Temperature","Slow",function(value)
+            {
+                $("#WaterTempText").text(parseFloat(value).toFixed(0));                
+            });
+            gaugeControl.RegisterSSMParameterCode("Battery_Voltage","Slow",function(value)
+            {
+                $("#BatteryText").text(parseFloat(value).toFixed(0));                
+            });
+            gaugeControl.RegisterSSMParameterCode("Air_Fuel_Sensor_1","Slow+Fast",function(value)
+            {
+                $("#AFText").text(parseFloat(value).toFixed(0));                
+            });
+
+            onload = function()
+            {
+                gaugeControl.ConnectWebSocket();
+            };
+        </script>
+        <style>
+            @font-face {
+                font-family: 'Audiowide';
+                font-style: normal;
+                src: url(./Fonts/AudioWide/Audiowide-Regular.ttf) format('truetype');
+            }
+            @font-face {
+                font-family: 'DSEG14';
+                font-style: normal;
+                src: url(./Fonts/DSEG_v030/DSEG14Classic-Bold.ttf) format('truetype');
+            }
+
+            .meterTable{
+            width: 100%;
+            border-collapse: collapse;
+            border-right: 1px solid #999;
+
+            }
+            .meterTable th{
+            font-family:'Audiowide';
+            width: 25%;
+            padding: 6px;
+            text-align: center;
+            vertical-align: top;
+            color: #fff;
+            background-color: #555;
+            border-left: 5px solid #ff6633; 
+            border-top: 1px solid #fff;
+            font-size: 40px
+            }
+            .meterTable td{
+            font-family:'DSEG14';
+            width: 25%;
+            padding: 6px;
+            text-align : center;
+            color: #fff;
+            background-color: #000;
+            border-bottom: 1px solid #999;
+            border-left: 1px solid #999;
+            font-size: 90px
+            }
+        </style>
+    </head>
+    <body>
+        <table class="meterTable">
+            <tbody>
+                <tr>
+                    <th>
+                        Boost<br>[kgf/cm2]
+                    </th>
+                    <th>
+                        Tacho<br>[rpm]
+                    </th>
+                    <th>
+                        Speed<br>[km/h]
+                    </th>
+                </tr>
+                <tr>
+                    <td id="BoostText"></td>
+                    <td id="TachoText"></td>
+                    <td id="SpeedText"></td>
+                </tr>
+                <tr>
+                    <th>
+                        WaterTemp<br>[degC]
+                    </th>
+                    <th>
+                        Battery<br>[V]
+                    </th>
+                    <th>
+                        A/F
+                    </th>
+                </tr>
+                <tr>
+                    <td id="WaterTempText"></td>
+                    <td id="BatteryText"></td>
+                    <td id="AFText"></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

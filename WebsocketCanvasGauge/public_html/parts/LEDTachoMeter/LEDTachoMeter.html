@@ -14,14 +14,14 @@ and open the template in the editor.
         <script src="../scripts/partscommon.js"></script>
         <style>
             @font-face {
-            font-family: 'AstronautII';
+            font-family: 'DSEG14Classic';
             font-style: normal;
-            src: url(../../Fonts/Astronaut2.ttf) format('truetype');
+            src: url(../../Fonts/DSEG_v030/DSEG14Classic-BoldItalic.ttf) format('truetype');
             }
             @font-face {
-            font-family: 'Alien-Encounters-Bold';
+            font-family: 'Audiowide';
             font-style: normal;
-            src: url(../../Fonts/Alien-Encounters-Bold.ttf) format('truetype');
+            src: url(../../Fonts/AudioWide/Audiowide-Regular.ttf) format('truetype');
             }
             div.meter{
                 position:relative;
@@ -30,15 +30,25 @@ and open the template in the editor.
             {
                 position:absolute;
                 color: white;
-                font-family:'AstronautII';
+                font-family:'DSEG14Classic';
                 width:200px;
+                text-shadow: 0px 0px 20px #fff;
             }
             div.Speed_Text
             {
                 position:absolute;
                 color: white;
-                font-family:'Alien-Encounters-Bold';
-                width:200px;                
+                font-family:'DSEG14Classic';
+                width:400px;
+                text-shadow: 0px 0px 20px #fff;                
+            }
+            div.Gear_Text
+            {
+                position:absolute;
+                color: white;
+                font-family:'Audiowide';
+                width:200px;
+                text-shadow: 0px 0px 20px #fff;
             }
         </style>
         <script>
@@ -95,11 +105,11 @@ and open the template in the editor.
             <img src="LEDTachoMeter_Base.png" width="600" height="600" alt="" style="position:absolute;z-index:0">
             <canvas id="tacho_bar_Yellow" width="600" height="600" style="position:absolute;z-index:1;"></canvas>
             <canvas id="tacho_bar_Red" width="600" height="600" style="position:absolute;z-index:1;"></canvas>
-            <div id="gas_milage_label" class="LCD_Text" style="top:330px;left:100px;text-align: right;font-size:64px;z-index:1">20.00</div>
-            <div id="trip_label" class="LCD_Text" style="top:333px;left:305px;text-align: right;font-size:48px;z-index:1">0.0</div>
-            <div id="fuel_label" class="LCD_Text" style="top:368px;left:305px;text-align: right;font-size:48px;z-index:1">0.00</div>
-            <div id="gearpos_label" class="LCD_Text" style="top:388px;left:200px;text-align: right;font-size:160px;z-index:1">N</div>
-            <div id="speed_label" class="Speed_Text" style="top:160px;left:210px;text-align: right;font-size:140px;z-index:1">0</div>
+            <div id="gas_milage_label" class="LCD_Text" style="top:340px;left:100px;text-align: right;font-size:44px;z-index:1">20.00</div>
+            <div id="trip_label" class="LCD_Text" style="top:343px;left:305px;text-align: right;font-size:32px;z-index:1">0.0</div>
+            <div id="fuel_label" class="LCD_Text" style="top:378px;left:305px;text-align: right;font-size:32px;z-index:1">0.00</div>
+            <div id="gearpos_label" class="Gear_Text" style="top:410px;left:220px;text-align: right;font-size:120px;z-index:1">N</div>
+            <div id="speed_label" class="Speed_Text" style="top:172px;left:30px;text-align: right;font-size:105px;z-index:1">0</div>
         </div>
     </body>
 </html>
