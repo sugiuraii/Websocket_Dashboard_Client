@@ -40,22 +40,27 @@ var GaugeControl = function()
     
     /**
      * URL of Defi Websocket server.
+     * @default ws://location.hostname:2012/
      */
     this.Defi_WS_URL = "ws://"+location.hostname+":2012/";
     /**
      * URL of SSM Websocket server.
+     * @default ws://location.hostname:2013/
      */
     this.SSM_WS_URL =  "ws://"+location.hostname+":2013/";
     /**
      * URL of Arduino Websocket server.
+     * @default ws://location.hostname:2015/
      */
     this.Arduino_WS_URL = "ws://"+location.hostname+":2015/";
     /**
      * URL of ELM327 Websocket server.
+     * @default ws://location.hostname:2016/
      */
     this.ELM327_WS_URL = "ws://"+location.hostname+":2016/";
     /**
      * URL of FUELTRIP Websocket server.
+     * @default ws://location.hostname:2014/
      */
     this.FUELTRIP_WS_URL = "ws://"+location.hostname+":2014/";
     
@@ -73,43 +78,51 @@ var GaugeControl = function()
     /**
      * HTML element ID of debug message window.<br>
      * デバッグメッセージウインドウのHTMLエレメントID.
+     * @default #div_message
      */
     this.MessageWindowID = '#div_message';
     /**
      * HTML element ID of DefiCOM_Websocket status indicator.<br>
      * DefiCOM_Websocket ステータスインジケータのHTMLエレメントID.
+     * @default #defi_status
      */
     this.Defi_StatusIndicatorID = "#defi_status";
     /**
      * HTML element ID of SSMCOM_Websocket status indicator.<br>
      * SSMCOM_Websocket ステータスインジケータのHTMLエレメントID.
+     * @default #ssm_status
      */
     this.SSM_StatusIndicatorID = "#ssm_status";
     /**
      * HTML element ID of ArduinoCOM_Websocket status indicator.<br>
      * ArduinoCOM_Websocket ステータスインジケータのHTMLエレメントID.
+     * @default #arduino_status
      */
     this.Arduino_StatusIndicatorID = "#arduino_status";
     /**
      * HTML element ID of ELM327COM_Websocket status indicator.<br>
      * ELM327COM_Websocket ステータスインジケータのHTMLエレメントID.
+     * @default #elm327_status
      */
     this.ELM327_StatusIndicatorID = "#elm327_status";
     /**
      * HTML element ID of FUELTRIP_Websocket status indicator.<br>
      * FUELTRIP_Websocket ステータスインジケータのHTMLエレメントID.
+     * @default #fueltrip_status
      */
     this.FUELTRIP_StatusIndicatorID = "#fueltrip_status";
     
     /**
      * HTML element ID of the spinner to set DefiCOM/ArduinoCOM send interval.<br>
      * Defi/Arduinoのwebsocket通信インターバルを設定するスピナーのHTMLID
+     * @default #spinner_defiWSinterval
      */
     this.DEFIARDUINOWSInverval_SpinnerID = "#spinner_defiWSinterval";
     
     /**
      * WaitTime after websocket Open or websocket Close (msec)<br>
      * WebSocketオープンまたはクローズ後の待ち時間(ミリ秒)
+     * @default 5000
      */
     this.WaitTimeAfterWebSocketOpenClose = 5000;
 };
@@ -242,28 +255,38 @@ GaugeControl.prototype = {
 
     },
     /**
-     * Register event which is called FUELTRIP VAL message is received.<br>
-     * FUELTRIPメッセージを受信したときのイベントを登録。
-     * @param {String} type Type of FUELTRIP message (MOMENT or SECT)<br>
-     * FUELTRIPメッセージの種類(MOMENT(瞬間燃費)またはSECT(区間燃費).
-     * @param {function()} receivedEventHandler Event to register.
+     * Register event which is called MOMENT_FUELTRIP VAL message is received.<br>
+     * MOMENT_FUELTRIP(瞬間燃費)メッセージを受信したときのイベントを登録。
+     * @param {function(moment_gasmilage, total_gas, total_trip, total_gasmilage)} receivedEvent Event to register.
      */
-    RegisterFUELTRIPPacketRecivedEvent : function(type, receivedEventHandler)
+    RegisterMOMENTFUELTRIPPacketRecivedEvent : function(receivedEvent)
     {
         'use strict';
         if(this._FUELTRIP_WS !== null)
-            if(type === "MOMENT")
-                this._FUELTRIP_WS.onMomentFUELTRIPpacketReceived = receivedEventHandler;
-            else if (type === "SECT")
-                this._FUELTRIP_WS.onSectFUELTRIPpacketReceived = receivedEventHandler;
-            else
-                this._appendDebugMessage("FUELTRIP", "PacketReceivedEvent Register is required. But type is nether MOMENT nor SECT."); 
+            this._FUELTRIP_WS.onMomentFUELTRIPpacketReceived = receivedEvent;
         else
             this._appendDebugMessage("FUELTRIP", "PacketReceivedEvent Register is required. But Websocket is not enabled."); 
 
     },
     /**
-     * Connect enabled websocket.<br>Please call Enable(Defi/SSM/ELM327/Arduino)Websocket method before connect.<br>接続します。<br>接続前にEnable(Defi/SSM/ELM327/Arduino)WebsocketメソッドでWebsocketを有効化してください。
+     * Register event which is called SECT_FUELTRIP VAL message is received.<br>
+     * SECT_FUELTRIP(区間燃費)メッセージを受信したときのイベントを登録。
+     * @param {function(sect_span, sect_trip, sect_gas, sect_gasmilage)} receivedEvent Event to register.
+     */
+    RegisterSECTFUELTRIPPacketRecivedEvent : function(receivedEvent)
+    {
+        'use strict';
+        if(this._FUELTRIP_WS !== null)
+            this._FUELTRIP_WS.onSectFUELTRIPpacketReceived = receivedEvent;
+        else
+            this._appendDebugMessage("FUELTRIP", "PacketReceivedEvent Register is required. But Websocket is not enabled."); 
+
+    },
+    /**
+     * Connect enabled websocket.<br>
+     * Please call Enable(Defi/SSM/ELM327/Arduino)Websocket method before connect.<br>
+     * 接続します。<br>
+     * 接続前にEnable(Defi/SSM/ELM327/Arduino)WebsocketメソッドでWebsocketを有効化してください。
      */
     ConnectWebSocket : function()
     {

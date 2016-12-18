@@ -66,7 +66,7 @@ and open the template in the editor.
                 $("#frame_AF")[0].contentWindow.value = value*14.7;
                 $("#frame_AF")[0].contentWindow.value_update();
             });
-            gaugeControl.RegisterFUELTRIPPacketRecivedEvent("MOMENT",function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
+            gaugeControl.RegisterMOMENTFUELTRIPPacketRecivedEvent(function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
             {
                 var gauge_id = "#frame_gasmilage";
                 $(gauge_id)[0].contentWindow.total_fuel = total_gas;
@@ -75,7 +75,7 @@ and open the template in the editor.
                 $(gauge_id)[0].contentWindow.milage_0 = moment_gasmilage;
                 $(gauge_id)[0].contentWindow.value_update();
             });
-            gaugeControl.RegisterFUELTRIPPacketRecivedEvent("SECT",function(sect_span, sect_trip, sect_gas, sect_gasmilage)
+            gaugeControl.RegisterSECTFUELTRIPPacketRecivedEvent(function(sect_span, sect_trip, sect_gas, sect_gasmilage)
             {
                 var num_sects = sect_gasmilage.length;
                 var i;

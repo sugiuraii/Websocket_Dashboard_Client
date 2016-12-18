@@ -10,12 +10,12 @@ and open the template in the editor.
 body:before {
 	z-index: 0;
 	content: "";
-	display: block;
+        display: block;
 	position: absolute;
-        top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+        top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
 	background: -moz-linear-gradient(top, rgba(0,0,0,1),rgba(0,0,0,0.8) 50%, rgba(0,0,0,0.5));
         background: -webkit-gradient(linear, center top, center bottom, from(rgba(0,0,0,1)),color-stop(0.5, rgba(0,0,0,0.8)), to(rgba(0,0,0,0.5)));
 }

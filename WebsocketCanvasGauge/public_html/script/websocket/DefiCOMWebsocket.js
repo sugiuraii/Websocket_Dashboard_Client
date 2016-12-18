@@ -4,6 +4,11 @@
  * and open the template in the editor.
  */
 
+/**
+ * ArduinoCOM_Websocket class.
+ * @constructor
+ * @returns {ArduinoCOM_Websocket.newobj|DefiCOM_Websocket}
+ */
 var ArduinoCOM_Websocket = function()
 {
     'use strict';
@@ -12,16 +17,48 @@ var ArduinoCOM_Websocket = function()
     return newobj;
 };
 
+/**
+ * DefiCOM_Websocket class.
+ * @constructor
+ * @returns {DefiCOM_Websocket}
+ */
 var DefiCOM_Websocket = function()
 {
     'use strict';
+    /**
+     * Websocket obj.
+     * @private
+     */
     this._ws;
+    /**
+     * URL of server
+     */
     this.URL;
+    /**
+     * Prefix of modecode. (Do not change).
+     */
     this.ModePrefix = "DEFI";
+    /**
+     * Event on VAL packet is received.
+     */
     this.onVALpacketReceived = {};
+    /**
+     * Event on ERR packet is received.
+     * @param {msg} msg JSON of message.
+     */
     this.onERRpacketReceived = function(msg){};
+    /**
+     * Event on RES packet is received.
+     * @param {msg} msg JSON of message.
+     */
     this.onRESpacketReceived = function(msg){};
+    /**
+     * Event on websocket open.
+     */
     this.onWebsocketOpen = function(){};
+    /**
+     * Event on websocket close.
+     */
     this.onWebsocketClose = function(){};
     this.onWebsocketError = function(msg)
     {
@@ -29,6 +66,11 @@ var DefiCOM_Websocket = function()
     };
 };
 
+/**
+ * Send DEFI(ARDUINO)_WS_SEND to enable or disable defi(arduino) parameter.
+ * @param {String} code Defi(Arduino) parameter code to set.
+ * @param {String} flag Enable or disable flag. ("true" or "false")
+ */
 DefiCOM_Websocket.prototype.SendWSSend = function(code,flag)
 {
     'use strict';
@@ -42,6 +84,10 @@ DefiCOM_Websocket.prototype.SendWSSend = function(code,flag)
     this._ws.send(jsonstr);
 };
 
+/**
+ * Send DEFI(ARDUINO)_WS_INTERVAL to set inverval for sending VAL message.
+ * @param {Numeric} interval of VAL message. (more than 0. 0:No interval).
+ */
 DefiCOM_Websocket.prototype.SendWSInterval = function(interval)
 {
     'use strict';
@@ -69,6 +115,11 @@ DefiCOM_Websocket.prototype.SendReset = function()
 };
 */
 
+/**
+ * Parse incomming JSON mesage
+ * @param {JSON} message JSON message to parse.
+ * @private
+ */
 DefiCOM_Websocket.prototype._parseIncomingMessage = function(message){
     'use strict';
     var received_json_object = JSON.parse(message);
@@ -90,6 +141,9 @@ DefiCOM_Websocket.prototype._parseIncomingMessage = function(message){
     };
 };
 
+/**
+ * Connect websocket.
+ */
 DefiCOM_Websocket.prototype.Connect = function() { 
     'use strict';
     var support = "MozWebSocket" in window ? 'MozWebSocket' : ("WebSocket" in window ? 'WebSocket' : null);
@@ -116,6 +170,9 @@ DefiCOM_Websocket.prototype.Connect = function() {
     };
 };
 
+/**
+ * Close websocket.
+ */
 DefiCOM_Websocket.prototype.Close = function()
 {
     'use strict';
@@ -124,22 +181,11 @@ DefiCOM_Websocket.prototype.Close = function()
     };
 };
 
+/**
+ * Get websocket ready state.
+ */
 DefiCOM_Websocket.prototype.getReadyState = function()
 {
     'use strict';
     return this._ws.readyState;
-};
-
-DefiCOM_Websocket.prototype.getParameterCodeList = function()
-{
-    var parameterCodeList = [
-        "Manifold_Absolute_Pressure",
-        "Engine_Speed",
-        "Oil_Pressure",
-        "Fuel_Rail_Pressure",
-        "Exhaust_Gas_Temperature",
-        "Oil_Temperature",
-        "Coolant_Temperature"];
-    
-    return parameterCodeList;
 };
