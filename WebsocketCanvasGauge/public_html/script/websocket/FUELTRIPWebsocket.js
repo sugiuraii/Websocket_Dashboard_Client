@@ -6,6 +6,7 @@
 
 var FUELTRIP_Websocket = function()
 {
+    'use strict';
     this._ws;
     this.URL;
     this.ModePrefix = "FUELTRIP";
@@ -22,7 +23,8 @@ var FUELTRIP_Websocket = function()
 };
 
 FUELTRIP_Websocket.prototype.SendSectSpan = function(sect_span)
-{
+{   
+    'use strict';
     var obj={
       mode : "SECT_SPAN",
       sect_span : sect_span
@@ -34,6 +36,7 @@ FUELTRIP_Websocket.prototype.SendSectSpan = function(sect_span)
 
 FUELTRIP_Websocket.prototype.SendReset = function()
 {
+    'use strict';
     var obj={
       mode : "RESET"
     };
@@ -45,6 +48,7 @@ FUELTRIP_Websocket.prototype.SendReset = function()
 
 FUELTRIP_Websocket.prototype.SendSectStoreMax = function(storemax)
 {
+    'use strict';
     var obj={
       mode : "SECT_STOREMAX",
       storemax : storemax
@@ -56,6 +60,7 @@ FUELTRIP_Websocket.prototype.SendSectStoreMax = function(storemax)
 };
 
 FUELTRIP_Websocket.prototype._parseIncomingMessage = function(message){
+    'use strict';
     var received_json_object = JSON.parse(message);
     switch(received_json_object.mode)
     {
@@ -83,6 +88,7 @@ FUELTRIP_Websocket.prototype._parseIncomingMessage = function(message){
 };
 
 FUELTRIP_Websocket.prototype.Connect = function() { 
+    'use strict';
     var support = "MozWebSocket" in window ? 'MozWebSocket' : ("WebSocket" in window ? 'WebSocket' : null);
 
     if (support === null) {
@@ -109,6 +115,7 @@ FUELTRIP_Websocket.prototype.Connect = function() {
 
 FUELTRIP_Websocket.prototype.Close = function()
 {
+    'use strict';
     if(this._ws){
         this._ws.close();
     };
@@ -116,5 +123,6 @@ FUELTRIP_Websocket.prototype.Close = function()
 
 FUELTRIP_Websocket.prototype.getReadyState = function()
 {
+    'use strict';
     return this._ws.readyState;
 };

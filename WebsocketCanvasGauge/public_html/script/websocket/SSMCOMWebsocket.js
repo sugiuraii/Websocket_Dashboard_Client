@@ -6,6 +6,7 @@
 
 var ELM327COM_Websocket = function()
 {
+    'use strict';
     var newobj = new SSMCOM_Websocket();
     newobj.ModePrefix = "ELM327";
     return newobj;
@@ -13,6 +14,7 @@ var ELM327COM_Websocket = function()
 
 var SSMCOM_Websocket = function()
 {
+    'use strict';
     this._ws;
     this.URL;
     this.ModePrefix = "SSM";
@@ -29,6 +31,7 @@ var SSMCOM_Websocket = function()
 
 SSMCOM_Websocket.prototype.SendCOMRead = function(code, mode, flag)
 {
+    'use strict';
     var obj={
       mode : this.ModePrefix + "_COM_READ",
       code : code,
@@ -42,6 +45,7 @@ SSMCOM_Websocket.prototype.SendCOMRead = function(code, mode, flag)
 
 SSMCOM_Websocket.prototype.SendSlowreadInterval = function(interval)
 {
+    'use strict';
     var obj={
       mode : this.ModePrefix + "_SLOWREAD_INTERVAL",
       interval : interval
@@ -55,6 +59,7 @@ SSMCOM_Websocket.prototype.SendSlowreadInterval = function(interval)
 /*
 SSMCOM_Websocket.prototype.SendReset = function()
 {
+    'use strict';
     var obj={
       mode : "RESET"
     };
@@ -66,6 +71,7 @@ SSMCOM_Websocket.prototype.SendReset = function()
 */
 
 SSMCOM_Websocket.prototype._parseIncomingMessage = function(message){
+    'use strict';
     var received_json_object = JSON.parse(message);
     switch(received_json_object.mode)
     {
@@ -88,6 +94,7 @@ SSMCOM_Websocket.prototype._parseIncomingMessage = function(message){
 };
 
 SSMCOM_Websocket.prototype.Connect = function() { 
+    'use strict';
     var support = "MozWebSocket" in window ? 'MozWebSocket' : ("WebSocket" in window ? 'WebSocket' : null);
 
     if (support === null) {
@@ -114,6 +121,7 @@ SSMCOM_Websocket.prototype.Connect = function() {
 
 SSMCOM_Websocket.prototype.Close = function()
 {
+    'use strict';
     if(this._ws){
         this._ws.close();
     };
@@ -121,5 +129,6 @@ SSMCOM_Websocket.prototype.Close = function()
 
 SSMCOM_Websocket.prototype.getReadyState = function()
 {
+    'use strict';
     return this._ws.readyState;
 };

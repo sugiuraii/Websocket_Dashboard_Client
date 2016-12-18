@@ -8,7 +8,7 @@ and open the template in the editor.
     <head>
         <title>Simple Text Meter</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width,height=device-height">
         <script src="./script/libs/jquery/jquery.js"></script>
         <script src="./script/websocket/DefiCOMWebsocket.js"></script>
         <script src="./script/websocket/SSMCOMWebsocket.js"></script>
@@ -18,31 +18,31 @@ and open the template in the editor.
             var gaugeControl = new GaugeControl();
             gaugeControl.EnableDefiWebSocket();
             gaugeControl.EnableSSMWebSocket();
-            gaugeControl.RegisterDefiParameterCode("Manifold_Absolute_Pressure", function(value)
+            gaugeControl.RegisterDefiParameterCode(gaugeControl.DefiParameterCode.Manifold_Absolute_Pressure, function(value)
             {
                 $("#BoostText").text(parseFloat(value).toFixed(2));
             });
             
-            gaugeControl.RegisterDefiParameterCode("Engine_Speed", function(value)
+            gaugeControl.RegisterDefiParameterCode(gaugeControl.DefiParameterCode.Engine_Speed, function(value)
             {
                 $("#TachoText").text(parseFloat(value).toFixed(0));                
             });
             
-            gaugeControl.RegisterSSMParameterCode("Vehicle_Speed","Slow+Fast", function(value)
+            gaugeControl.RegisterSSMParameterCode(gaugeControl.SSMParameterCode.Vehicle_Speed, gaugeControl.ReadMode.SlowAndFast , function(value)
             {
                 $("#SpeedText").text(parseFloat(value).toFixed(0));
             });
-            gaugeControl.RegisterSSMParameterCode("Coolant_Temperature","Slow",function(value)
+            gaugeControl.RegisterSSMParameterCode(gaugeControl.SSMParameterCode.Coolant_Temperature,gaugeControl.ReadMode.Slow ,function(value)
             {
                 $("#WaterTempText").text(parseFloat(value).toFixed(0));                
             });
-            gaugeControl.RegisterSSMParameterCode("Battery_Voltage","Slow",function(value)
+            gaugeControl.RegisterSSMParameterCode(gaugeControl.SSMParameterCode.Battery_Voltage,gaugeControl.ReadMode.Slow ,function(value)
             {
-                $("#BatteryText").text(parseFloat(value).toFixed(0));                
+                $("#BatteryText").text(parseFloat(value).toFixed(2));                
             });
-            gaugeControl.RegisterSSMParameterCode("Air_Fuel_Sensor_1","Slow+Fast",function(value)
+            gaugeControl.RegisterSSMParameterCode(gaugeControl.SSMParameterCode.Air_Fuel_Sensor_1,gaugeControl.ReadMode.SlowAndFast,function(value)
             {
-                $("#AFText").text(parseFloat(value).toFixed(0));                
+                $("#AFText").text(parseFloat(value*14).toFixed(1));                
             });
 
             onload = function()
@@ -70,26 +70,26 @@ and open the template in the editor.
             }
             .meterTable th{
             font-family:'Audiowide';
-            width: 25%;
-            padding: 6px;
+            width: 33%;
+            height: 25%;
             text-align: center;
             vertical-align: top;
             color: #fff;
             background-color: #555;
             border-left: 5px solid #ff6633; 
             border-top: 1px solid #fff;
-            font-size: 40px
+            font-size: 4vw
             }
             .meterTable td{
             font-family:'DSEG14';
-            width: 25%;
-            padding: 6px;
+            width: 33%;
+            height: 25%;
             text-align : center;
             color: #fff;
             background-color: #000;
             border-bottom: 1px solid #999;
             border-left: 1px solid #999;
-            font-size: 90px
+            font-size: 8vw
             }
         </style>
     </head>

@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 var ArduinoCOM_Websocket = function()
 {
+    'use strict';
     var newobj = new DefiCOM_Websocket();
     newobj.ModePrefix = "ARDUINO";
     return newobj;
@@ -12,6 +14,7 @@ var ArduinoCOM_Websocket = function()
 
 var DefiCOM_Websocket = function()
 {
+    'use strict';
     this._ws;
     this.URL;
     this.ModePrefix = "DEFI";
@@ -28,6 +31,7 @@ var DefiCOM_Websocket = function()
 
 DefiCOM_Websocket.prototype.SendWSSend = function(code,flag)
 {
+    'use strict';
     var obj={
       mode : this.ModePrefix + "_WS_SEND",
       code : code,
@@ -40,6 +44,7 @@ DefiCOM_Websocket.prototype.SendWSSend = function(code,flag)
 
 DefiCOM_Websocket.prototype.SendWSInterval = function(interval)
 {
+    'use strict';
     var obj={
       mode : this.ModePrefix + "_WS_INTERVAL",
       interval : interval
@@ -53,6 +58,7 @@ DefiCOM_Websocket.prototype.SendWSInterval = function(interval)
 /*
 DefiCOM_Websocket.prototype.SendReset = function()
 {
+    'use strict';
     var obj={
       mode : "RESET"
     };
@@ -64,6 +70,7 @@ DefiCOM_Websocket.prototype.SendReset = function()
 */
 
 DefiCOM_Websocket.prototype._parseIncomingMessage = function(message){
+    'use strict';
     var received_json_object = JSON.parse(message);
     switch(received_json_object.mode)
     {
@@ -84,6 +91,7 @@ DefiCOM_Websocket.prototype._parseIncomingMessage = function(message){
 };
 
 DefiCOM_Websocket.prototype.Connect = function() { 
+    'use strict';
     var support = "MozWebSocket" in window ? 'MozWebSocket' : ("WebSocket" in window ? 'WebSocket' : null);
 
     if (support === null) {
@@ -110,6 +118,7 @@ DefiCOM_Websocket.prototype.Connect = function() {
 
 DefiCOM_Websocket.prototype.Close = function()
 {
+    'use strict';
     if(this._ws){
         this._ws.close();
     };
@@ -117,5 +126,20 @@ DefiCOM_Websocket.prototype.Close = function()
 
 DefiCOM_Websocket.prototype.getReadyState = function()
 {
+    'use strict';
     return this._ws.readyState;
+};
+
+DefiCOM_Websocket.prototype.getParameterCodeList = function()
+{
+    var parameterCodeList = [
+        "Manifold_Absolute_Pressure",
+        "Engine_Speed",
+        "Oil_Pressure",
+        "Fuel_Rail_Pressure",
+        "Exhaust_Gas_Temperature",
+        "Oil_Temperature",
+        "Coolant_Temperature"];
+    
+    return parameterCodeList;
 };
