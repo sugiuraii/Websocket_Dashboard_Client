@@ -439,6 +439,10 @@ GaugeControl.prototype = {
     {
         return this.ELM327ParameterCode.keys();
     },
+    addDebugMessageWindow : function()
+    {
+        $("body").append("<div class=\"debug_message\" id=\"div_message\" ></div>");
+    },
     //private
     /**
      * Initialize websocket obj.

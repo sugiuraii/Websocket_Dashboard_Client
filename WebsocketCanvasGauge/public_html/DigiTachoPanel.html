@@ -17,6 +17,7 @@ and open the template in the editor.
         <script src="./script/meterpanel-common.js"></script>
         <script>
             var gaugeControl = new GaugeControl();
+            
             gaugeControl.EnableDefiWebSocket();
             gaugeControl.EnableSSMWebSocket();
             gaugeControl.EnableFUELTRIPWebSocket();
@@ -301,17 +302,24 @@ and open the template in the editor.
         <iframe class="meter" style="top:0px;left:905px;transform:scale(0.35)" id="frame_watertemp" src="./parts/SemiCircularGauge/SemiCircularGauge.html" scrolling="no" width="799" height="584" seamless> </iframe>
         <iframe class="meter" style="top:205px;left:905px;transform:scale(0.35)" id="frame_volt" src="./parts/SemiCircularGauge/SemiCircularGauge.html" scrolling="no" width="799" height="584" seamless> </iframe>
         <iframe class="meter" style="top:410px;left:905px;transform:scale(0.35)" id="frame_throttle" src="./parts/SemiCircularGauge/SemiCircularGauge.html" scrolling="no" width="799" height="584" seamless> </iframe>
-
         <br>
+        
         <div class="debug_message" id="div_message" ></div>
-        <button id="button_reset" class="button1" onclick="gaugeControl.ResetFuelTrip()" style="position:absolute;top:0px;right:0px">Reset</button>
-        <button id="button_debug" class="button1" onclick="gaugeControl.ShowDebugMessage()" style="position:absolute;top:80px;right:0px">Debug</button>
-        <div class="websocket_statusBox" style="position:absolute;top:160px;right:0px">
-            <div style="color:white">Websocket Status</div> 
-            <div id="defi_status" style="color: red">Defi</div>
-            <div id="ssm_status" style="color: red">SSM</div>
-            <div id="fueltrip_status" style="color: red">FUELTRIP</div>
-            <div style="color:white">DefiWSInterval<br><input style="background:black;color:white" id="spinner_defiWSinterval" type="number" min="0" max="10" step="1" value ="0" onchange="gaugeControl.DefiArduinoWSIntervalChange()"/> </div>
+        <div class="controlPanel">
+            <button id="button_reset" class="button_reset" onclick="gaugeControl.ResetFuelTrip()">Reset</button>
+            <button id="button_debug" class="button_debug" onclick="gaugeControl.ShowDebugMessage()">Debug</button>
+            <div class="websocket_statusBox">
+                <div>Websocket Status</div> 
+                <div id="defi_status">Defi</div>
+                <div id="ssm_status">SSM</div>
+                <div id="arduino_status">Arduino</div>
+                <div id="elm327_status">ELM327</div>
+                <div id="fueltrip_status">FUELTRIP</div>
+                <div>
+                    DefiWSInterval<br>
+                    <input id="spinner_defiWSinterval" type="number" min="0" max="10" step="1" value ="0" onchange="gaugeControl.DefiArduinoWSIntervalChange()"/>
+                </div>
+            </div>
         </div>
     </body>
 </html>

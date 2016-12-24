@@ -13,12 +13,15 @@ and open the template in the editor.
         <script src="../../script/libs/jquery/jquery.js"></script>
         <style>
             @font-face {
-                font-family: 'NimbusSansL';
+                font-family: 'FreeSans';
                 font-style: normal;
-                src: url(../../Fonts/nimbus-sans/NimbusSanL-Bol.otf) format('opentype');
+                src: url(../../Fonts/GNU-Freefonts/FreeSansBold.otf) format('opentype');
             }
             div.meter{
                 position:relative;
+                width:1280px;
+                height:660px;
+                background-image: url('./MilageGraph_Back.png')
             }
             div.tripfuel_label
             {
@@ -30,7 +33,7 @@ and open the template in the editor.
                 font-size: 65px;
                 letter-spacing: -0.06em;
                 color: white;
-                font-family:'NimbusSansL';
+                font-family:'FreeSans';
                 text-shadow: 0px 0px 20px #fff;
                 z-index : 5;
             }
@@ -44,7 +47,7 @@ and open the template in the editor.
                 font-size: 120px;
                 letter-spacing: -0.06em;
                 color: white;
-                font-family:'NimbusSansL';
+                font-family:'FreeSans';
                 text-shadow: 0px 0px 20px #fff;
             }
         </style>
@@ -206,7 +209,6 @@ and open the template in the editor.
     </head>
     <body>
         <div class="meter">          
-            <img src="MilageGraph_Back.png" alt="" style="position:absolute;z-index:0">
             <canvas id="milagebar_0" width="80" height="480" style="position:absolute;z-index:1;top:34px;left:822px"></canvas>
             <canvas id="milagebar_5" width="60" height="480" style="position:absolute;z-index:1;top:34px;left:720px"></canvas>
             <canvas id="milagebar_10" width="60" height="480" style="position:absolute;z-index:1;top:34px;left:605px"></canvas>
