@@ -439,9 +439,43 @@ GaugeControl.prototype = {
     {
         return this.ELM327ParameterCode.keys();
     },
+    /**
+     * Add debug message window html into body element.(Call this in window.onload)<br>
+     * デバッグメッセージウインドを追加します。(window.onloadからコールしてください)
+     */
     addDebugMessageWindow : function()
     {
-        $("body").append("<div class=\"debug_message\" id=\"div_message\" ></div>");
+        var html = '<div class=\"debug_message\" id=\"div_message\" >\
+                    </div>';
+        
+        $("body").append(html);
+    },
+    /**
+     * Add control panel window (button, interval spiiner, websocket indicator).<br>
+     * コントロールパネルウインドウを追加します(ボタン、interval controler, websocket inducator含む)(window.onloadからコールしてください)
+     */
+    addControlPanel : function()
+    {
+        var html = '\
+            <div class=\"controlPanel\">\
+                <button id=\"button_reset\" class=\"button_reset\" onclick=\"gaugeControl.ResetFuelTrip()\">Reset</button>\
+                <button id=\"button_debug\" class=\"button_debug\" onclick=\"gaugeControl.ShowDebugMessage()\">Debug</button>\
+                <div class=\"websocket_statusBox\">\
+                    <div>Websocket Status</div> \
+                    <div id=\"defi_status\">Defi</div>\
+                    <div id=\"ssm_status\">SSM</div>\
+                    <div id=\"arduino_status\">Arduino</div>\
+                    <div id=\"elm327_status\">ELM327</div>\
+                    <div id=\"fueltrip_status\">FUELTRIP</div>\
+                    <div>\
+                        DefiWSInterval<br>\
+                        <input id=\"spinner_defiWSinterval\" type=\"number\" min=\"0\" max=\"10\" step=\"1\" value =\"0\" onchange=\"gaugeControl.DefiArduinoWSIntervalChange()\"/>\
+                    </div>\
+                </div>\
+            </div>\
+            ';
+        
+        $("body").append(html);
     },
     //private
     /**
