@@ -9,11 +9,15 @@ and open the template in the editor.
         <title>WaterTemp/Batt Voltage</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./css/default.css" type="text/css">
         <script src="./script/libs/jquery/jquery.js"></script>
         <script src="./script/websocket/SSMCOMWebsocket.js"></script>
         <script src="./script/meterpanel-common.js"></script>
         <script>
             var gaugeControl = new GaugeControl();
+            gaugeControl.addDebugMessageWindow();
+            gaugeControl.addControlPanel();
+            
             gaugeControl.EnableSSMWebSocket();
             gaugeControl.RegisterSSMParameterCode("Coolant_Temperature","Slow",function(value)
             {
@@ -64,7 +68,7 @@ and open the template in the editor.
             {
                 initialize_gauge1();
                 initialize_gauge2();
-                gaugeControl.ConnectWebSocket();
+                gaugeControl.ConnectWebSocket();s
             };
             
         </script>
@@ -87,6 +91,5 @@ and open the template in the editor.
     
     <iframe class="meter" style="top:10px" id="gauge_frame1" src="./parts/SemiCircularGauge/SemiCircularGauge.html" scrolling="no" width="799" height="584" seamless> </iframe>
     <iframe class="meter" style="top:240px" id="gauge_frame2" src="./parts/SemiCircularGauge/SemiCircularGauge.html" scrolling="no" width="799" height="584" seamless> </iframe>
-    <div id="div_message" style="position:absolute;top:500px"></div>
     </body>
 </html>

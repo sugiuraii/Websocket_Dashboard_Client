@@ -9,11 +9,15 @@ and open the template in the editor.
         <title>Boost gauge demo</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./css/default.css" type="text/css">
         <script src="./script/libs/jquery/jquery.js"></script>
         <script src="./script/websocket/DefiCOMWebsocket.js"></script>
         <script src="./script/meterpanel-common.js"></script>
         <script>
             var gaugeControl = new GaugeControl();
+            gaugeControl.addDebugMessageWindow();
+            gaugeControl.addControlPanel();
+
             gaugeControl.EnableDefiWebSocket();
             gaugeControl.RegisterDefiParameterCode("Manifold_Absolute_Pressure",function(val)
             {
@@ -63,6 +67,5 @@ and open the template in the editor.
     </head>
     <body>
     <iframe class="meter" style="top:10px" id="gauge_frame1" src="./parts/FullCircularGauge/FullCircularGauge.html" scrolling="no" width="799" height="794" seamless> </iframe>
-    <div id="div_message" style="position:absolute;top:500px"></div>
     </body>
 </html>

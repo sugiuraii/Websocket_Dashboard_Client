@@ -17,6 +17,9 @@ and open the template in the editor.
         <script src="./script/meterpanel-common.js"></script>
         <script>
             var gaugeControl = new GaugeControl();
+            gaugeControl.addDebugMessageWindow();
+            gaugeControl.addControlPanel();
+
             gaugeControl.EnableDefiWebSocket();
             gaugeControl.RegisterDefiParameterCode("Manifold_Absolute_Pressure", function(value)
             {
@@ -58,9 +61,8 @@ and open the template in the editor.
                 $("#gauge_frame1")[0].contentWindow.value_update();
             });
             onload = function()
-            {                
-                 gaugeControl.ConnectWebSocket();
-                 setInterval("gaugeControl.CheckWebSocketStatus()", 1000);
+            {
+                gaugeControl.ConnectWebSocket();
             };            
         </script>
         <style>
@@ -86,16 +88,5 @@ and open the template in the editor.
         <center>
             <iframe class="meter" id="gauge_frame1" src="./parts/AnalogMeterCluster/AnalogMeterCluster.html" scrolling="no" width="1060" height="600" seamless> </iframe><br>
         </center>
-        <br>
-        <div class="debug_message" id="div_message" ></div>
-        <button id="button_reset" class="button1" onclick="gaugeControl.ResetFuelTrip()" style="position:absolute;top:0%;right:0vw">Reset</button>
-        <button id="button_debug" class="button1" onclick="gaugeControl.ShowDebugMessage()" style="position:absolute;top:80px;right:0px">Debug</button>
-        <div class="websocket_statusBox" style="position:absolute;top:160px;right:0px">
-            <div style="color:white">Websocket Status</div> 
-            <div id="defi_status" style="color: red">Defi</div>
-            <div id="ssm_status" style="color: red">SSM</div>
-            <div id="fueltrip_status" style="color: red">FUELTRIP</div>
-            <div style="color:white">DefiWSInterval<br><input style="background:black;color:white" id="spinner_defiWSinterval" type="number" min="0" max="10" step="1" value ="0" onchange="gaugeControl.DefiArduinoWSIntervalChange()"/> </div>
-        </div>
     </body>
 </html>

@@ -445,10 +445,14 @@ GaugeControl.prototype = {
      */
     addDebugMessageWindow : function()
     {
-        var html = '<div class=\"debug_message\" id=\"div_message\" >\
-                    </div>';
+        'use strict';
         
-        $("body").append(html);
+        $('body').ready(function()
+        {
+            var html = '<div class=\"debug_message\" id=\"div_message\" >\
+                        </div>';
+            $("body").append(html);
+        });
     },
     /**
      * Add control panel window (button, interval spiiner, websocket indicator).<br>
@@ -456,12 +460,16 @@ GaugeControl.prototype = {
      */
     addControlPanel : function()
     {
-        var html = '\
-            <div class=\"controlPanel\">\
-                <button id=\"button_reset\" class=\"button_reset\" onclick=\"gaugeControl.ResetFuelTrip()\">Reset</button>\
-                <button id=\"button_debug\" class=\"button_debug\" onclick=\"gaugeControl.ShowDebugMessage()\">Debug</button>\
+        'use strict';
+        
+        $('body').ready(function()
+        {
+            var html = '\
+            <div id=\"controlPanel\" class=\"controlPanel\">\
+                <button id=\"button_reset\" class=\"button_reset\">Reset</button>\
+                <button id=\"button_debug\" class=\"button_debug\">Debug</button>\
                 <div class=\"websocket_statusBox\">\
-                    <div>Websocket Status</div> \
+                    <div>Websocket Status</div>\
                     <div id=\"defi_status\">Defi</div>\
                     <div id=\"ssm_status\">SSM</div>\
                     <div id=\"arduino_status\">Arduino</div>\
@@ -474,8 +482,29 @@ GaugeControl.prototype = {
                 </div>\
             </div>\
             ';
+            $('body').append(html);
+        });
+
+        //Register button event
+        var self = this;
+        $('#button_reset').ready(function(){
+            $("#button_reset").click(function(){
+                self.ResetFuelTrip()
+            });    
+        });
+        $('#button_debug').ready(function(){
+            $("#button_debug").click(function(){
+                self.ShowDebugMessage()
+            });
+        });
         
-        $("body").append(html);
+        //set interval to websocket indicator
+        $('#controlPanel').ready(function()
+        {
+            setInterval(function(){
+                self.CheckWebSocketStatus();
+            }, 1000);
+        });
     },
     //private
     /**

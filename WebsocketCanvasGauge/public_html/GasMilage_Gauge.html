@@ -17,6 +17,8 @@ and open the template in the editor.
         <script>
             var gaugeControl = new GaugeControl();
             gaugeControl.EnableFUELTRIPWebSocket();
+            gaugeControl.addDebugMessageWindow();
+            gaugeControl.addControlPanel();
             
             gaugeControl.RegisterMOMENTFUELTRIPPacketRecivedEvent(function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
             {
@@ -66,7 +68,6 @@ and open the template in the editor.
             {
                 initialize_gauge();
                 gaugeControl.ConnectWebSocket();
-                setInterval("gaugeControl.CheckWebSocketStatus()", 1000);
             };
             
         </script>
@@ -90,15 +91,5 @@ and open the template in the editor.
         <center>
             <iframe class="meter" style="top:10px" id="gauge_frame1" src="./parts/MilageGraph/MilageGraph.html" scrolling="no" width="1280" height="660" seamless> </iframe>
         </center>
-        <br>
-        <div class="debug_message" id="div_message"></div>
-        <div class="websocket_statusBox" style="position:absolute;top:160px;right:0px">
-            <div style="color:white">Websocket Status</div> 
-            <div id="fueltrip_status" style="color: red">FUELTRIP</div>
-        </div>
-        
-        <button id="button_reset" class="button1" onclick="gaugeControl.ResetFuelTrip()" style="position:absolute;top:0px;right:0px">Reset</button>
-        <button id="button_debug" class="button1" onclick="gaugeControl.ShowDebugMessage()" style="position:absolute;top:80px;right:0px">Debug</button>
-
     </body>
 </html>

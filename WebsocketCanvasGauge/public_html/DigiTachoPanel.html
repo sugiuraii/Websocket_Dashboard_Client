@@ -17,6 +17,8 @@ and open the template in the editor.
         <script src="./script/meterpanel-common.js"></script>
         <script>
             var gaugeControl = new GaugeControl();
+            gaugeControl.addDebugMessageWindow();
+            gaugeControl.addControlPanel();
             
             gaugeControl.EnableDefiWebSocket();
             gaugeControl.EnableSSMWebSocket();
@@ -273,8 +275,6 @@ and open the template in the editor.
             
             onload = function()
             {
-                gaugeControl.addDebugMessageWindow();
-                gaugeControl.addControlPanel();
                 initializeGaugeBoost();
                 initializeGaugeAF();
                 initializeGaugeWater();
@@ -282,7 +282,6 @@ and open the template in the editor.
                 initializeGaugeThrottle();
                 initializeGaugeFuelTrip();
                 gaugeControl.ConnectWebSocket();
-                setInterval("gaugeControl.CheckWebSocketStatus()", 1000);
             };
             
         </script>
