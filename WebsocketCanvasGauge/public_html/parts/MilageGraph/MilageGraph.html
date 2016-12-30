@@ -60,6 +60,10 @@ and open the template in the editor.
             var _milage_bar_25;
             var _milage_bar_30;
             
+            var _fuel_label_dom;
+            var _trip_label_dom;
+            var _gasmilage_label_dom;
+            
             this.milage_0 = 10.0;
             this.milage_5 = 9.3;
             this.milage_10 = 21.0;
@@ -84,6 +88,11 @@ and open the template in the editor.
             
             function milage_bar_initialize()
             {
+                // labels
+                _fuel_label_dom = $("#fuel_label").get(0);
+                _trip_label_dom = $("#trip_label").get(0);
+                _gasmilage_label_dom = $("#gasmilage_label").get(0);
+                
                 // MilageBar_0
                 var milage_canvas_0 = document.getElementById("milagebar_0");
                 var milage_image_0 = new Image();
@@ -174,7 +183,6 @@ and open the template in the editor.
                 milage_image_30.onload = function(){
                     value_update();
                 };
-                
             }
             
             function value_update()
@@ -194,12 +202,12 @@ and open the template in the editor.
                 _milage_bar_20.draw();
                 _milage_bar_25.draw();
                 _milage_bar_30.draw();
-                if(parseFloat(this.total_fuel).toFixed(2) !== $("#fuel_label").text())
-                    $("#fuel_label").text(parseFloat(this.total_fuel).toFixed(2));
-                if(parseFloat(this.total_trip).toFixed(1) !== $("#trip_label").text())
-                    $("#trip_label").text(parseFloat(this.total_trip).toFixed(1));
-                if(parseFloat(this.total_gasmilage).toFixed(2) !== $("#gasmilage_label").text())
-                    $("#gasmilage_label").text(parseFloat(this.total_gasmilage).toFixed(1));
+                if(parseFloat(this.total_fuel).toFixed(2) !== _fuel_label_dom.textContent)
+                    _fuel_label_dom.textContent = parseFloat(this.total_fuel).toFixed(2);
+                if(parseFloat(this.total_trip).toFixed(1) !== _trip_label_dom.textContent)
+                    _trip_label_dom.textContent = parseFloat(this.total_trip).toFixed(1);
+                if(parseFloat(this.total_gasmilage).toFixed(1) !== _gasmilage_label_dom.textContent)
+                    _gasmilage_label_dom.textContent = parseFloat(this.total_gasmilage).toFixed(1);
             }
             
             onload = function() {

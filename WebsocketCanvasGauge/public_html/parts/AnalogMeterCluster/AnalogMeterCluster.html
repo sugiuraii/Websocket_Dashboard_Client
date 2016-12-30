@@ -48,6 +48,12 @@ and open the template in the editor.
             var _watertemp_bar;
             var _boost_needle;
             
+            var _fuel_label_dom;
+            var _trip_label_dom;
+            var _gas_milage_label_dom;
+            var _speed_label_dom;
+            var _gearpos_label_dom;
+            
             this.tacho = 0;
             this.speed = 0;
             this.watertemp = 0;
@@ -64,6 +70,12 @@ and open the template in the editor.
                 _tacho_needle = needlegauge_initialize("tacho_needle","AnalogTachoMeter_Needle.png",0,9000,90,270,false);
                 _speed_needle = needlegauge_initialize("speed_needle","AnalogSpeedMeter_Needle.png",0,280,75,210,false);
                 _boost_needle = needlegauge_initialize("boost_needle","BoostMeter_Needle.png",-1.0,2.0,30,90,true);
+                
+                _fuel_label_dom = $("#fuel_label").get(0);
+                _trip_label_dom = $("#trip_label").get(0);
+                _gas_milage_label_dom = $("#gas_milage_label").get(0);
+                _speed_label_dom = $("#speed_label").get(0);
+                _gearpos_label_dom = $("#gearpos_label").get(0);
             }
             
             value_update = function()
@@ -80,11 +92,11 @@ and open the template in the editor.
                 _watertemp_bar.draw();
                 _boost_needle.draw();
                 
-                updatValueTextLabel(fuel, "#fuel_label", 1);
-                updatValueTextLabel(trip, "#trip_label", 1);
-                updatValueTextLabel(gas_milage, "#gas_milage_label", 1);
-                updatValueTextLabel(speed, "#speed_label", 0);
-                updateStringTextLabel(calc_gear_pos(tacho, speed, neutral_sw), "#gearpos_label");
+                updatValueTextLabel(fuel, _fuel_label_dom, 1);
+                updatValueTextLabel(trip, _trip_label_dom, 1);
+                updatValueTextLabel(gas_milage, _gas_milage_label_dom, 1);
+                updatValueTextLabel(speed, _speed_label_dom, 0);
+                updateStringTextLabel(calc_gear_pos(tacho, speed, neutral_sw), _gearpos_label_dom);
             };
             
             onload = function() {

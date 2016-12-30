@@ -93,14 +93,14 @@ function calc_gear_pos(tacho, speed, neutral_sw)
         return "-";  
 };
 
-function updatValueTextLabel(value, elementID, parseDigit)
+function updatValueTextLabel(value, element_dom, parseDigit)
 {
-    if(parseFloat(value).toFixed(parseDigit) !== $(elementID).text())
-        $(elementID).text(parseFloat(value).toFixed(parseDigit));
+    if(parseFloat(value).toFixed(parseDigit) !== element_dom.textContent)
+        element_dom.textContent = parseFloat(value).toFixed(parseDigit);
 };
 
-function updateStringTextLabel(string, elementID)
+function updateStringTextLabel(string, element_dom)
 {
-    if(string !== $(elementID).text())
-        $(elementID).text(string);
+    if(string !== element_dom.textContent)
+        element_dom.textContent = string;
 };

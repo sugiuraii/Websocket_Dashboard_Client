@@ -11,6 +11,9 @@ var CircularProgressBar_canvas = function(canvas, img)
     this._canvas = canvas;
     this._context = canvas.getContext('2d');
     this._img = img;
+    this._canvas_width = canvas.width;
+    this._canvas_height = canvas.height;
+
     // Local value and instances
     this._curr_arcAngle;
         
@@ -64,8 +67,8 @@ CircularProgressBar_canvas.prototype.draw = function()
         //Update curr_arcAngle
         this._curr_arcAngle = Math.floor(new_arcAngle/this.angle_resolution) * this.angle_resolution;
 
-    var canvas_max_x = canvas.width;
-    var canvas_max_y = canvas.height;
+    var canvas_max_x = this._canvas_width;
+    var canvas_max_y = this._canvas_height;
     var circle_center_x = this.circle_center_x + this.offset_x;
     var circle_center_y = this.circle_center_y + this.offset_y;
     var offset_x = this.offset_x;
@@ -93,7 +96,6 @@ CircularProgressBar_canvas.prototype.draw = function()
     context.moveTo(circle_center_x, circle_center_y);
     context.arc(circle_center_x, circle_center_y, radius, start_angle, end_angle, anticlockwise);
     context.closePath();
-    //context.stroke();
     context.clip();
 
     context.drawImage(img, offset_x, offset_y);

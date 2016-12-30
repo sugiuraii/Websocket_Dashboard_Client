@@ -88,6 +88,8 @@ and open the template in the editor.
             
             var _value_bar1;
             
+            var _num_label;
+            
             this.value_max = 2.0;
             this.value_min = -1.0;
             this.title_str = "TURBO BOOST";
@@ -263,13 +265,15 @@ and open the template in the editor.
             {
                 _value_bar1.value = value;
                 _value_bar1.draw();
-                if(parseFloat(this.value).toFixed(value_label_rounded) !== $("#num_label1").text())
-                    $("#num_label1").text(parseFloat(this.value).toFixed(value_label_rounded)); 
+                var parsedVal = parseFloat(this.value).toFixed(value_label_rounded);
+                if(parsedVal !== _num_label_dom.textContent)
+                    _num_label_dom.textContent = parsedVal;
             }
             
             onload = function() {
                 //initialize();
                 //value_update();
+                _num_label_dom = $("#num_label1").get(0);
             };
     </script>
     </head>

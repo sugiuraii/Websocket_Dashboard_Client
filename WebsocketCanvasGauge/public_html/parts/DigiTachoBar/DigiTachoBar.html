@@ -63,6 +63,8 @@ and open the template in the editor.
         </style>
         <script>
             var _tacho_bar;
+            var _speed_label_dom;
+            var _gearpos_label_dom;
             
             this.tacho = 0;
             this.speed = 0;            
@@ -71,15 +73,17 @@ and open the template in the editor.
             function initialize()
             {
                 _tacho_bar = customprogressbar_initialize("tacho_bar","DigiTachoBar.png",0, 9000, false, false);
+                _speed_label_dom = $("#speed_label").get(0);
+                _gearpos_label_dom = $("#gearpos_label").get(0);
             }
             
             value_update = function()
             {
                 _tacho_bar.value = tacho;
                 _tacho_bar.draw();
-                updatValueTextLabel(speed, "#speed_label", 0);
+                updatValueTextLabel(speed, _speed_label_dom, 0);
                 var gearpos = calc_gear_pos(tacho, speed, neutral_sw);
-                updateStringTextLabel(calc_gear_pos(tacho, speed, neutral_sw), "#gearpos_label");
+                updateStringTextLabel(gearpos, _gearpos_label_dom);
             };
             
             onload = function() {

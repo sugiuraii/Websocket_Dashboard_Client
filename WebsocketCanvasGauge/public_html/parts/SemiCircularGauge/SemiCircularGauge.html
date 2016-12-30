@@ -84,6 +84,7 @@ and open the template in the editor.
             var _greenzone_bar1;
             var _yellowzone_bar1;
             var _value_bar1;
+            var _num_label1_dom;
             
             this.value_max = 120;
             this.value_min = 0;
@@ -122,6 +123,7 @@ and open the template in the editor.
                     greenzone_bar_initialize();
                 textlayer_initialize();
                 value_bar_initialize();
+                _num_label1_dom = $("#num_label1").get(0);
             }
             
             function textlayer_initialize()
@@ -254,8 +256,8 @@ and open the template in the editor.
             {
                 _value_bar1.value = value;
                 _value_bar1.draw();
-                if(parseFloat(this.value).toFixed(value_label_rounded) !== $("#num_label1").text())
-                    $("#num_label1").text(parseFloat(this.value).toFixed(value_label_rounded));  
+                if(parseFloat(this.value).toFixed(value_label_rounded) !== _num_label1_dom.textContent)
+                    _num_label1_dom.textContent = parseFloat(this.value).toFixed(value_label_rounded);  
             }
             
             onload = function() {

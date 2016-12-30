@@ -55,6 +55,15 @@ and open the template in the editor.
             var _tacho_bar_Yellow;
             var _tacho_bar_Red;
             
+            var _fuel_label_dom;
+            var _trip_label_dom;
+            var _gas_milage_label_dom;
+            var _speed_label_dom;
+            var _gearpos_label_dom;
+            
+            var _tacho_bar_YellowElem;
+            var _tacho_bar_RedElem;
+            
             this.tacho = 0;
             this.speed = 0;
             this.trip = 0.0;
@@ -68,6 +77,15 @@ and open the template in the editor.
                 _tacho_bar_Red = circularprogressbar_initialize("tacho_bar_Red","LEDTachoMeter_LED_Red.png",0, 9000, 90, 270,false);
                 _tacho_bar_Yellow.angle_resolution = 6;
                 _tacho_bar_Red.angle_resolution = 6;
+                
+                _fuel_label_dom = $("#fuel_label").get(0);
+                _trip_label_dom = $("#trip_label").get(0);
+                _gas_milage_label_dom = $("#gas_milage_label").get(0);
+                _speed_label_dom = $("#speed_label").get(0);
+                _gearpos_label_dom = $("#gearpos_label").get(0);
+                
+                _tacho_bar_YellowElem = $('#tacho_bar_Yellow');
+                _tacho_bar_RedElem = $('#tacho_bar_Red');
             }
             
             value_update = function()
@@ -76,22 +94,22 @@ and open the template in the editor.
                 {
                     _tacho_bar_Yellow.value = tacho;
                     _tacho_bar_Yellow.draw();
-                    $('#tacho_bar_Yellow').css('visibility','visible');
-                    $('#tacho_bar_Red').css('visibility','hidden');
+                    _tacho_bar_YellowElem.css('visibility','visible');
+                    _tacho_bar_RedElem.css('visibility','hidden');
                 }
                 else
                 {
                     _tacho_bar_Red.value = tacho;
                     _tacho_bar_Red.draw();
-                    $('#tacho_bar_Red').css('visibility','visible');
-                    $('#tacho_bar_Yellow').css('visibility','hidden');                    
+                    _tacho_bar_RedElem.css('visibility','visible');
+                    _tacho_bar_YellowElem.css('visibility','hidden');                    
                 }
             
-                updatValueTextLabel(fuel, "#fuel_label", 2);
-                updatValueTextLabel(trip, "#trip_label", 1);
-                updatValueTextLabel(gas_milage, "#gas_milage_label", 2);
-                updatValueTextLabel(speed, "#speed_label", 0);
-                updateStringTextLabel(calc_gear_pos(tacho, speed, neutral_sw), "#gearpos_label");
+                updatValueTextLabel(fuel, _fuel_label_dom, 2);
+                updatValueTextLabel(trip, _trip_label_dom, 1);
+                updatValueTextLabel(gas_milage, _gas_milage_label_dom, 2);
+                updatValueTextLabel(speed, _speed_label_dom, 0);
+                updateStringTextLabel(calc_gear_pos(tacho, speed, neutral_sw), _gearpos_label_dom);
             };
             
             onload = function() {

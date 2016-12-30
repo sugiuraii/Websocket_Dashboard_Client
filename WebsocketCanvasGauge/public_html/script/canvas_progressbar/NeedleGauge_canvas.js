@@ -12,6 +12,8 @@ var NeedleGauge_canvas = function(canvas, img)
     this._img = img;
     this._context = canvas.getContext('2d');
     this._curr_rotAngle;
+    this._canvas_width = canvas.width;
+    this._canvas_height = canvas.height;
 
     // Properties and Default values
     this.offset_angle = 0;
@@ -53,8 +55,8 @@ NeedleGauge_canvas.prototype.draw = function()
         //Update curr_arcAngle
         this._curr_rotAngle = Math.floor(new_rotAngle/this.angle_resolution) * this.angle_resolution;;
 
-    var canvas_max_x = canvas.width;
-    var canvas_max_y = canvas.height;
+    var canvas_max_x = this._canvas_width;
+    var canvas_max_y = this._canvas_height;
     var rotation_center_x = this.rotation_center_x;
     var rotation_center_y = this.rotation_center_y;
 

@@ -12,6 +12,8 @@ var CustomProgressBar_canvas = function(canvas, img)
     this._img = img;
     this._context = canvas.getContext('2d');
     this._curr_Barpixel;
+    this._canvas_width = canvas.width;
+    this._canvas_height = canvas.height;
     
     // Properties and Default values
     this.vertical = false;
@@ -35,8 +37,8 @@ CustomProgressBar_canvas.prototype.draw = function()
     if ( ! canvas || ! context )
         return false;
 
-    var canvas_max_x = canvas.width;
-    var canvas_max_y = canvas.height;
+    var canvas_max_x = this._canvas_width;
+    var canvas_max_y = this._canvas_height;
 
     // Calculate bar pixel from value
     var percent = (this.value - this.min)/(this.max - this.min)*100;
@@ -102,7 +104,6 @@ CustomProgressBar_canvas.prototype.draw = function()
     context.beginPath();
     context.rect(rect_start_x,rect_start_y,rect_width,rect_height);
     context.closePath();
-    //context.stroke();
     context.clip();
 
     context.drawImage(img, 0, 0);

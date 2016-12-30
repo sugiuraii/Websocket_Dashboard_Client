@@ -14,6 +14,7 @@ and open the template in the editor.
         <script src="./script/websocket/DefiCOMWebsocket.js"></script>
         <script src="./script/meterpanel-common.js"></script>
         <script>
+            var _gauge_frame1;
             var gaugeControl = new GaugeControl();
             gaugeControl.addDebugMessageWindow();
             gaugeControl.addControlPanel();
@@ -21,27 +22,28 @@ and open the template in the editor.
             gaugeControl.EnableDefiWebSocket();
             gaugeControl.RegisterDefiParameterCode("Manifold_Absolute_Pressure",function(val)
             {
-                $("#gauge_frame1")[0].contentWindow.value = val;
-                $("#gauge_frame1")[0].contentWindow.value_update();
+                _gauge_frame.value = val;
+                _gauge_frame.value_update();
             });
             initialize_gauge1 = function()
             {
                 var gauge_id = "#gauge_frame1";
-                $(gauge_id)[0].contentWindow.value_max = 2.0;
-                $(gauge_id)[0].contentWindow.value_min = -1.0;
-                $(gauge_id)[0].contentWindow.title_str = "TURBO BOOST";
-                $(gauge_id)[0].contentWindow.unit_str = "x100Pa";
-                $(gauge_id)[0].contentWindow.scale_str1 ="-1.0";
-                $(gauge_id)[0].contentWindow.scale_str2 ="-0.5";
-                $(gauge_id)[0].contentWindow.scale_str3 = "0";
-                $(gauge_id)[0].contentWindow.scale_str4 = "0.5";
-                $(gauge_id)[0].contentWindow.scale_str5 = "1.0";
-                $(gauge_id)[0].contentWindow.scale_str6 = "1.5";
-                $(gauge_id)[0].contentWindow.scale_str7 = "2.0";
-                $(gauge_id)[0].contentWindow.redzone_offset_angle = 315;
-                $(gauge_id)[0].contentWindow.redzone_full_angle = 45;
-                $(gauge_id)[0].contentWindow.value_label_rounded = 1;
-                $(gauge_id)[0].contentWindow.initialize();
+                _gauge_frame = $(gauge_id)[0].contentWindow;
+                _gauge_frame.value_max = 2.0;
+                _gauge_frame.value_min = -1.0;
+                _gauge_frame.title_str = "TURBO BOOST";
+                _gauge_frame.unit_str = "x100Pa";
+                _gauge_frame.scale_str1 ="-1.0";
+                _gauge_frame.scale_str2 ="-0.5";
+                _gauge_frame.scale_str3 = "0";
+                _gauge_frame.scale_str4 = "0.5";
+                _gauge_frame.scale_str5 = "1.0";
+                _gauge_frame.scale_str6 = "1.5";
+                _gauge_frame.scale_str7 = "2.0";
+                _gauge_frame.redzone_offset_angle = 315;
+                _gauge_frame.redzone_full_angle = 45;
+                _gauge_frame.value_label_rounded = 1;
+                _gauge_frame.initialize();
             };
             onload = function()
             {
