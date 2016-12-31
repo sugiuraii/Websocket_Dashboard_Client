@@ -14,6 +14,9 @@ and open the template in the editor.
         <script src="./script/websocket/SSMCOMWebsocket.js"></script>
         <script src="./script/meterpanel-common.js"></script>
         <script>
+            var gaugeFrameWaterTemp;
+            var gaugeFrameBatteryVoltage;
+            
             var gaugeControl = new GaugeControl();
             gaugeControl.addDebugMessageWindow();
             gaugeControl.addControlPanel();
@@ -21,54 +24,56 @@ and open the template in the editor.
             gaugeControl.EnableSSMWebSocket();
             gaugeControl.RegisterSSMParameterCode("Coolant_Temperature","Slow",function(value)
             {
-                $("#gauge_frame1")[0].contentWindow.value = value;
-                $("#gauge_frame1")[0].contentWindow.value_update();
+                gaugeFrameWaterTemp.value = value;
+                gaugeFrameWaterTemp.value_update();
             });
             gaugeControl.RegisterSSMParameterCode("Battery_Voltage","Slow",function(value)
             {
-                $("#gauge_frame2")[0].contentWindow.value = value;
-                $("#gauge_frame2")[0].contentWindow.value_update();
+                gaugeFrameBatteryVoltage.value = value;
+                gaugeFrameBatteryVoltage.value_update();
             });
             initialize_gauge1 = function()
             {
-                var gauge_id = "#gauge_frame1";
-                $(gauge_id)[0].contentWindow.value_max = 150;
-                $(gauge_id)[0].contentWindow.value_min = 50;
-                $(gauge_id)[0].contentWindow.title_str = "WATER TEMP";
-                $(gauge_id)[0].contentWindow.unit_str = "C";
-                $(gauge_id)[0].contentWindow.scale_str1 ="50";
-                $(gauge_id)[0].contentWindow.scale_str2 ="75";
-                $(gauge_id)[0].contentWindow.scale_str3 = "100";
-                $(gauge_id)[0].contentWindow.scale_str4 = "125";
-                $(gauge_id)[0].contentWindow.scale_str5 = "150";
-                $(gauge_id)[0].contentWindow.redzone_offset_angle = 292.5;
-                $(gauge_id)[0].contentWindow.redzone_full_angle = 67.5;
-                $(gauge_id)[0].contentWindow.value_label_rounded = 0;
-                $(gauge_id)[0].contentWindow.initialize();
+                var targetGauge = gaugeFrameWaterTemp;
+                targetGauge.value_max = 150;
+                targetGauge.value_min = 50;
+                targetGauge.title_str = "WATER TEMP";
+                targetGauge.unit_str = "C";
+                targetGauge.scale_str1 ="50";
+                targetGauge.scale_str2 ="75";
+                targetGauge.scale_str3 = "100";
+                targetGauge.scale_str4 = "125";
+                targetGauge.scale_str5 = "150";
+                targetGauge.redzone_offset_angle = 292.5;
+                targetGauge.redzone_full_angle = 67.5;
+                targetGauge.value_label_rounded = 0;
+                targetGauge.initialize();
             };
             
             initialize_gauge2 = function()
             {
-                var gauge_id = "#gauge_frame2";
-                $(gauge_id)[0].contentWindow.value_max = 15;
-                $(gauge_id)[0].contentWindow.value_min = 11;
-                $(gauge_id)[0].contentWindow.title_str = "BATTERY VOLT";
-                $(gauge_id)[0].contentWindow.unit_str = "V";
-                $(gauge_id)[0].contentWindow.scale_str1 ="11";
-                $(gauge_id)[0].contentWindow.scale_str2 ="12";
-                $(gauge_id)[0].contentWindow.scale_str3 = "13";
-                $(gauge_id)[0].contentWindow.scale_str4 = "14";
-                $(gauge_id)[0].contentWindow.scale_str5 = "15";
-                $(gauge_id)[0].contentWindow.redzone_offset_angle = 337.5;
-                $(gauge_id)[0].contentWindow.redzone_full_angle = 22.5;
-                $(gauge_id)[0].contentWindow.value_label_rounded = 1;
-                $(gauge_id)[0].contentWindow.initialize();
+                var targetGauge = gaugeFrameBatteryVoltage;
+                targetGauge.value_max = 15;
+                targetGauge.value_min = 11;
+                targetGauge.title_str = "BATTERY VOLT";
+                targetGauge.unit_str = "V";
+                targetGauge.scale_str1 ="11";
+                targetGauge.scale_str2 ="12";
+                targetGauge.scale_str3 = "13";
+                targetGauge.scale_str4 = "14";
+                targetGauge.scale_str5 = "15";
+                targetGauge.redzone_offset_angle = 337.5;
+                targetGauge.redzone_full_angle = 22.5;
+                targetGauge.value_label_rounded = 1;
+                targetGauge.initialize();
             };            
             onload = function()
             {
+                gaugeFrameWaterTemp = $("#gauge_frame1")[0].contentWindow;
+                gaugeFrameBatteryVoltage = $("#gauge_frame2")[0].contentWindow;
                 initialize_gauge1();
                 initialize_gauge2();
-                gaugeControl.ConnectWebSocket();s
+                gaugeControl.ConnectWebSocket();
             };
             
         </script>

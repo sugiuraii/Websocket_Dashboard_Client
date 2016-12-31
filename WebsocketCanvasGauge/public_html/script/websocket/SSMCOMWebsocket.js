@@ -129,6 +129,9 @@ SSMCOM_Websocket.prototype.Close = function()
 
 SSMCOM_Websocket.prototype.getReadyState = function()
 {
-    'use strict';
+    'use strict';    
+    if(typeof this._ws === "undefined")
+        return -1;
+    
     return this._ws.readyState;
 };

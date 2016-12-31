@@ -124,5 +124,8 @@ FUELTRIP_Websocket.prototype.Close = function()
 FUELTRIP_Websocket.prototype.getReadyState = function()
 {
     'use strict';
+    if(typeof this._ws === "undefined")
+        return -1;
+
     return this._ws.readyState;
 };

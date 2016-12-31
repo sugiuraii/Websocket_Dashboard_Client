@@ -187,5 +187,8 @@ DefiCOM_Websocket.prototype.Close = function()
 DefiCOM_Websocket.prototype.getReadyState = function()
 {
     'use strict';
+    if(typeof this._ws === "undefined")
+        return -1;
+    
     return this._ws.readyState;
 };

@@ -16,6 +16,7 @@ and open the template in the editor.
         <script src="./script/websocket/FUELTRIPWebsocket.js"></script>
         <script src="./script/meterpanel-common.js"></script>
         <script>
+            var gaugeFrame1;
             var gaugeControl = new GaugeControl();
             gaugeControl.addDebugMessageWindow();
             gaugeControl.addControlPanel();
@@ -26,39 +27,40 @@ and open the template in the editor.
             
             gaugeControl.RegisterDefiParameterCode("Engine_Speed",function(value)
             {
-                $("#gauge_frame1")[0].contentWindow.tacho = value;
-                $("#gauge_frame1")[0].contentWindow.value_update();
+                gaugeFrame1.tacho = value;
+                gaugeFrame1.value_update();
             });
             
             gaugeControl.RegisterSSMParameterCode("Coolant_Temperature","Slow",function(value)
             {
-                $("#gauge_frame1")[0].contentWindow.watertemp = value;
-                $("#gauge_frame1")[0].contentWindow.value_update();
+                gaugeFrame1.watertemp = value;
+                gaugeFrame1.value_update();
             });
             gaugeControl.RegisterSSMParameterCode("Vehicle_Speed","Slow+Fast",function(value)
             {
-                $("#gauge_frame1")[0].contentWindow.speed = value;
-                $("#gauge_frame1")[0].contentWindow.value_update();
+                gaugeFrame1.speed = value;
+                gaugeFrame1.value_update();
             });
             gaugeControl.RegisterSSMParameterCode("Neutral_Position_Switch","Slow+Fast",function(value)
             {
                 if(value.toLowerCase() === "false")
-                    $("#gauge_frame1")[0].contentWindow.neutral_sw = false;
+                    gaugeFrame1.neutral_sw = false;
                 else
-                    $("#gauge_frame1")[0].contentWindow.neutral_sw = true;
+                    gaugeFrame1.neutral_sw = true;
 
-                $("#gauge_frame1")[0].contentWindow.value_update();
+                gaugeFrame1.value_update();
             });
             
             gaugeControl.RegisterMOMENTFUELTRIPPacketRecivedEvent(function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
             {
-                $("#gauge_frame1")[0].contentWindow.fuel = total_gas;
-                $("#gauge_frame1")[0].contentWindow.trip = total_trip;
-                $("#gauge_frame1")[0].contentWindow.gas_milage = total_gasmilage;
-                $("#gauge_frame1")[0].contentWindow.value_update();
+                gaugeFrame1.fuel = total_gas;
+                gaugeFrame1.trip = total_trip;
+                gaugeFrame1.gas_milage = total_gasmilage;
+                gaugeFrame1.value_update();
             });            
             onload = function()
             {
+                gaugeFrame1 = $("#gauge_frame1")[0].contentWindow;
                 gaugeControl.ConnectWebSocket();
             };            
         </script>

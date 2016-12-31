@@ -489,12 +489,12 @@ GaugeControl.prototype = {
         var self = this;
         $('#button_reset').ready(function(){
             $("#button_reset").click(function(){
-                self.ResetFuelTrip()
+                self.ResetFuelTrip();
             });    
         });
         $('#button_debug').ready(function(){
             $("#button_debug").click(function(){
-                self.ShowDebugMessage()
+                self.ShowDebugMessage();
             });
         });
         
@@ -574,6 +574,9 @@ GaugeControl.prototype = {
             {
                 switch(webSocketObj.getReadyState()) 
                 { 
+                    case -1: //Websocket obj is undefined
+                        $(indicatorElementID).css("color","gray");
+                        break;
                     case 0://CONNECTING
                         $(indicatorElementID).css("color","blue");
                         break;

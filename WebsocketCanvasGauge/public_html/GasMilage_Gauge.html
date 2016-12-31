@@ -15,6 +15,7 @@ and open the template in the editor.
         <script src="./script/meterpanel-common.js"></script>
 
         <script>
+            var gaugeFrame;
             var gaugeControl = new GaugeControl();
             gaugeControl.EnableFUELTRIPWebSocket();
             gaugeControl.addDebugMessageWindow();
@@ -22,11 +23,11 @@ and open the template in the editor.
             
             gaugeControl.RegisterMOMENTFUELTRIPPacketRecivedEvent(function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
             {
-                $("#gauge_frame1")[0].contentWindow.total_fuel = total_gas;
-                $("#gauge_frame1")[0].contentWindow.total_trip = total_trip;
-                $("#gauge_frame1")[0].contentWindow.total_gasmilage = total_gasmilage;
-                $("#gauge_frame1")[0].contentWindow.milage_0 = moment_gasmilage;
-                $("#gauge_frame1")[0].contentWindow.value_update();
+                gaugeFrame.total_fuel = total_gas;
+                gaugeFrame.total_trip = total_trip;
+                gaugeFrame.total_gasmilage = total_gasmilage;
+                gaugeFrame.milage_0 = moment_gasmilage;
+                gaugeFrame.value_update();
             });
             gaugeControl.RegisterSECTFUELTRIPPacketRecivedEvent(function(sect_span, sect_trip, sect_gas, sect_gasmilage)
             {
@@ -38,34 +39,34 @@ and open the template in the editor.
                 {
                     sect_gasmilage_zerofill.unshift(0);
                 }
-                $("#gauge_frame1")[0].contentWindow.milage_30 = sect_gasmilage_zerofill[0];
-                $("#gauge_frame1")[0].contentWindow.milage_25 = sect_gasmilage_zerofill[1];
-                $("#gauge_frame1")[0].contentWindow.milage_20 = sect_gasmilage_zerofill[2];
-                $("#gauge_frame1")[0].contentWindow.milage_15 = sect_gasmilage_zerofill[3];
-                $("#gauge_frame1")[0].contentWindow.milage_10 = sect_gasmilage_zerofill[4];
-                $("#gauge_frame1")[0].contentWindow.milage_5 = sect_gasmilage_zerofill[5];              
-                $("#gauge_frame1")[0].contentWindow.value_update();
+                gaugeFrame.milage_30 = sect_gasmilage_zerofill[0];
+                gaugeFrame.milage_25 = sect_gasmilage_zerofill[1];
+                gaugeFrame.milage_20 = sect_gasmilage_zerofill[2];
+                gaugeFrame.milage_15 = sect_gasmilage_zerofill[3];
+                gaugeFrame.milage_10 = sect_gasmilage_zerofill[4];
+                gaugeFrame.milage_5 = sect_gasmilage_zerofill[5];              
+                gaugeFrame.value_update();
             });
             
             initialize_gauge = function()
             {
-                var gauge_id = "#gauge_frame1";
-                $(gauge_id)[0].contentWindow.milage_0 = 0;
-                $(gauge_id)[0].contentWindow.milage_5 = 0;
-                $(gauge_id)[0].contentWindow.milage_10 = 0;
-                $(gauge_id)[0].contentWindow.milage_15 = 0;
-                $(gauge_id)[0].contentWindow.milage_20 = 0;
-                $(gauge_id)[0].contentWindow.milage_25 = 0;
-                $(gauge_id)[0].contentWindow.milage_30 = 0;
-                $(gauge_id)[0].contentWindow.total_trip = 0;
-                $(gauge_id)[0].contentWindow.total_fuel = 0;
-                $(gauge_id)[0].contentWindow.total_gasmilage = 0;
+                gaugeFrame.milage_0 = 0;
+                gaugeFrame.milage_5 = 0;
+                gaugeFrame.milage_10 = 0;
+                gaugeFrame.milage_15 = 0;
+                gaugeFrame.milage_20 = 0;
+                gaugeFrame.milage_25 = 0;
+                gaugeFrame.milage_30 = 0;
+                gaugeFrame.total_trip = 0;
+                gaugeFrame.total_fuel = 0;
+                gaugeFrame.total_gasmilage = 0;
                 
-                $(gauge_id)[0].contentWindow.initialize();
+                gaugeFrame.initialize();
             };
                         
             onload = function()
             {
+                gaugeFrame = $("#gauge_frame1")[0].contentWindow;
                 initialize_gauge();
                 gaugeControl.ConnectWebSocket();
             };
