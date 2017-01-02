@@ -13,8 +13,8 @@ onload = function() {
     var img = new Image();
     img.src = "../img/fukuchan.jpg";
 
-    _bar1 = new CustomProgressBar_canvas(canvas, img);
-    _bar1.vertical = true;
+    _bar1 = new RectangularCanvasProgressBar(canvas, img);
+    _bar1.vertical = false;
     _bar1.invert_direction = true;
     _bar1.min = 0;
     _bar1.max = 100;
@@ -30,7 +30,7 @@ onload = function() {
                     value+=1;
                     
                 _bar1.value = value;
-                _bar1.draw();
+                _bar1.drawOneTime();
 
 
                 },1000/FPS);

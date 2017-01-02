@@ -71,6 +71,60 @@ var CircularCanvasProgressBar = function(canvas, img)
 };
 Object.setPrototypeOf(CircularCanvasProgressBar.prototype, CanvasGaugeCommon.prototype);
 
+/**
+ * Calculate bodunding box of pie shape. (To define redraw region).
+ * @private
+ * @param {type} centerX 
+ * @param {type} centerY
+ * @param {type} radius
+ * @param {type} startAngle
+ * @param {type} endAngle
+ * @param {type} anticlockwise
+ * @returns {{upperLeftX, upperLeftY, width, height}
+ */
+CircularCanvasProgressBar.prototype._calcRedrawBoudingBox = function(centerX, centerY, radius, startAngle, endAngle, anticlockwise)
+{
+    'use strict';
+    var startAngleRadian = Math.PI/180*startAngle;
+    var endAngleRadian = Math.PI/180*endAngle;
+    
+    if(anticlockwise)
+    {
+        startAngleRadian = -startAngleRadian;
+        endAngleRadian = -endAngleRadian;
+    }
+    
+    var arcstartX = centerX + radius*Math.cos(startAngleRadian);
+    var arcstartY = centerY + radius*Math.sin(startAngleRadian);
+    var arcendX = centerX + radius*Math.cos(endAngleRadian);
+    var arcendY = centerY + radius*Math.sin(endAngleRadian);
+
+    var xVerticesList = [centerX, arcstartX, arcendX];
+    var yVerticesList = [centerY, arcstartY, arcendY];
+    
+    //Add to VerticesList when the arc across 90*n degree
+    for(var theta = Math.ceil(startAngle/90)*90 ; theta <= endAngle; theta += 90)
+    {
+        if(theta % 360 === 0)
+            xVerticesList.push(centerX + radius);
+        else if ((theta-180) % 360 === 0)
+            xVerticesList.push(centerX - radius);
+        
+        if ((theta - 90) % 360 === 0)
+            yVerticesList.push(centerY + (anticlockwise? -radius:radius));
+        else if ((theta - 270) % 360 === 0)
+            yVerticesList.push(centerY + (anticlockwise? radius:-radius));
+    }
+    
+    var maxX = Math.ceil(Math.max.apply(null,xVerticesList));
+    var minX = Math.floor(Math.min.apply(null,xVerticesList));
+    var maxY = Math.ceil(Math.max.apply(null,yVerticesList));
+    var minY = Math.floor(Math.min.apply(null,yVerticesList));
+    
+    var result = {upperLeftX : minX, upperLeftY : minY, width : maxX-minX, height : maxY-minY};
+    return result;
+};
+
 //Private methods
 CircularCanvasProgressBar.prototype._render = function()
 {  
@@ -89,16 +143,15 @@ CircularCanvasProgressBar.prototype._render = function()
         percent = 100 - percent;
 
     var new_arcAngle = this.full_angle*(percent/100);
-
+    var previous_arcAngle = this._curr_arcAngle;
+    
     // If the angle displacement (new_arcAngle - curr_arcAngle) is below angle resolution, skip redraw
     if (Math.abs(new_arcAngle - this._curr_arcAngle) < this.angle_resolution)
         return;
     else
-        //Update curr_arcAngle
-        this._curr_arcAngle = Math.floor(new_arcAngle/this.angle_resolution) * this.angle_resolution;
+       //Round into angle_resolution
+       new_arcAngle = Math.floor(new_arcAngle/this.angle_resolution) * this.angle_resolution;
 
-    var canvas_max_x = this._canvas_width;
-    var canvas_max_y = this._canvas_height;
     var circle_center_x = this.circle_center_x + this.offset_x;
     var circle_center_y = this.circle_center_y + this.offset_y;
     var offset_x = this.offset_x;
@@ -110,26 +163,35 @@ CircularCanvasProgressBar.prototype._render = function()
 
     if(anticlockwise)
     {
-        start_angle = Math.PI/180*this.offset_angle;
-        end_angle = Math.PI/180*(this.offset_angle - this._curr_arcAngle);
+        start_angle = this.offset_angle;
+        end_angle = this.offset_angle - new_arcAngle;
     }
     else
     {
-        start_angle = Math.PI/180*this.offset_angle;
-        end_angle = Math.PI/180*(this.offset_angle + this._curr_arcAngle);
+        start_angle = this.offset_angle;
+        end_angle = this.offset_angle + new_arcAngle;
     }
+    
+    //calculate redraw region
+    var redrawMaxAngle = Math.max(this.offset_angle + new_arcAngle, this.offset_angle + previous_arcAngle);
+    var redrawMinAngle = Math.min(this.offset_angle + new_arcAngle, this.offset_angle + previous_arcAngle);
+    var redrawBound = this._calcRedrawBoudingBox(circle_center_x, circle_center_y, radius, redrawMinAngle, redrawMaxAngle, anticlockwise);
+    
     context.save();
 
     // reset and clear canvas
-    context.clearRect(0,0,canvas_max_x,canvas_max_y); 
+    context.clearRect(redrawBound.upperLeftX,redrawBound.upperLeftY , redrawBound.width, redrawBound.height); 
     context.beginPath();
     context.moveTo(circle_center_x, circle_center_y);
-    context.arc(circle_center_x, circle_center_y, radius, start_angle, end_angle, anticlockwise);
+    context.arc(circle_center_x, circle_center_y, radius, Math.PI/180*start_angle, Math.PI/180*end_angle, anticlockwise);
     context.closePath();
     context.clip();
 
-    context.drawImage(img, offset_x, offset_y);
+    context.drawImage(img, redrawBound.upperLeftX,redrawBound.upperLeftY , redrawBound.width, redrawBound.height, redrawBound.upperLeftX,redrawBound.upperLeftY , redrawBound.width, redrawBound.height);
     context.restore();
+    
+    //Finally, update curr_arcAngle
+    this._curr_arcAngle = new_arcAngle;    
 };    
 
 var RectangularCanvasProgressBar = function(canvas, img)
@@ -168,6 +230,7 @@ RectangularCanvasProgressBar.prototype._render = function()
         percent = 100 - percent;
 
     var new_Barpixel;
+    var previous_Barpixel = this._curr_Barpixel;
     if(this.vertical)
         new_Barpixel = canvas_max_y*percent/100;
     else
@@ -177,53 +240,115 @@ RectangularCanvasProgressBar.prototype._render = function()
     if (Math.abs(new_Barpixel - this._curr_Barpixel) < this.pixel_resolution)
         return;
     else
-        //Update curr_arcAngle
-        this._curr_Barpixel = Math.floor(new_Barpixel/this.pixel_resolution) * this.pixel_resolution;
+        //Round new_Barpixel into pixel_resolution
+        new_Barpixel = Math.floor(new_Barpixel/this.pixel_resolution) * this.pixel_resolution;
 
     var rect_start_x,rect_start_y,rect_width,rect_height;
-
+    var redraw_start_x, redraw_start_y, redraw_width, redraw_height;
+    var skip_draw = false;
+    var skip_clear = false;
+    
     if(this.vertical)
     {
         rect_start_x = 0;
+        redraw_start_x = rect_start_x;
         rect_width = canvas_max_x;
-
-        if(this.invert_direction)
+        redraw_width = rect_width;
+        
+        if(this.invert_direction) // top to bottom
         {
             rect_start_y = 0;
-            rect_height =  this._curr_Barpixel;
+            rect_height =  new_Barpixel;
+            if(new_Barpixel > previous_Barpixel) // Increase
+            {
+                skip_clear = true;
+                redraw_start_y = previous_Barpixel;
+                redraw_height = new_Barpixel - previous_Barpixel;
+            }
+            else // Decrease
+            {
+                skip_draw = true;
+                redraw_start_y = new_Barpixel;
+                redraw_height = previous_Barpixel - new_Barpixel;
+            }
         }
-        else
+        else // bottom to top
         {
-            rect_start_y = canvas_max_y - this._curr_Barpixel;
-            rect_height =  this._curr_Barpixel;
+            rect_start_y = canvas_max_y - new_Barpixel;
+            rect_height =  new_Barpixel;
+            if(new_Barpixel > previous_Barpixel) // Increase
+            {
+                skip_clear = true;
+                redraw_start_y = canvas_max_y - new_Barpixel;
+                redraw_height = new_Barpixel - previous_Barpixel;
+            }
+            else // Decrease
+            {
+                skip_draw = true;
+                redraw_start_y = canvas_max_y - previous_Barpixel;
+                redraw_height = previous_Barpixel - new_Barpixel;
+            }
         }
     }
     else
     {
         rect_start_y = 0;
+        redraw_start_y = rect_start_y;
         rect_height = canvas_max_y;
-        if(this.invert_direction)
+        redraw_height = rect_height;
+        
+        if(this.invert_direction) // Right to left
         {
-            rect_start_x = canvas_max_x - this._curr_Barpixel;
-            rect_width =  this._curr_Barpixel;
+            rect_start_x = canvas_max_x - new_Barpixel;
+            rect_width =  new_Barpixel;
+            if(new_Barpixel > previous_Barpixel) // Increase
+            {
+                skip_clear = true;
+                redraw_start_x = canvas_max_x - new_Barpixel;
+                redraw_width = new_Barpixel - previous_Barpixel;
+            }
+            else // Decrease
+            {
+                skip_draw = true;
+                redraw_start_x = canvas_max_x - previous_Barpixel;
+                redraw_width = previous_Barpixel - new_Barpixel;
+            }
         }
-        else
+        else // Left to right
         {
             rect_start_x = 0;
-            rect_width = this._curr_Barpixel;
+            rect_width = new_Barpixel;
+            if(new_Barpixel > previous_Barpixel) // Increase
+            {
+                skip_clear = true;
+                redraw_start_x = previous_Barpixel;
+                redraw_width = new_Barpixel - previous_Barpixel;
+            }
+            else // Decrease
+            {
+                skip_draw = true;
+                redraw_start_x = new_Barpixel;
+                redraw_width = previous_Barpixel - new_Barpixel;
+            }
         }
     }
     context.save();
 
     // reset and clear canvas
-    context.clearRect(0,0,canvas_max_x,canvas_max_y); 
-    context.beginPath();
-    context.rect(rect_start_x,rect_start_y,rect_width,rect_height);
-    context.closePath();
-    context.clip();
-
-    context.drawImage(img, 0, 0);
+    if(!skip_clear)
+        context.clearRect(redraw_start_x,redraw_start_y,redraw_width,redraw_height);
+    if(!skip_draw)
+    {
+        context.beginPath();
+        context.rect(rect_start_x,rect_start_y,rect_width,rect_height);
+        context.closePath();
+        context.clip();
+        context.drawImage(img, redraw_start_x,redraw_start_y,redraw_width,redraw_height,redraw_start_x,redraw_start_y,redraw_width,redraw_height);
+    }
     context.restore();
+    
+    //Finally, update curr_barpixel
+    this._curr_Barpixel = new_Barpixel;
 };
 
 var NeedleCanvasGauge = function(canvas, img)
