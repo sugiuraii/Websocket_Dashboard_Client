@@ -9,7 +9,7 @@ and open the template in the editor.
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        <script src="../../script/canvas_progressbar/CircularProgressBar_canvas.js"></script>
+        <script src="../../script/canvas_progressbar/CanvasGauge.js"></script>
         <script src="../../script/libs/jquery/jquery.js"></script>
         <script src="../scripts/partscommon.js"></script>
         <style>
@@ -73,8 +73,8 @@ and open the template in the editor.
             
             function initialize()
             {
-                _tacho_bar_Yellow = circularprogressbar_initialize("tacho_bar_Yellow","LEDTachoMeter_LED_Yellow.png",0, 9000, 90, 270,false);
-                _tacho_bar_Red = circularprogressbar_initialize("tacho_bar_Red","LEDTachoMeter_LED_Red.png",0, 9000, 90, 270,false);
+                _tacho_bar_Yellow = initializeCircularCanvasProgressBar("tacho_bar_Yellow","LEDTachoMeter_LED_Yellow.png",0, 9000, 90, 270,false);
+                _tacho_bar_Red = initializeCircularCanvasProgressBar("tacho_bar_Red","LEDTachoMeter_LED_Red.png",0, 9000, 90, 270,false);
                 _tacho_bar_Yellow.angle_resolution = 6;
                 _tacho_bar_Red.angle_resolution = 6;
                 
@@ -93,14 +93,14 @@ and open the template in the editor.
                 if(tacho < 8000)
                 {
                     _tacho_bar_Yellow.value = tacho;
-                    _tacho_bar_Yellow.draw();
+                    //_tacho_bar_Yellow.draw();
                     _tacho_bar_YellowElem.css('visibility','visible');
                     _tacho_bar_RedElem.css('visibility','hidden');
                 }
                 else
                 {
                     _tacho_bar_Red.value = tacho;
-                    _tacho_bar_Red.draw();
+                    //_tacho_bar_Red.draw();
                     _tacho_bar_RedElem.css('visibility','visible');
                     _tacho_bar_YellowElem.css('visibility','hidden');                    
                 }

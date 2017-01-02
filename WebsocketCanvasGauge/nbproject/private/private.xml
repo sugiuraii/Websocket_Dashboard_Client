@@ -2,6 +2,11 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/kuniaki/Documents/NetBeansProjects/WebsocketCanvasGauge/public_html/parts/MilageGraph/MilageGraph.html</file>
+            <file>file:/C:/Users/kuniaki/Documents/NetBeansProjects/WebsocketCanvasGauge/public_html/DigiTachoPanel.html</file>
+            <file>file:/C:/Users/kuniaki/Documents/NetBeansProjects/WebsocketCanvasGauge/public_html/parts/scripts/partscommon.js</file>
+            <file>file:/C:/Users/kuniaki/Documents/NetBeansProjects/WebsocketCanvasGauge/public_html/parts/DigiTachoBar/DigiTachoBar.html</file>
+        </group>
     </open-files>
 </project-private>

@@ -4,14 +4,6 @@
  * and open the template in the editor.
  */
 
-var ELM327COM_Websocket = function()
-{
-    'use strict';
-    var newobj = new SSMCOM_Websocket();
-    newobj.ModePrefix = "ELM327";
-    return newobj;
-};
-
 var SSMCOM_Websocket = function()
 {
     'use strict';
@@ -135,3 +127,11 @@ SSMCOM_Websocket.prototype.getReadyState = function()
     
     return this._ws.readyState;
 };
+
+var ELM327COM_Websocket = function()
+{
+    'use strict';
+    SSMCOM_Websocket.call(this);
+    this.ModePrefix = "ELM327";
+};
+Object.setPrototypeOf(ELM327COM_Websocket.prototype, SSMCOM_Websocket.prototype);

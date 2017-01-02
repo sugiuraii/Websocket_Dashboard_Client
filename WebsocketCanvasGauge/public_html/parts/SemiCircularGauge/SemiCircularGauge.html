@@ -9,7 +9,7 @@ and open the template in the editor.
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        <script src="../../script/canvas_progressbar/CircularProgressBar_canvas.js"></script>
+        <script src="../../script/canvas_progressbar/CanvasGauge.js"></script>
         <script src="../../script/libs/jquery/jquery.js"></script>
         <style>
             @font-face {
@@ -143,7 +143,7 @@ and open the template in the editor.
                 var redzone_img = new Image();
                 redzone_img.src = "SemiCircular_Gauge1_Redzone_Bar.png";
 
-                _redzone_bar1 = new CircularProgressBar_canvas(redzone_canvas,redzone_img);
+                _redzone_bar1 = new CircularCanvasProgressBar(redzone_canvas,redzone_img);
                 // Properties and Default values
                 _redzone_bar1.offset_angle = redzone_offset_angle;
                 _redzone_bar1.full_angle = redzone_full_angle;
@@ -171,7 +171,7 @@ and open the template in the editor.
                 var yellowzone_img = new Image();
                 yellowzone_img.src = "SemiCircular_Gauge1_Yellowzone_Bar.png";
 
-                _yellowzone_bar1 = new CircularProgressBar_canvas(yellowzone_canvas,yellowzone_img);
+                _yellowzone_bar1 = new CircularCanvasProgressBar(yellowzone_canvas,yellowzone_img);
                 // Properties and Default values
                 _yellowzone_bar1.offset_angle = yellowzone_offset_angle;
                 _yellowzone_bar1.full_angle = yellowzone_full_angle;
@@ -199,7 +199,7 @@ and open the template in the editor.
                 var greenzone_img = new Image();
                 greenzone_img.src = "SemiCircular_Gauge1_Greenzone_Bar.png";
 
-                _greenzone_bar1 = new CircularProgressBar_canvas(greenzone_canvas,greenzone_img);
+                _greenzone_bar1 = new CircularCanvasProgressBar(greenzone_canvas,greenzone_img);
                 // Properties and Default values
                 _greenzone_bar1.offset_angle = greenzone_offset_angle;
                 _greenzone_bar1.full_angle = greenzone_full_angle;
@@ -227,7 +227,7 @@ and open the template in the editor.
                 var value_img = new Image();
                 value_img.src = "SemiCircular_Gauge1_Value_Bar.png";
 
-                _value_bar1 = new CircularProgressBar_canvas(value_canvas,value_img);
+                _value_bar1 = new CircularCanvasProgressBar(value_canvas,value_img);
                 // Properties and Default values
                 _value_bar1.offset_angle = 180;
                 _value_bar1.full_angle = 180;

@@ -4,64 +4,65 @@
  * and open the template in the editor.
  */
 
-function customprogressbar_initialize(canvas_id, canvas_img_name, value_min, value_max, vertical, invert_direction)
+function initializeRectangularCanvasProgressBar(canvas_id, canvas_img_name, value_min, value_max, vertical, invert_direction)
 {
-    var customprogressbar_canvas = document.getElementById(canvas_id);
-    var customprogressbar_img = new Image();
-    customprogressbar_img.src = canvas_img_name;
+    var canvas = document.getElementById(canvas_id);
+    var img = new Image();
+    img.src = canvas_img_name;
 
-    var customprogressbarobj = new CustomProgressBar_canvas(customprogressbar_canvas, customprogressbar_img);
-    customprogressbarobj.vertical = vertical;
-    customprogressbarobj.invert_direction = invert_direction;
-    customprogressbarobj.min = value_min;
-    customprogressbarobj.max = value_max;
-    customprogressbarobj.pixel_resolution = 16;
+    var progressbarObj = new RectangularCanvasProgressBar(canvas, img);
+    progressbarObj.vertical = vertical;
+    progressbarObj.invert_direction = invert_direction;
+    progressbarObj.min = value_min;
+    progressbarObj.max = value_max;
+    progressbarObj.pixel_resolution = 16;
 
-    customprogressbar_img.onload = function(){
-        customprogressbarobj.draw();
+    img.onload = function(){
+        progressbarObj.drawStart();
     };
-
-    return customprogressbarobj;
+    
+    return progressbarObj;
 }
 
-function circularprogressbar_initialize(canvas_id, canvas_img_name, value_min, value_max, offset_angle, full_angle, anticlockwise)
+function initializeCircularCanvasProgressBar(canvas_id, canvas_img_name, value_min, value_max, offset_angle, full_angle, anticlockwise)
 {
-    var canvas_elem = document.getElementById(canvas_id);
-    var image_elem = new Image();
-    image_elem.src = canvas_img_name;
+    var canvas = document.getElementById(canvas_id);
+    var img = new Image();
+    img.src = canvas_img_name;
 
-    var canvas_obj = new CircularProgressBar_canvas(canvas_elem,image_elem);
-    canvas_obj.offset_angle = offset_angle;
-    canvas_obj.full_angle = full_angle;
-    canvas_obj.angle_resolution = 3;
-    canvas_obj.anticlockwise = anticlockwise;
-    canvas_obj.min = value_min;
-    canvas_obj.max = value_max;
-    image_elem.onload = function(){
-        canvas_obj.draw();
+    var progressbarObj = new CircularCanvasProgressBar(canvas, img);
+    progressbarObj.offset_angle = offset_angle;
+    progressbarObj.full_angle = full_angle;
+    progressbarObj.angle_resolution = 3;
+    progressbarObj.anticlockwise = anticlockwise;
+    progressbarObj.min = value_min;
+    progressbarObj.max = value_max;
+    
+    img.onload = function(){
+        progressbarObj.drawStart();
     };
 
-    return canvas_obj;
+    return progressbarObj;
 }
 
-function needlegauge_initialize(canvas_id, canvas_img_name, value_min, value_max, offset_angle, full_angle, anticlockwise)
+function initializeNeedleCanvasGauge(canvas_id, canvas_img_name, value_min, value_max, offset_angle, full_angle, anticlockwise)
 {
-    var canvas_elem = document.getElementById(canvas_id);
-    var image_elem = new Image();
-    image_elem.src = canvas_img_name;
+    var canvas = document.getElementById(canvas_id);
+    var img = new Image();
+    img.src = canvas_img_name;
 
-    var canvas_obj = new NeedleGauge_canvas(canvas_elem,image_elem);
-    canvas_obj.offset_angle = offset_angle;
-    canvas_obj.full_angle = full_angle;
-    canvas_obj.anticlockwise = anticlockwise;
-    canvas_obj.min = value_min;
-    canvas_obj.max = value_max;
+    var gaugeObj = new NeedleCanvasGauge(canvas,img);
+    gaugeObj.offset_angle = offset_angle;
+    gaugeObj.full_angle = full_angle;
+    gaugeObj.anticlockwise = anticlockwise;
+    gaugeObj.min = value_min;
+    gaugeObj.max = value_max;
 
-    image_elem.onload = function(){
-        canvas_obj.draw();
+    img.onload = function(){
+        gaugeObj.drawStart();
     };
 
-    return canvas_obj;
+    return gaugeObj;
 }
 
 function calc_gear_pos(tacho, speed, neutral_sw)

@@ -9,7 +9,7 @@ and open the template in the editor.
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        <script src="../../script/canvas_progressbar/CustomProgressBar_canvas.js"></script>
+        <script src="../../script/canvas_progressbar/CanvasGauge.js"></script>
         <script src="../../script/libs/jquery/jquery.js"></script>
         <script src="../scripts/partscommon.js"></script>
         <style>
@@ -72,7 +72,7 @@ and open the template in the editor.
             
             function initialize()
             {
-                _tacho_bar = customprogressbar_initialize("tacho_bar","DigiTachoBar.png",0, 9000, false, false);
+                _tacho_bar = initializeRectangularCanvasProgressBar("tacho_bar","DigiTachoBar.png",0, 9000, false, false);
                 _speed_label_dom = $("#speed_label").get(0);
                 _gearpos_label_dom = $("#gearpos_label").get(0);
             }
@@ -80,7 +80,6 @@ and open the template in the editor.
             value_update = function()
             {
                 _tacho_bar.value = tacho;
-                _tacho_bar.draw();
                 updatValueTextLabel(speed, _speed_label_dom, 0);
                 var gearpos = calc_gear_pos(tacho, speed, neutral_sw);
                 updateStringTextLabel(gearpos, _gearpos_label_dom);

@@ -9,8 +9,7 @@ and open the template in the editor.
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        <script src="../../script/canvas_progressbar/CircularProgressBar_canvas.js"></script>
-        <script src="../../script/canvas_progressbar/NeedleGauge_canvas.js"></script>
+        <script src="../../script/canvas_progressbar/CanvasGauge.js"></script>
         <script src="../../script/libs/jquery/jquery.js"></script>
         <script src="../scripts/partscommon.js"></script>
         <style>
@@ -65,11 +64,11 @@ and open the template in the editor.
             
             function initialize()
             {
-                _tacho_bar = circularprogressbar_initialize("tacho_bar","AnalogTachoMeter_Bar.png",0, 9000, 90, 270,false);
-                _watertemp_bar = circularprogressbar_initialize("watertemp_bar","AnalogSpeedMeter_Bar.png",60,140,165,120,false);
-                _tacho_needle = needlegauge_initialize("tacho_needle","AnalogTachoMeter_Needle.png",0,9000,90,270,false);
-                _speed_needle = needlegauge_initialize("speed_needle","AnalogSpeedMeter_Needle.png",0,280,75,210,false);
-                _boost_needle = needlegauge_initialize("boost_needle","BoostMeter_Needle.png",-1.0,2.0,30,90,true);
+                _tacho_bar = initializeCircularCanvasProgressBar("tacho_bar","AnalogTachoMeter_Bar.png",0, 9000, 90, 270,false);
+                _watertemp_bar = initializeCircularCanvasProgressBar("watertemp_bar","AnalogSpeedMeter_Bar.png",60,140,165,120,false);
+                _tacho_needle = initializeNeedleCanvasGauge("tacho_needle","AnalogTachoMeter_Needle.png",0,9000,90,270,false);
+                _speed_needle = initializeNeedleCanvasGauge("speed_needle","AnalogSpeedMeter_Needle.png",0,280,75,210,false);
+                _boost_needle = initializeNeedleCanvasGauge("boost_needle","BoostMeter_Needle.png",-1.0,2.0,30,90,true);
                 
                 _fuel_label_dom = $("#fuel_label").get(0);
                 _trip_label_dom = $("#trip_label").get(0);
@@ -85,13 +84,13 @@ and open the template in the editor.
                 _speed_needle.value = speed;
                 _watertemp_bar.value = watertemp;
                 _boost_needle.value = boost;
-
+                /*
                 _tacho_bar.draw();
                 _tacho_needle.draw();
                 _speed_needle.draw();
                 _watertemp_bar.draw();
                 _boost_needle.draw();
-                
+                */
                 updatValueTextLabel(fuel, _fuel_label_dom, 1);
                 updatValueTextLabel(trip, _trip_label_dom, 1);
                 updatValueTextLabel(gas_milage, _gas_milage_label_dom, 1);

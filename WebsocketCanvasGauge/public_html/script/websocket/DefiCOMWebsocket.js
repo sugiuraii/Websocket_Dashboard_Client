@@ -5,19 +5,6 @@
  */
 
 /**
- * ArduinoCOM_Websocket class.
- * @constructor
- * @returns {ArduinoCOM_Websocket.newobj|DefiCOM_Websocket}
- */
-var ArduinoCOM_Websocket = function()
-{
-    'use strict';
-    var newobj = new DefiCOM_Websocket();
-    newobj.ModePrefix = "ARDUINO";
-    return newobj;
-};
-
-/**
  * DefiCOM_Websocket class.
  * @constructor
  * @returns {DefiCOM_Websocket}
@@ -192,3 +179,15 @@ DefiCOM_Websocket.prototype.getReadyState = function()
     
     return this._ws.readyState;
 };
+
+/**
+ * ArduinoCOM_Websocket class.
+ * @constructor
+ */
+var ArduinoCOM_Websocket = function()
+{
+    'use strict';
+    DefiCOM_Websocket.call(this);
+    this.ModePrefix = "ARDUINO";
+};
+Object.setPrototypeOf(ArduinoCOM_Websocket.prototype, DefiCOM_Websocket.prototype);
