@@ -161,7 +161,7 @@ and open the template in the editor.
                 _redzone_bar1.offset_y = 0;
                 
                 redzone_img.onload = function(){
-                    _redzone_bar1.draw();
+                    _redzone_bar1.drawOneTime();
                 };
             }
             
@@ -189,7 +189,7 @@ and open the template in the editor.
                 _yellowzone_bar1.offset_y = 0;
                 
                 yellowzone_img.onload = function(){
-                    _yellowzone_bar1.draw();
+                    _yellowzone_bar1.drawOneTime();
                 };
             }
             
@@ -217,7 +217,7 @@ and open the template in the editor.
                 _greenzone_bar1.offset_y = 0;
                 
                 greenzone_img.onload = function(){
-                    _greenzone_bar1.draw();
+                    _greenzone_bar1.drawOneTime();
                 };
             }
             
@@ -247,7 +247,7 @@ and open the template in the editor.
                 _value_bar1.angle_resolution = this.angle_resolution;
                 
                 value_img.onload = function(){
-                    _value_bar1.draw();
+                    _value_bar1.drawStart();
                 };
                 
             }
@@ -255,7 +255,6 @@ and open the template in the editor.
             function value_update()
             {
                 _value_bar1.value = value;
-                _value_bar1.draw();
                 if(parseFloat(this.value).toFixed(value_label_rounded) !== _num_label1_dom.textContent)
                     _num_label1_dom.textContent = parseFloat(this.value).toFixed(value_label_rounded);  
             }

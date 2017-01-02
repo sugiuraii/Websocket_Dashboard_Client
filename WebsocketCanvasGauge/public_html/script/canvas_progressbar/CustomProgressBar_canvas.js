@@ -30,12 +30,9 @@ var CustomProgressBar_canvas = function(canvas, img)
 CustomProgressBar_canvas.prototype.draw = function()
 {   
     'use strict';
-    var canvas = this._canvas;
+    //var canvas = this._canvas;
     var context = this._context;
     var img = this._img;
-    
-    if ( ! canvas || ! context )
-        return false;
 
     var canvas_max_x = this._canvas_width;
     var canvas_max_y = this._canvas_height;

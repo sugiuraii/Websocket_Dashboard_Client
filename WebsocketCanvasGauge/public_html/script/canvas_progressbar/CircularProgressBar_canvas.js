@@ -16,14 +16,15 @@ var CircularProgressBar_canvas = function(canvas, img)
 
     // Local value and instances
     this._curr_arcAngle;
-        
+    this._requestAnimationFrameID;
+    
     // Properties and Default values
     this.offset_angle = 0;
     this.full_angle = 360;
     this.anticlockwise = false;
     this.min = 0;
     this.max = 100;
-    this.angle_resolution = 0.5;
+    this.angle_resolution = 0.1;
     
     this.invert_fill = false;
     
@@ -37,16 +38,32 @@ var CircularProgressBar_canvas = function(canvas, img)
     this.value = this.min;
 };
 
-//Public methods
-CircularProgressBar_canvas.prototype.draw = function()
+CircularProgressBar_canvas.prototype.drawOneTime = function()
+{
+    this._render();
+};
+
+CircularProgressBar_canvas.prototype.drawStart = function()
+{
+    var self = this;
+    this.requestAnimationFrameID = requestAnimationFrame(function()
+        {
+            self._render();
+            self.drawStart();
+        });
+};
+
+CircularProgressBar_canvas.prototype.drawStop = function()
+{
+    window.cancelAnimationFrame(this.requestAnimationFrameID);
+};
+
+//Private methods
+CircularProgressBar_canvas.prototype._render = function()
 {  
     'use strict';
-    var canvas = this._canvas;
     var context = this._context;
     var img = this._img;
-    
-    if ( ! canvas || ! context )
-        return false;
 
     // Calculate arc angle from value
     var percent = (this.value - this.min)/(this.max - this.min)*100;
@@ -100,5 +117,4 @@ CircularProgressBar_canvas.prototype.draw = function()
 
     context.drawImage(img, offset_x, offset_y);
     context.restore();
-
 };    

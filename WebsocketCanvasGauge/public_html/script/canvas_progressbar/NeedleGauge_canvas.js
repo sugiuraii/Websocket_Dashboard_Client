@@ -36,9 +36,6 @@ NeedleGauge_canvas.prototype.draw = function()
     var canvas = this._canvas;
     var context = this._context;
     var img = this._img;
-    
-    if ( ! canvas || ! canvas.getContext )
-        return false;
 
      // Calculate arc angle from value
     var percent = (this.value - this.min)/(this.max - this.min)*100;
