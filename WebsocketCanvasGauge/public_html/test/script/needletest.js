@@ -4,20 +4,37 @@
  * and open the template in the editor.
  */
 var _bar1;
+var value;
+var FPS=60;
 
 onload = function() {
-    _bar1 = new NeedleGauge_canvas("bar1","../img/needle1.png",10,5);
+    var canvas = document.getElementById("bar1");
+    var img = new Image();
+    img.src = "../img/needle1.png";
+    
+    _bar1 = new NeedleCanvasGauge(canvas, img);
     _bar1.anticlockwise=false;
     _bar1.full_angle=270;
     _bar1.offset_angle=135;
     _bar1.min = 0;
     _bar1.max = 100;
+    _bar1.img_pivot_x = 10;
+    _bar1.img_pivot_y = 5;
+    
+    value=0;
+    
+    setInterval(function()
+    {
+        if(value>100)
+            {
+                value=0;
+            }
+            value+=1;
+
+        _bar1.value = value;
+        _bar1.drawOneTime();
+
+
+    },1000/FPS);
+
 };
-
-function rangeChange () {
-    var val = document.getElementById("value_slider").value;
-    _bar1.value = val;
-    _bar1.draw();
-}
-
-

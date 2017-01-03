@@ -357,7 +357,7 @@ var NeedleCanvasGauge = function(canvas, img)
     CanvasGaugeCommon.call(this, canvas, img);
 
     //private
-    this._curr_rotAngle;
+    this._curr_rotAngle = 0;
 
     // Properties and Default values
     this.offset_angle = 0;
@@ -366,7 +366,9 @@ var NeedleCanvasGauge = function(canvas, img)
     this.angle_resolution = 0.5;
     
     this.rotation_center_x = canvas.width/2;
-    this.rotation_center_y = canvas.height/2; 
+    this.rotation_center_y = canvas.height/2;
+    this.img_pivot_x = canvas.width/2;
+    this.img_pivot_y = canvas.height/2;
 };
 Object.setPrototypeOf(NeedleCanvasGauge.prototype, CanvasGaugeCommon.prototype);
 
@@ -384,39 +386,117 @@ NeedleCanvasGauge.prototype._render = function()
     if(percent > 100)
         percent = 100;
     var new_rotAngle = this.full_angle*(percent/100);
-
+    var previous_rotAngle = this._curr_rotAngle;
+    
     // If the angle displacement (new_rotAngle - curr_rotAngle) is below angle resolution, skip redraw
     if (Math.abs(new_rotAngle - this._curr_rotAngle) < this.angle_resolution)
         return;
     else
-        //Update curr_arcAngle
-        this._curr_rotAngle = Math.floor(new_rotAngle/this.angle_resolution) * this.angle_resolution;;
+        //Round into angle_resolution
+        new_rotAngle = Math.floor(new_rotAngle/this.angle_resolution) * this.angle_resolution;;
+    
+    var imgWidth = img.width;
+    var imgHeight = img.height;
+    var imgPivotX = this.img_pivot_x;
+    var imgPivotY = this.img_pivot_y;
+    var rotCenterX = this.rotation_center_x;
+    var rotCenterY = this.rotation_center_y;
 
-    var canvas_max_x = this._canvas_width;
-    var canvas_max_y = this._canvas_height;
-    var rotation_center_x = this.rotation_center_x;
-    var rotation_center_y = this.rotation_center_y;
-
-    var anticlockwise = this.anticlockwise;
-    var rotation_angle;
-    if(anticlockwise)
+    var newActualRotAngle;
+    var previousActualRotAngle;
+    if(this.anticlockwise)
     {
-        rotation_angle = Math.PI/180*(this.offset_angle - this._curr_rotAngle);
+        newActualRotAngle = Math.PI/180*(this.offset_angle - new_rotAngle);
+        previousActualRotAngle = Math.PI/180*(this.offset_angle - previous_rotAngle);
     }
     else
     {
-        rotation_angle = Math.PI/180*(this.offset_angle + this._curr_rotAngle);
+        newActualRotAngle = Math.PI/180*(this.offset_angle + new_rotAngle);
+        previousActualRotAngle = Math.PI/180*(this.offset_angle + previous_rotAngle); 
     }
     context.save();
-    // reset and clear canvas
-    context.clearRect(0,0,canvas_max_x,canvas_max_y);
+
+    // Clear previous frame with calculating bounding box
+    var clearRegionBoundingBox = this._calcRedrawBoudingBox(rotCenterX, rotCenterY, imgPivotX, imgPivotY, imgWidth, imgHeight, previousActualRotAngle);
+    context.clearRect(clearRegionBoundingBox.upperLeftX, clearRegionBoundingBox.upperLeftY, clearRegionBoundingBox.width, clearRegionBoundingBox.height);
 
     //実際の画像変換とは逆順に定義していることに注意。
-    context.translate(rotation_center_x, rotation_center_y);
+    context.translate(rotCenterX, rotCenterY);
     //apply rotation
-    context.rotate(rotation_angle);        
-    context.translate( -1 * rotation_center_x, -1 * rotation_center_y);
-
-    context.drawImage(img, 0,0);
+    context.rotate(newActualRotAngle);        
+    context.translate( -rotCenterX, -rotCenterY);
+    context.drawImage(img, rotCenterX - imgPivotX, rotCenterY - imgPivotY);
     context.restore();
+    
+    //Finally, update curr_rotangle
+    this._curr_rotAngle = new_rotAngle;
+};
+
+/**
+ * Calculate rotated coodinate with center point.
+ * @private
+ * @param {number} x input X.
+ * @param {number} y input Y.
+ * @param {number} centerX center point X.
+ * @param {number} centerY center point Y.
+ * @param {number} angle Rotation angle in radian.
+ * @returns {x:number y:number} Result rotated coordinate.
+ */
+NeedleCanvasGauge.prototype._rotationCoordinate = function(x, y, centerX, centerY, angle)
+{
+    'use strict';
+    var x1, y1;
+    x1 = x - centerX;
+    y1 = y - centerY;
+    
+    var x2, y2;
+    x2 = Math.cos(angle) * x1 - Math.sin(angle) * y1;
+    y2 = Math.cos(angle) * y1 + Math.sin(angle) * x1;
+    
+    var x3, y3;
+    x3 = x2 + centerX;
+    y3 = y2 + centerY;
+    
+    var result = { x: x3, y: y3};
+    return result;
+};
+
+/**
+ * Calculate redraw bouding box.
+ * @private
+ * @param {number} rotCenterX
+ * @param {number} rotCenterY
+ * @param {number} imgPivotX
+ * @param {number} imgPivotY
+ * @param {number} imgWidth
+ * @param {number} imgHeight
+ * @param {number} angle
+ * @returns {NeedleCanvasGauge.prototype._calcRedrawBoudingBox.result}
+ */
+NeedleCanvasGauge.prototype._calcRedrawBoudingBox = function(rotCenterX, rotCenterY, imgPivotX, imgPivotY, imgWidth, imgHeight, angle)
+{
+    'use strict';
+    //Rotated upper left
+    var rotatedULpt = this._rotationCoordinate(rotCenterX - imgPivotX, rotCenterY - imgPivotY, rotCenterX, rotCenterY, angle);
+    //Rotated lower left
+    var rotatedLLpt = this._rotationCoordinate(rotCenterX - imgPivotX, rotCenterY - imgPivotY + imgHeight, rotCenterX, rotCenterY, angle);
+    //Rotated upper right
+    var rotatedURpt = this._rotationCoordinate(rotCenterX - imgPivotX + imgWidth, rotCenterY - imgPivotY, rotCenterX, rotCenterY, angle);
+    //Rotated lower right
+    var rotatedLRpt = this._rotationCoordinate(rotCenterX - imgPivotX + imgWidth, rotCenterY - imgPivotY + imgHeight, rotCenterX, rotCenterY, angle);
+
+    //Calculate bouding box
+    var maxX = Math.max(rotatedULpt.x, rotatedLLpt.x, rotatedURpt.x, rotatedLRpt.x);
+    var minX = Math.min(rotatedULpt.x, rotatedLLpt.x, rotatedURpt.x, rotatedLRpt.x);
+    var maxY = Math.max(rotatedULpt.y, rotatedLLpt.y, rotatedURpt.y, rotatedLRpt.y);
+    var minY = Math.min(rotatedULpt.y, rotatedLLpt.y, rotatedURpt.y, rotatedLRpt.y);
+    
+    //Round into integer
+    maxX = Math.ceil(maxX);
+    minX = Math.floor(minX);
+    maxY = Math.ceil(maxY);
+    minY = Math.floor(minY);
+    
+    var result = {upperLeftX : minX, upperLeftY : minY, width : maxX-minX, height : maxY-minY};
+    return result;
 };
