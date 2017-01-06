@@ -65,7 +65,7 @@ var CircularCanvasProgressBar = function(canvas, img)
     this.circle_center_x = canvas.width/2;
     this.circle_center_y = canvas.height/2;    
     this.circle_radius = canvas.width/2;
-    
+    this.circue_inner_radius = 0;
     this.offset_x = 0;
     this.offset_y = 0;
 };
@@ -82,7 +82,7 @@ Object.setPrototypeOf(CircularCanvasProgressBar.prototype, CanvasGaugeCommon.pro
  * @param {type} anticlockwise
  * @returns {{upperLeftX, upperLeftY, width, height}
  */
-CircularCanvasProgressBar.prototype._calcRedrawBoudingBox = function(centerX, centerY, radius, startAngle, endAngle, anticlockwise)
+CircularCanvasProgressBar.prototype._calcRedrawBoudingBox = function(centerX, centerY, radius, inner_radius, startAngle, endAngle, anticlockwise)
 {
     'use strict';
     var startAngleRadian = Math.PI/180*startAngle;
@@ -97,23 +97,39 @@ CircularCanvasProgressBar.prototype._calcRedrawBoudingBox = function(centerX, ce
     var arcstartX = centerX + radius*Math.cos(startAngleRadian);
     var arcstartY = centerY + radius*Math.sin(startAngleRadian);
     var arcendX = centerX + radius*Math.cos(endAngleRadian);
-    var arcendY = centerY + radius*Math.sin(endAngleRadian);
-
-    var xVerticesList = [centerX, arcstartX, arcendX];
-    var yVerticesList = [centerY, arcstartY, arcendY];
+    var arcendY = centerY + radius*Math.sin(endAngleRadian);    
+    var inner_arcstartX = centerX + inner_radius*Math.cos(startAngleRadian);
+    var inner_arcstartY = centerY + inner_radius*Math.sin(startAngleRadian);
+    var inner_arcendX = centerX + inner_radius*Math.cos(endAngleRadian);
+    var inner_arcendY = centerY + inner_radius*Math.sin(endAngleRadian);
+    
+    var xVerticesList = [arcstartX, arcendX, inner_arcstartX, inner_arcendX];
+    var yVerticesList = [arcstartY, arcendY, inner_arcstartY, inner_arcendY];
     
     //Add to VerticesList when the arc across 90*n degree
     for(var theta = Math.ceil(startAngle/90)*90 ; theta <= endAngle; theta += 90)
     {
         if(theta % 360 === 0)
+        {
             xVerticesList.push(centerX + radius);
+            xVerticesList.push(centerX + inner_radius);            
+        }
         else if ((theta-180) % 360 === 0)
+        {
             xVerticesList.push(centerX - radius);
+            xVerticesList.push(centerX - inner_radius);
+        }
         
         if ((theta - 90) % 360 === 0)
+        {
             yVerticesList.push(centerY + (anticlockwise? -radius:radius));
+            yVerticesList.push(centerY + (anticlockwise? -inner_radius:inner_radius));            
+        }
         else if ((theta - 270) % 360 === 0)
+        {
             yVerticesList.push(centerY + (anticlockwise? radius:-radius));
+            yVerticesList.push(centerY + (anticlockwise? inner_radius:-inner_radius));
+        }
     }
     
     var maxX = Math.ceil(Math.max.apply(null,xVerticesList));
@@ -157,6 +173,7 @@ CircularCanvasProgressBar.prototype._render = function()
     var offset_x = this.offset_x;
     var offset_y = this.offset_y;
     var radius = this.circle_radius;
+    var inner_radius = this.circue_inner_radius;
 
     var start_angle, end_angle;
     var anticlockwise = this.anticlockwise;
@@ -175,18 +192,22 @@ CircularCanvasProgressBar.prototype._render = function()
     //calculate redraw region
     var redrawMaxAngle = Math.max(this.offset_angle + new_arcAngle, this.offset_angle + previous_arcAngle);
     var redrawMinAngle = Math.min(this.offset_angle + new_arcAngle, this.offset_angle + previous_arcAngle);
-    var redrawBound = this._calcRedrawBoudingBox(circle_center_x, circle_center_y, radius, redrawMinAngle, redrawMaxAngle, anticlockwise);
+    var redrawBound = this._calcRedrawBoudingBox(circle_center_x, circle_center_y, radius, inner_radius, redrawMinAngle, redrawMaxAngle, anticlockwise);
     
     context.save();
 
     // reset and clear canvas
     context.clearRect(redrawBound.upperLeftX,redrawBound.upperLeftY , redrawBound.width, redrawBound.height); 
     context.beginPath();
-    context.moveTo(circle_center_x, circle_center_y);
     context.arc(circle_center_x, circle_center_y, radius, Math.PI/180*start_angle, Math.PI/180*end_angle, anticlockwise);
+    if(inner_radius > 0)
+        context.arc(circle_center_x, circle_center_y, inner_radius, Math.PI/180*end_angle, Math.PI/180*start_angle, !anticlockwise);
+    else
+        context.lineTo(circle_center_x, circle_center_y);
+    
     context.closePath();
     context.clip();
-
+    
     context.drawImage(img, redrawBound.upperLeftX,redrawBound.upperLeftY , redrawBound.width, redrawBound.height, redrawBound.upperLeftX,redrawBound.upperLeftY , redrawBound.width, redrawBound.height);
     context.restore();
     

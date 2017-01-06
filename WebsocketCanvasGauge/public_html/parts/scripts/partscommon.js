@@ -45,7 +45,7 @@ function initializeCircularCanvasProgressBar(canvas_id, canvas_img_name, value_m
     return progressbarObj;
 }
 
-function initializeNeedleCanvasGauge(canvas_id, canvas_img_name, value_min, value_max, offset_angle, full_angle, anticlockwise)
+function initializeNeedleCanvasGauge(canvas_id, canvas_img_name, value_min, value_max, offset_angle, full_angle, anticlockwise, imgPivotX, imgPivotY)
 {
     var canvas = document.getElementById(canvas_id);
     var img = new Image();
@@ -57,6 +57,8 @@ function initializeNeedleCanvasGauge(canvas_id, canvas_img_name, value_min, valu
     gaugeObj.anticlockwise = anticlockwise;
     gaugeObj.min = value_min;
     gaugeObj.max = value_max;
+    gaugeObj.img_pivot_x = imgPivotX;
+    gaugeObj.img_pivot_y = imgPivotY;
 
     img.onload = function(){
         gaugeObj.drawStart();
