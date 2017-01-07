@@ -24,7 +24,7 @@ function initializeRectangularCanvasProgressBar(canvas_id, canvas_img_name, valu
     return progressbarObj;
 }
 
-function initializeCircularCanvasProgressBar(canvas_id, canvas_img_name, value_min, value_max, offset_angle, full_angle, anticlockwise)
+function initializeCircularCanvasProgressBar(canvas_id, canvas_img_name, radius, inner_radius,  value_min, value_max, offset_angle, full_angle, anticlockwise)
 {
     var canvas = document.getElementById(canvas_id);
     var img = new Image();
@@ -37,6 +37,8 @@ function initializeCircularCanvasProgressBar(canvas_id, canvas_img_name, value_m
     progressbarObj.anticlockwise = anticlockwise;
     progressbarObj.min = value_min;
     progressbarObj.max = value_max;
+    progressbarObj.circle_radius = radius;
+    progressbarObj.circue_inner_radius = inner_radius;
     
     img.onload = function(){
         progressbarObj.drawStart();

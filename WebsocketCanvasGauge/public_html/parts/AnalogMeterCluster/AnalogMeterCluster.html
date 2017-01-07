@@ -64,8 +64,8 @@ and open the template in the editor.
             
             function initialize()
             {
-                _tacho_bar = initializeCircularCanvasProgressBar("tacho_bar","AnalogTachoMeter_Bar.png",0, 9000, 90, 270,false);
-                _watertemp_bar = initializeCircularCanvasProgressBar("watertemp_bar","AnalogSpeedMeter_Bar.png",60,140,165,120,false);
+                _tacho_bar = initializeCircularCanvasProgressBar("tacho_bar","AnalogTachoMeter_Bar.png", 200, 170, 0, 9000, 90, 270,false);
+                _watertemp_bar = initializeCircularCanvasProgressBar("watertemp_bar","AnalogSpeedMeter_Bar.png", 160, 120 ,60,140,165,120,false);
                 _tacho_needle = initializeNeedleCanvasGauge("tacho_needle","AnalogTachoMeter_Needle.png",0,9000,90,270,false,15,15);
                 _speed_needle = initializeNeedleCanvasGauge("speed_needle","AnalogSpeedMeter_Needle.png",0,280,75,210,false,15,15);
                 _boost_needle = initializeNeedleCanvasGauge("boost_needle","BoostMeter_Needle.png",-1.0,2.0,30,90,true,90,15);
