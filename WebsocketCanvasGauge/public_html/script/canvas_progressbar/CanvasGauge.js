@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-var CanvasGaugeCommon = function(canvas, img)
+var CanvasIndicator = function(canvas, img)
 {
     'use strict';
     //private
@@ -15,7 +15,12 @@ var CanvasGaugeCommon = function(canvas, img)
     this._canvas_height = canvas.height;
     
     this._requestAnimationFrameID;
-    
+};
+
+var CanvasGauge = function(canvas, img)
+{
+    'use strict';
+    CanvasIndicator.call(this, canvas, img);
     //public
     this.min = 0;
     this.max = 100;
@@ -23,14 +28,15 @@ var CanvasGaugeCommon = function(canvas, img)
     this.invert_fill = false;
     this.value = this.min;
 };
+Object.setPrototypeOf(CanvasGauge.prototype, CanvasIndicator.prototype);
 
-CanvasGaugeCommon.prototype.drawOneTime = function()
+CanvasGauge.prototype.drawOneTime = function()
 {
     'use strict';
     this._render();
 };
 
-CanvasGaugeCommon.prototype.drawStart = function()
+CanvasGauge.prototype.drawStart = function()
 {
     'use strict';
     var self = this;
@@ -41,7 +47,7 @@ CanvasGaugeCommon.prototype.drawStart = function()
         });
 };
 
-CanvasGaugeCommon.prototype.drawStop = function()
+CanvasGauge.prototype.drawStop = function()
 {
     'use strict';
     window.cancelAnimationFrame(this.requestAnimationFrameID);
@@ -49,7 +55,7 @@ CanvasGaugeCommon.prototype.drawStop = function()
 
 var CircularCanvasProgressBar = function(canvas, img)
 {
-    CanvasGaugeCommon.call(this, canvas, img);
+    CanvasGauge.call(this, canvas, img);
     
     'use strict';
     // Local value and instances
@@ -69,7 +75,7 @@ var CircularCanvasProgressBar = function(canvas, img)
     this.offset_x = 0;
     this.offset_y = 0;
 };
-Object.setPrototypeOf(CircularCanvasProgressBar.prototype, CanvasGaugeCommon.prototype);
+Object.setPrototypeOf(CircularCanvasProgressBar.prototype, CanvasGauge.prototype);
 
 /**
  * Calculate bodunding box of pie shape. (To define redraw region).
@@ -77,6 +83,7 @@ Object.setPrototypeOf(CircularCanvasProgressBar.prototype, CanvasGaugeCommon.pro
  * @param {type} centerX 
  * @param {type} centerY
  * @param {type} radius
+ * @param {type} inner_radius
  * @param {type} startAngle
  * @param {type} endAngle
  * @param {type} anticlockwise
@@ -218,17 +225,17 @@ CircularCanvasProgressBar.prototype._render = function()
 var RectangularCanvasProgressBar = function(canvas, img)
 {
     'use strict';
-    CanvasGaugeCommon.call(this, canvas, img);
+    CanvasGauge.call(this, canvas, img);
     
     //private
-    this._curr_Barpixel;
+    this._curr_Barpixel = 0;
     
     // Properties and Default values
     this.vertical = false;
     this.invert_direction = false;
     this.pixel_resolution = 1;
 };
-Object.setPrototypeOf(RectangularCanvasProgressBar.prototype, CanvasGaugeCommon.prototype);
+Object.setPrototypeOf(RectangularCanvasProgressBar.prototype, CanvasGauge.prototype);
 
 RectangularCanvasProgressBar.prototype._render = function()
 {   
@@ -375,7 +382,7 @@ RectangularCanvasProgressBar.prototype._render = function()
 var NeedleCanvasGauge = function(canvas, img)
 {
     'use strict';
-    CanvasGaugeCommon.call(this, canvas, img);
+    CanvasGauge.call(this, canvas, img);
 
     //private
     this._curr_rotAngle = 0;
@@ -391,7 +398,7 @@ var NeedleCanvasGauge = function(canvas, img)
     this.img_pivot_x = canvas.width/2;
     this.img_pivot_y = canvas.height/2;
 };
-Object.setPrototypeOf(NeedleCanvasGauge.prototype, CanvasGaugeCommon.prototype);
+Object.setPrototypeOf(NeedleCanvasGauge.prototype, CanvasGauge.prototype);
 
 //Public methods
 NeedleCanvasGauge.prototype._render = function()
