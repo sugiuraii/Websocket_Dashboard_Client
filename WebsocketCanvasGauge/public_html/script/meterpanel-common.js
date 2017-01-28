@@ -127,643 +127,664 @@ var GaugeControl = function()
     this.WaitTimeAfterWebSocketOpenClose = 5000;
 };
 
-GaugeControl.prototype = {
-    //public
-    /**
-     * Enable DefiWebSocket.<br>
-     * DefiWebSocketを有効化する
-     */
-    EnableDefiWebSocket : function()
-    {
-        'use strict';
-        this._Defi_WS = new DefiCOM_Websocket();
-        this._initializeWebSocket(this._Defi_WS);
-    },
-    /**
-     * Enable SSMWebSocket.<br>
-     * SSMWebSocketを有効化する
-     */
-    EnableSSMWebSocket : function()
-    {
-        'use strict';
-        this._SSM_WS = new SSMCOM_Websocket();
-        this._initializeWebSocket(this._SSM_WS);
-    },
-    /**
-     * Enable ArduinoWebSocket.<br>
-     * ArduinoWebSocketを有効化する
-     */
-    EnableArduinoWebSocket : function()
-    {
-        'use strict';
-        this._Arduino_WS = new ArduinoCOM_Websocket();
-        this._initializeWebSocket(this._Arduino_WS);
-    },
-    /**
-     * Enable ELM327WebSocket.<br>
-     * ELM327WebSocketを有効化する
-     */
-    EnableELM327WebSocket : function()
-    {
-        'use strict';
-        this._ELM327_WS = new ELM327COM_Websocket();
-        this._initializeWebSocket(this._ELM327_WS);
-    },
-    /**
-     * Enable FUELTRIPWebSocket.<br>
-     * FUELTRIPWebSocketを有効化する
-     */
-    EnableFUELTRIPWebSocket : function()
-    {
-        'use strict';
-        this._FUELTRIP_WS = new FUELTRIP_Websocket();
-        this._initializeWebSocket(this._FUELTRIP_WS);
-    },
-    /**
-     * Register defi parameter code and register event called when corresponding VAL packet is received. <br>
-     * 読み出すDefiパラメータコードと、VALパケット到着時のイベント処理ルーチンの登録
-     * @param {String} code Defi parameter code.<br> 登録するDefiParameterコード名。 
-     * @param {function(var)} receivedEventHandler Event called when corresponding VAL packet is received.<br>
-     * 対応するVALパケットを受信したときに呼び出されるイベント。
-     */
-    RegisterDefiParameterCode : function(code, receivedEventHandler)
-    {
-        'use strict';
-        if(this._Defi_WS !== null)
-            this._Defi_WS.onVALpacketReceived[code] = receivedEventHandler;
-        else
-            this._appendDebugMessage("DEFI", "ParameterCode Register is required. But Websocket is not enabled.");
-    },
-    /**
-     * Register arduino parameter code and register event called when corresponding VAL packet is received. <br>
-     * 読み出すDefiパラメータコードと、VALパケット到着時のイベント処理ルーチンの登録
-     * @param {String} code Arduino parameter code.<br> 登録するArduinoParameterコード名。 
-     * @param {function(var)} receivedEventHandler Event called when corresponding VAL packet is received.<br>
-     * 対応するVALパケットを受信したときに呼び出されるイベント。
-     */
-    RegisterArduinoParameterCode : function(code, receivedEventHandler)
-    {
-        'use strict';
-        if(this._Arduino_WS !== null)
-            this._Arduino_WS.onVALpacketReceived[code] = receivedEventHandler;
-        else
-            this._appendDebugMessage("ARDUINO", "ParameterCode Register is required. But Websocket is not enabled."); 
-    },
-    /**
-     * Register SSM parameter code and register event called when corresponding VAL packet is received. <br>
-     * 読み出すSSMパラメータコードと、VALパケット到着時のイベント処理ルーチンの登録
-     * @param {String} code SSM parameter code.<br> 登録するSSM Parameterコード名。
-     * @param {String} SlowFastFlag Read mode. Read mode must be "Slow", "Fast" or "Slow+Fast".<br>読み出しモード。"Slow"または"Fast"または"Slow+Fast"。 
-     * @param {function(var)} receivedEventHandler Event called when corresponding VAL packet is received.<br>
-     * 対応するVALパケットを受信したときに呼び出されるイベント。
-     */
-    RegisterSSMParameterCode : function(code, SlowFastFlag, receivedEventHandler)
-    {
-        'use strict';
-        if(SlowFastFlag !== "Slow" && SlowFastFlag !== "Fast"  && SlowFastFlag !== "Slow+Fast")
-            this._appendDebugMessage("SSM", "SlowFastFlag is "+SlowFastFlag+". Not Slow or Fast or Slow+Fast.");
-        else if (this._SSM_WS !== null)
-        {
-            // SSM SlowFastReadFlag is managed by parameter code. Not switch code. If switch code is assinged, need conversion.
-            this._SSM_SlowFastReadFlagList[this._convertSSMSwitchCodeToNumericCode(code)] = SlowFastFlag;
-            this._SSM_WS.onVALpacketReceived[code] = receivedEventHandler;
-        }
-        else
-            this._appendDebugMessage("SSM", "ParameterCode Register is required. But Websocket is not enabled."); 
+/**
+ * Enable DefiWebSocket.<br>
+ * DefiWebSocketを有効化する
+ */
+GaugeControl.prototype.EnableDefiWebSocket = function()
+{
+    'use strict';
+    this._Defi_WS = new DefiCOM_Websocket();
+    this._initializeWebSocket(this._Defi_WS);
+};
+    
+/**
+ * Enable SSMWebSocket.<br>
+ * SSMWebSocketを有効化する
+ */
+GaugeControl.prototype.EnableSSMWebSocket = function()
+{
+    'use strict';
+    this._SSM_WS = new SSMCOM_Websocket();
+    this._initializeWebSocket(this._SSM_WS);
+};
 
-    },
-    /**
-     * Register ELM327 parameter code and register event called when corresponding VAL packet is received. <br>
-     * 読み出すELM327パラメータコードと、VALパケット到着時のイベント処理ルーチンの登録
-     * @param {String} code ELM327 parameter code.<br> 登録するELM327 Parameterコード名。
-     * @param {String} SlowFastFlag Read mode. Read mode must be "Slow", "Fast" or "Slow+Fast".<br>読み出しモード。"Slow"または"Fast"または"Slow+Fast"。 
-     * @param {function(var)} receivedEventHandler Event called when corresponding VAL packet is received.<br>
-     * 対応するVALパケットを受信したときに呼び出されるイベント。
-     */
-    RegisterELM327ParameterCode : function(code, SlowFastFlag, receivedEventHandler)
-    {
-        'use strict';
-        if(SlowFastFlag !== "Slow" && SlowFastFlag !== "Fast"  && SlowFastFlag !== "Slow+Fast")
-            this._appendDebugMessage("ELM327", "SlowFastFlag is "+SlowFastFlag+". Not Slow or Fast or Slow+Fast.");
-        else if (this._ELM327_WS !== null)
-        {
-            this._ELM327_SlowFastReadFlagList[code] = SlowFastFlag;
-            this._ELM327_WS.onVALpacketReceived[code] = receivedEventHandler;
-        }
-        else
-            this._appendDebugMessage("ELM327", "ParameterCode Register is required. But Websocket is not enabled."); 
+/**
+ * Enable ArduinoWebSocket.<br>
+ * ArduinoWebSocketを有効化する
+ */
+GaugeControl.prototype.EnableArduinoWebSocket = function()
+{
+    'use strict';
+    this._Arduino_WS = new ArduinoCOM_Websocket();
+    this._initializeWebSocket(this._Arduino_WS);
+};
 
-    },
-    /**
-     * Register event which is called MOMENT_FUELTRIP VAL message is received.<br>
-     * MOMENT_FUELTRIP(瞬間燃費)メッセージを受信したときのイベントを登録。
-     * @param {function(moment_gasmilage, total_gas, total_trip, total_gasmilage)} receivedEvent Event to register.
-     */
-    RegisterMOMENTFUELTRIPPacketRecivedEvent : function(receivedEvent)
-    {
-        'use strict';
-        if(this._FUELTRIP_WS !== null)
-            this._FUELTRIP_WS.onMomentFUELTRIPpacketReceived = receivedEvent;
-        else
-            this._appendDebugMessage("FUELTRIP", "PacketReceivedEvent Register is required. But Websocket is not enabled."); 
+/**
+ * Enable ELM327WebSocket.<br>
+ * ELM327WebSocketを有効化する
+ */
+GaugeControl.prototype.EnableELM327WebSocket = function()
+{
+    'use strict';
+    this._ELM327_WS = new ELM327COM_Websocket();
+    this._initializeWebSocket(this._ELM327_WS);
+};
 
-    },
-    /**
-     * Register event which is called SECT_FUELTRIP VAL message is received.<br>
-     * SECT_FUELTRIP(区間燃費)メッセージを受信したときのイベントを登録。
-     * @param {function(sect_span, sect_trip, sect_gas, sect_gasmilage)} receivedEvent Event to register.
-     */
-    RegisterSECTFUELTRIPPacketRecivedEvent : function(receivedEvent)
-    {
-        'use strict';
-        if(this._FUELTRIP_WS !== null)
-            this._FUELTRIP_WS.onSectFUELTRIPpacketReceived = receivedEvent;
-        else
-            this._appendDebugMessage("FUELTRIP", "PacketReceivedEvent Register is required. But Websocket is not enabled."); 
+/**
+ * Enable FUELTRIPWebSocket.<br>
+ * FUELTRIPWebSocketを有効化する
+ */
+GaugeControl.prototype.EnableFUELTRIPWebSocket = function()
+{
+    'use strict';
+    this._FUELTRIP_WS = new FUELTRIP_Websocket();
+    this._initializeWebSocket(this._FUELTRIP_WS);
+};
 
-    },
-    /**
-     * Connect enabled websocket.<br>
-     * Please call Enable(Defi/SSM/ELM327/Arduino)Websocket method before connect.<br>
-     * 接続します。<br>
-     * 接続前にEnable(Defi/SSM/ELM327/Arduino)WebsocketメソッドでWebsocketを有効化してください。
-     */
-    ConnectWebSocket : function()
+/**
+ * Register defi parameter code and register event called when corresponding VAL packet is received. <br>
+ * 読み出すDefiパラメータコードと、VALパケット到着時のイベント処理ルーチンの登録
+ * @param {String} code Defi parameter code.<br> 登録するDefiParameterコード名。 
+ * @param {function(var)} receivedEventHandler Event called when corresponding VAL packet is received.<br>
+ * 対応するVALパケットを受信したときに呼び出されるイベント。
+ */
+GaugeControl.prototype.RegisterDefiParameterCode = function(code, receivedEventHandler)
+{
+    'use strict';
+    if(this._Defi_WS !== null)
+        this._Defi_WS.onVALpacketReceived[code] = receivedEventHandler;
+    else
+        this._appendDebugMessage("DEFI", "ParameterCode Register is required. But Websocket is not enabled.");
+};
+
+/**
+ * Register arduino parameter code and register event called when corresponding VAL packet is received. <br>
+ * 読み出すDefiパラメータコードと、VALパケット到着時のイベント処理ルーチンの登録
+ * @param {String} code Arduino parameter code.<br> 登録するArduinoParameterコード名。 
+ * @param {function(var)} receivedEventHandler Event called when corresponding VAL packet is received.<br>
+ * 対応するVALパケットを受信したときに呼び出されるイベント。
+ */
+GaugeControl.prototype.RegisterArduinoParameterCode = function(code, receivedEventHandler)
+{
+    'use strict';
+    if(this._Arduino_WS !== null)
+        this._Arduino_WS.onVALpacketReceived[code] = receivedEventHandler;
+    else
+        this._appendDebugMessage("ARDUINO", "ParameterCode Register is required. But Websocket is not enabled."); 
+};
+
+/**
+ * Register SSM parameter code and register event called when corresponding VAL packet is received. <br>
+ * 読み出すSSMパラメータコードと、VALパケット到着時のイベント処理ルーチンの登録
+ * @param {String} code SSM parameter code.<br> 登録するSSM Parameterコード名。
+ * @param {String} SlowFastFlag Read mode. Read mode must be "Slow", "Fast" or "Slow+Fast".<br>読み出しモード。"Slow"または"Fast"または"Slow+Fast"。 
+ * @param {function(var)} receivedEventHandler Event called when corresponding VAL packet is received.<br>
+ * 対応するVALパケットを受信したときに呼び出されるイベント。
+ */
+GaugeControl.prototype.RegisterSSMParameterCode = function(code, SlowFastFlag, receivedEventHandler)
+{
+    'use strict';
+    if(SlowFastFlag !== "Slow" && SlowFastFlag !== "Fast"  && SlowFastFlag !== "Slow+Fast")
+        this._appendDebugMessage("SSM", "SlowFastFlag is "+SlowFastFlag+". Not Slow or Fast or Slow+Fast.");
+    else if (this._SSM_WS !== null)
     {
-        'use strict';
-        if(this._Defi_WS !== null)
-        {
-            this._Defi_WS.URL = this.Defi_WS_URL;
-            this._Defi_WS.Connect();
-        }
-        if(this._SSM_WS !== null)
-        {
-            this._SSM_WS.URL = this.SSM_WS_URL;
-            this._SSM_WS.Connect();
-        }
-        if(this._Arduino_WS !== null)
-        {
-            this._Arduino_WS.URL = this.Arduino_WS_URL;
-            this._Arduino_WS.Connect();
-        }
-        if(this._ELM327_WS !== null)
-        {
-            this._ELM327_WS.URL = this.ELM327_WS_URL;
-            this._ELM327_WS.Connect();
-        }
-        if(this._FUELTRIP_WS !== null)
-        {
-            this._FUELTRIP_WS.URL = this.FUELTRIP_WS_URL;
-            this._FUELTRIP_WS.Connect();
-        }
-    },
-    /**
-     * Disconnect websocket.<br>Websocketを切断します.
-     */
-    DisconnectWebSocket : function()
+        // SSM SlowFastReadFlag is managed by parameter code. Not switch code. If switch code is assinged, need conversion.
+        this._SSM_SlowFastReadFlagList[this._convertSSMSwitchCodeToNumericCode(code)] = SlowFastFlag;
+        this._SSM_WS.onVALpacketReceived[code] = receivedEventHandler;
+    }
+    else
+        this._appendDebugMessage("SSM", "ParameterCode Register is required. But Websocket is not enabled."); 
+};
+
+/**
+ * Register ELM327 parameter code and register event called when corresponding VAL packet is received. <br>
+ * 読み出すELM327パラメータコードと、VALパケット到着時のイベント処理ルーチンの登録
+ * @param {String} code ELM327 parameter code.<br> 登録するELM327 Parameterコード名。
+ * @param {String} SlowFastFlag Read mode. Read mode must be "Slow", "Fast" or "Slow+Fast".<br>読み出しモード。"Slow"または"Fast"または"Slow+Fast"。 
+ * @param {function(var)} receivedEventHandler Event called when corresponding VAL packet is received.<br>
+ * 対応するVALパケットを受信したときに呼び出されるイベント。
+ */
+GaugeControl.prototype.RegisterELM327ParameterCode = function(code, SlowFastFlag, receivedEventHandler)
+{
+    'use strict';
+    if(SlowFastFlag !== "Slow" && SlowFastFlag !== "Fast"  && SlowFastFlag !== "Slow+Fast")
+        this._appendDebugMessage("ELM327", "SlowFastFlag is "+SlowFastFlag+". Not Slow or Fast or Slow+Fast.");
+    else if (this._ELM327_WS !== null)
     {
-        'use strict';
-        if(this._Defi_WS !== null)
-            this._Defi_WS.Close();
-        if(this._SSM_WS !== null)
-            this._SSM_WS.Close();
-        if(this._Arduino_WS !== null)
-            this._Arduino_WS.Close();
-        if(this._ELM327_WS !== null)
-            this._ELM327_WS.Close();
-        if(this._FUELTRIP_WS !== null)
-            this._FUELTRIP_WS.Close();
-    },
-    /**
-     * Check websocket status and update indicator.<br> Please register this method to setInterval().<br>
-     * Websocket状態を確認して、インジケータの表示を更新します<br> リアルタイムで表示する際はsetInterval()メソッドに登録し定期的に呼ぶこと。
-     * @see GaugeControl.Defi_StatusIndicatorID
-     * @see GaugeControl.SSM_StatusIndicatorID
-     * @see GaugeControl.Arduino_StatusIndicatorID
-     * @see GaugeControl.ELM327_StatusIndicatorID
-     * @see GaugeControl.FUELTRIP_StatusIndicatorID
-     */
-    CheckWebSocketStatus : function()
+        this._ELM327_SlowFastReadFlagList[code] = SlowFastFlag;
+        this._ELM327_WS.onVALpacketReceived[code] = receivedEventHandler;
+    }
+    else
+        this._appendDebugMessage("ELM327", "ParameterCode Register is required. But Websocket is not enabled."); 
+
+};
+
+/**
+ * Register event which is called MOMENT_FUELTRIP VAL message is received.<br>
+ * MOMENT_FUELTRIP(瞬間燃費)メッセージを受信したときのイベントを登録。
+ * @param {function(moment_gasmilage, total_gas, total_trip, total_gasmilage)} receivedEvent Event to register.
+ */
+GaugeControl.prototype.RegisterMOMENTFUELTRIPPacketRecivedEvent = function(receivedEvent)
+{
+    'use strict';
+    if(this._FUELTRIP_WS !== null)
+        this._FUELTRIP_WS.onMomentFUELTRIPpacketReceived = receivedEvent;
+    else
+        this._appendDebugMessage("FUELTRIP", "PacketReceivedEvent Register is required. But Websocket is not enabled."); 
+
+};
+
+/**
+ * Register event which is called SECT_FUELTRIP VAL message is received.<br>
+ * SECT_FUELTRIP(区間燃費)メッセージを受信したときのイベントを登録。
+ * @param {function(sect_span, sect_trip, sect_gas, sect_gasmilage)} receivedEvent Event to register.
+ */
+GaugeControl.prototype.RegisterSECTFUELTRIPPacketRecivedEvent = function(receivedEvent)
+{
+    'use strict';
+    if(this._FUELTRIP_WS !== null)
+        this._FUELTRIP_WS.onSectFUELTRIPpacketReceived = receivedEvent;
+    else
+        this._appendDebugMessage("FUELTRIP", "PacketReceivedEvent Register is required. But Websocket is not enabled."); 
+
+};
+
+/**
+ * Connect enabled websocket.<br>
+ * Please call Enable(Defi/SSM/ELM327/Arduino)Websocket method before connect.<br>
+ * 接続します。<br>
+ * 接続前にEnable(Defi/SSM/ELM327/Arduino)WebsocketメソッドでWebsocketを有効化してください。
+ */
+GaugeControl.prototype.ConnectWebSocket = function()
+{
+    'use strict';
+    if(this._Defi_WS !== null)
     {
-        'use strict';
-        this._changeWebSocketIndicator(this._Defi_WS, this.Defi_StatusIndicatorID);
-        this._changeWebSocketIndicator(this._SSM_WS, this.SSM_StatusIndicatorID);
-        this._changeWebSocketIndicator(this._Arduino_WS, this.Arduino_StatusIndicatorID);
-        this._changeWebSocketIndicator(this._ELM327_WS, this.ELM327_StatusIndicatorID);
-        this._changeWebSocketIndicator(this._FUELTRIP_WS, this.FUELTRIP_StatusIndicatorID);
-    },
-    /**
-     * Show or Hide debug message window.<br>デバッグメッセージウインドウを表示、非表示します。
-     */
-    ShowDebugMessage : function()
+        this._Defi_WS.URL = this.Defi_WS_URL;
+        this._Defi_WS.Connect();
+    }
+    if(this._SSM_WS !== null)
     {
-        'use strict';
-        if($(this.MessageWindowID).css("display") === "none")
-        {
-            //Show debug message window
-            $(this.MessageWindowID).css("display","inline");                    
-        }
-        else
-        {
-            //Hide debug message window
-            $(this.MessageWindowID).css("display","none");
-        }
-    },
-    /**
-     * Send FUELTRIP_WS_RESET packet and reset fuel/trip meter.<br>FUELTRIP_WS_RESETパケットを送信し、燃料消費、トリップ、燃費をリセットします。
-     */
-    ResetFuelTrip : function()
+        this._SSM_WS.URL = this.SSM_WS_URL;
+        this._SSM_WS.Connect();
+    }
+    if(this._Arduino_WS !== null)
     {
-        'use strict';
-        if(this._FUELTRIP_WS === null)
-        {
-            this._appendDebugMessage("FUELTRIP", "ResetFuelTrip() is called. But FUELTRIP_WS is null");
-        }
-        else if(window.confirm('Reset fuel and trip?'))
-        {
-            this._FUELTRIP_WS.SendReset();
-        };
-    },
-    /**
-     * Send (DEFI/ARDUINO)_SEND_INTERVAL packet and change send interval of VAL packet for Defi/Arduino Websocket.<br>
-     * (DEFI/ARDUINO)_SEND_INTERVALパケットを送信し、Defi/Arduino WebsocketのVALパケットの送信頻度を変更します。
-     * @see GaugeControl.DEFIARDUINOWSInverval_SpinnerID
-     */
-    DefiArduinoWSIntervalChange : function()
+        this._Arduino_WS.URL = this.Arduino_WS_URL;
+        this._Arduino_WS.Connect();
+    }
+    if(this._ELM327_WS !== null)
     {
-        'use strict';
-        var interval = $(this.DEFIARDUINOWSInverval_SpinnerID).val();
-        if(this._Defi_WS !== null)
-            this._Defi_WS.SendWSInterval(interval);
-        if(this._Arduino_WS !== null)
-            this._Arduino_WS.SendWSInterval(interval);
-        localStorage.WSInterval = interval;
-    },
-    /**
-     * Get the list of all available DefiParameterCodeList<br>
-     * 利用可能なDefiParameterCodeのリストを取得します。
-     * @returns {String[]} Array of String that contains all of available DefiParameterCode<br>
-     *              利用可能なDefiParameterCodeListを示すStringの配列
-     */
-    getDefiParameterCodeList : function()
+        this._ELM327_WS.URL = this.ELM327_WS_URL;
+        this._ELM327_WS.Connect();
+    }
+    if(this._FUELTRIP_WS !== null)
     {
-        return this.DefiParameterCode.keys(); 
-    },
-    /**
-     * Get the list of all available SSMParameterCodeList<br>
-     * 利用可能なSSMParameterCodeのリストを取得します。
-     * @returns {String[]} Array of String that contains all of available SSMParameterCode<br>
-     *              利用可能なSSMParameterCodeListを示すStringの配列
-     */
-    getSSMParameterCodeList : function()
+        this._FUELTRIP_WS.URL = this.FUELTRIP_WS_URL;
+        this._FUELTRIP_WS.Connect();
+    }
+};
+
+/**
+ * Disconnect websocket.<br>Websocketを切断します.
+ */
+GaugeControl.prototype.DisconnectWebSocket = function()
+{
+    'use strict';
+    if(this._Defi_WS !== null)
+        this._Defi_WS.Close();
+    if(this._SSM_WS !== null)
+        this._SSM_WS.Close();
+    if(this._Arduino_WS !== null)
+        this._Arduino_WS.Close();
+    if(this._ELM327_WS !== null)
+        this._ELM327_WS.Close();
+    if(this._FUELTRIP_WS !== null)
+        this._FUELTRIP_WS.Close();
+};
+
+/**
+ * Check websocket status and update indicator.<br> Please register this method to setInterval().<br>
+ * Websocket状態を確認して、インジケータの表示を更新します<br> リアルタイムで表示する際はsetInterval()メソッドに登録し定期的に呼ぶこと。
+ * @see GaugeControl.Defi_StatusIndicatorID
+ * @see GaugeControl.SSM_StatusIndicatorID
+ * @see GaugeControl.Arduino_StatusIndicatorID
+ * @see GaugeControl.ELM327_StatusIndicatorID
+ * @see GaugeControl.FUELTRIP_StatusIndicatorID
+ */
+GaugeControl.prototype.CheckWebSocketStatus = function()
+{
+    'use strict';
+    this._changeWebSocketIndicator(this._Defi_WS, this.Defi_StatusIndicatorID);
+    this._changeWebSocketIndicator(this._SSM_WS, this.SSM_StatusIndicatorID);
+    this._changeWebSocketIndicator(this._Arduino_WS, this.Arduino_StatusIndicatorID);
+    this._changeWebSocketIndicator(this._ELM327_WS, this.ELM327_StatusIndicatorID);
+    this._changeWebSocketIndicator(this._FUELTRIP_WS, this.FUELTRIP_StatusIndicatorID);
+};
+
+/**
+ * Show or Hide debug message window.<br>デバッグメッセージウインドウを表示、非表示します。
+ */
+GaugeControl.prototype.ShowDebugMessage = function()
+{
+    'use strict';
+    if($(this.MessageWindowID).css("display") === "none")
     {
-        return this.SSMParameterCode.keys();
-    },
-    /**
-     * Get the list of all available ArduinoParameterCodeList<br>
-     * 利用可能なArduinoParameterCodeのリストを取得します。
-     * @returns {String[]} Array of String that contains all of available ArduinoParameterCode<br>
-     *              利用可能なArduinoParameterCodeListを示すStringの配列
-     */
-    getArduinoParameterCodeList : function()
+        //Show debug message window
+        $(this.MessageWindowID).css("display","inline");                    
+    }
+    else
     {
-        return this.ArduinoParameterCode.keys();
-    },
-    /**
-     * Get the list of all available ELM327ParameterCodeList<br>
-     * 利用可能なELM327ParameterCodeのリストを取得します。
-     * @returns {String[]} Array of String that contains all of available ELM327ParameterCode<br>
-     *              利用可能なELM327ParameterCodeListを示すStringの配列
-     */
-    getELM327ParameterCodeList : function()
+        //Hide debug message window
+        $(this.MessageWindowID).css("display","none");
+    }
+};
+
+/**
+ * Send FUELTRIP_WS_RESET packet and reset fuel/trip meter.<br>FUELTRIP_WS_RESETパケットを送信し、燃料消費、トリップ、燃費をリセットします。
+ */
+GaugeControl.prototype.ResetFuelTrip = function()
+{
+    'use strict';
+    if(this._FUELTRIP_WS === null)
     {
-        return this.ELM327ParameterCode.keys();
-    },
-    /**
-     * Add debug message window html into body element.(Call this in window.onload)<br>
-     * デバッグメッセージウインドを追加します。(window.onloadからコールしてください)
-     */
-    addDebugMessageWindow : function()
+        this._appendDebugMessage("FUELTRIP", "ResetFuelTrip() is called. But FUELTRIP_WS is null");
+    }
+    else if(window.confirm('Reset fuel and trip?'))
     {
-        'use strict';
-        
-        $('body').ready(function()
-        {
-            var html = '<div class=\"debug_message\" id=\"div_message\" >\
-                        </div>';
-            $("body").append(html);
-        });
-    },
-    /**
-     * Add control panel window (button, interval spiiner, websocket indicator).<br>
-     * コントロールパネルウインドウを追加します(ボタン、interval controler, websocket inducator含む)(window.onloadからコールしてください)
-     */
-    addControlPanel : function()
+        this._FUELTRIP_WS.SendReset();
+    };
+};
+
+/**
+ * Send (DEFI/ARDUINO)_SEND_INTERVAL packet and change send interval of VAL packet for Defi/Arduino Websocket.<br>
+ * (DEFI/ARDUINO)_SEND_INTERVALパケットを送信し、Defi/Arduino WebsocketのVALパケットの送信頻度を変更します。
+ * @see GaugeControl.DEFIARDUINOWSInverval_SpinnerID
+ */
+GaugeControl.prototype.DefiArduinoWSIntervalChange = function()
+{
+    'use strict';
+    var interval = $(this.DEFIARDUINOWSInverval_SpinnerID).val();
+    if(this._Defi_WS !== null)
+        this._Defi_WS.SendWSInterval(interval);
+    if(this._Arduino_WS !== null)
+        this._Arduino_WS.SendWSInterval(interval);
+    localStorage.WSInterval = interval;
+};
+
+/**
+ * Get the list of all available DefiParameterCodeList<br>
+ * 利用可能なDefiParameterCodeのリストを取得します。
+ * @returns {String[]} Array of String that contains all of available DefiParameterCode<br>
+ *              利用可能なDefiParameterCodeListを示すStringの配列
+ */
+GaugeControl.prototype.getDefiParameterCodeList = function()
+{
+    return this.DefiParameterCode.keys(); 
+};
+
+/**
+ * Get the list of all available SSMParameterCodeList<br>
+ * 利用可能なSSMParameterCodeのリストを取得します。
+ * @returns {String[]} Array of String that contains all of available SSMParameterCode<br>
+ *              利用可能なSSMParameterCodeListを示すStringの配列
+ */
+GaugeControl.prototype.getSSMParameterCodeList = function()
+{
+    return this.SSMParameterCode.keys();
+};
+
+/**
+ * Get the list of all available ArduinoParameterCodeList<br>
+ * 利用可能なArduinoParameterCodeのリストを取得します。
+ * @returns {String[]} Array of String that contains all of available ArduinoParameterCode<br>
+ *              利用可能なArduinoParameterCodeListを示すStringの配列
+ */
+GaugeControl.prototype.getArduinoParameterCodeList = function()
+{
+    return this.ArduinoParameterCode.keys();
+};
+
+/**
+ * Get the list of all available ELM327ParameterCodeList<br>
+ * 利用可能なELM327ParameterCodeのリストを取得します。
+ * @returns {String[]} Array of String that contains all of available ELM327ParameterCode<br>
+ *              利用可能なELM327ParameterCodeListを示すStringの配列
+ */
+GaugeControl.prototype.getELM327ParameterCodeList = function()
+{
+    return this.ELM327ParameterCode.keys();
+};
+
+/**
+ * Add debug message window html into body element.(Call this in window.onload)<br>
+ * デバッグメッセージウインドを追加します。(window.onloadからコールしてください)
+ */
+GaugeControl.prototype.addDebugMessageWindow = function()
+{
+    'use strict';
+
+    $('body').ready(function()
     {
-        'use strict';
-        
-        $('body').ready(function()
-        {
-            var html = '\
-            <div id=\"controlPanel\" class=\"controlPanel\">\
-                <button id=\"button_reset\" class=\"button_reset\">Reset</button>\
-                <button id=\"button_debug\" class=\"button_debug\">Debug</button>\
-                <div class=\"websocket_statusBox\">\
-                    <div>Websocket Status</div>\
-                    <div id=\"defi_status\">Defi</div>\
-                    <div id=\"ssm_status\">SSM</div>\
-                    <div id=\"arduino_status\">Arduino</div>\
-                    <div id=\"elm327_status\">ELM327</div>\
-                    <div id=\"fueltrip_status\">FUELTRIP</div>\
-                    <div>\
-                        DefiWSInterval<br>\
-                        <input id=\"spinner_defiWSinterval\" type=\"number\" min=\"0\" max=\"10\" step=\"1\" value =\"0\" onchange=\"gaugeControl.DefiArduinoWSIntervalChange()\"/>\
-                    </div>\
+        var html = '<div class=\"debug_message\" id=\"div_message\" >\
+                    </div>';
+        $("body").append(html);
+    });
+};
+
+/**
+ * Add control panel window (button, interval spiiner, websocket indicator).<br>
+ * コントロールパネルウインドウを追加します(ボタン、interval controler, websocket inducator含む)(window.onloadからコールしてください)
+ */
+GaugeControl.prototype.addControlPanel = function()
+{
+    'use strict';
+
+    $('body').ready(function()
+    {
+        var html = '\
+        <div id=\"controlPanel\" class=\"controlPanel\">\
+            <button id=\"button_reset\" class=\"button_reset\">Reset</button>\
+            <button id=\"button_debug\" class=\"button_debug\">Debug</button>\
+            <div class=\"websocket_statusBox\">\
+                <div>Websocket Status</div>\
+                <div id=\"defi_status\">Defi</div>\
+                <div id=\"ssm_status\">SSM</div>\
+                <div id=\"arduino_status\">Arduino</div>\
+                <div id=\"elm327_status\">ELM327</div>\
+                <div id=\"fueltrip_status\">FUELTRIP</div>\
+                <div>\
+                    DefiWSInterval<br>\
+                    <input id=\"spinner_defiWSinterval\" type=\"number\" min=\"0\" max=\"10\" step=\"1\" value =\"0\" onchange=\"gaugeControl.DefiArduinoWSIntervalChange()\"/>\
                 </div>\
             </div>\
-            ';
-            $('body').append(html);
-        });
+        </div>\
+        ';
+        $('body').append(html);
+    });
 
-        //Register button event
-        var self = this;
-        $('#button_reset').ready(function(){
-            $("#button_reset").click(function(){
-                self.ResetFuelTrip();
-            });    
+    //Register button event
+    var self = this;
+    $('#button_reset').ready(function(){
+        $("#button_reset").click(function(){
+            self.ResetFuelTrip();
+        });    
+    });
+    $('#button_debug').ready(function(){
+        $("#button_debug").click(function(){
+            self.ShowDebugMessage();
         });
-        $('#button_debug').ready(function(){
-            $("#button_debug").click(function(){
-                self.ShowDebugMessage();
-            });
-        });
-        
-        //set interval to websocket indicator
-        $('#controlPanel').ready(function()
-        {
-            setInterval(function(){
-                self.CheckWebSocketStatus();
-            }, 1000);
-        });
-    },
-    //private
-    /**
-     * Initialize websocket obj.
-     * @param {Defi/SSM/Arduino/ELM327/FUELTRIP_Websocket} webSocketObj to initialize.
-     * @private
-     */
-    _initializeWebSocket : function(webSocketObj)
+    });
+
+    //set interval to websocket indicator
+    $('#controlPanel').ready(function()
     {
-        'use strict';
-        var self = this;
-        webSocketObj.onERRpacketReceived = function(msg)
-        {
-            self._appendDebugMessage(webSocketObj.ModePrefix, msg);
-        };
-        webSocketObj.onRESpacketReceived = function(msg)
-        {
-            self._appendDebugMessage(webSocketObj.ModePrefix, msg);
-        };
-        webSocketObj.onWebsocketError = function(msg)
-        {
-            self._appendDebugMessage(webSocketObj.ModePrefix, msg);
-        };
-        webSocketObj.onWebsocketOpen = function()
-        {
-            self._appendDebugMessage(webSocketObj.ModePrefix, "Connection started");
-            // call _websocketCommunicationOnOpen(webSocketObj) 5(changeable by WaitTimeAfterWebSocketOpenClose) sec after websocket open.
-            setTimeout(self._websocketCommunicationOnOpen(webSocketObj), self.WaitTimeAfterWebSocketOpenClose);
-        };  
-        webSocketObj.onWebsocketClose = function()
-        {
-            self._appendDebugMessage(webSocketObj.ModePrefix, "Connection closed");
-            self._appendDebugMessage(webSocketObj.ModePrefix, "Reconnect after 5sec...");
-            setTimeout(
-            function(){
-                webSocketObj.Connect();
-            }, self.WaitTimeAfterWebSocketOpenClose);                
-        };
-    },
-    /**
-     * Append message to debug messsage window.
-     * @param {String} prefix Message prefix
-     * @param {String} message debug message
-     * @private
-     */
-    _appendDebugMessage : function(prefix,message)
+        setInterval(function(){
+            self.CheckWebSocketStatus();
+        }, 1000);
+    });
+};
+
+/**
+ * Initialize websocket obj.
+ * @param {Defi/SSM/Arduino/ELM327/FUELTRIP_Websocket} webSocketObj to initialize.
+ * @private
+ */
+GaugeControl.prototype._initializeWebSocket = function(webSocketObj)
+{
+    'use strict';
+    var self = this;
+    webSocketObj.onERRpacketReceived = function(msg)
     {
-        'use strict';
-        var output_message = prefix + " : "  + message;
-        $(this.MessageWindowID).append(output_message + '<br/>');
-    },
-    /**
-     * Check websocket status
-     * @param {type} webSocketObj
-     * @param {type} indicatorElementID
-     * @private
-     */
-    _changeWebSocketIndicator : function(webSocketObj, indicatorElementID)
+        self._appendDebugMessage(webSocketObj.ModePrefix, msg);
+    };
+    webSocketObj.onRESpacketReceived = function(msg)
     {
-        'use strict';
-        //Check if indicator element exists or not
-        if($(indicatorElementID)[0])
+        self._appendDebugMessage(webSocketObj.ModePrefix, msg);
+    };
+    webSocketObj.onWebsocketError = function(msg)
+    {
+        self._appendDebugMessage(webSocketObj.ModePrefix, msg);
+    };
+    webSocketObj.onWebsocketOpen = function()
+    {
+        self._appendDebugMessage(webSocketObj.ModePrefix, "Connection started");
+        // call _websocketCommunicationOnOpen(webSocketObj) 5(changeable by WaitTimeAfterWebSocketOpenClose) sec after websocket open.
+        setTimeout(self._websocketCommunicationOnOpen(webSocketObj), self.WaitTimeAfterWebSocketOpenClose);
+    };  
+    webSocketObj.onWebsocketClose = function()
+    {
+        self._appendDebugMessage(webSocketObj.ModePrefix, "Connection closed");
+        self._appendDebugMessage(webSocketObj.ModePrefix, "Reconnect after 5sec...");
+        setTimeout(
+        function(){
+            webSocketObj.Connect();
+        }, self.WaitTimeAfterWebSocketOpenClose);                
+    };
+};
+
+/**
+ * Append message to debug messsage window.
+ * @param {String} prefix Message prefix
+ * @param {String} message debug message
+ * @private
+ */
+GaugeControl.prototype._appendDebugMessage = function(prefix,message)
+{
+    'use strict';
+    var output_message = prefix + " : "  + message;
+    $(this.MessageWindowID).append(output_message + '<br/>');
+};
+
+/**
+ * Check websocket status
+ * @param {type} webSocketObj
+ * @param {type} indicatorElementID
+ * @private
+ */
+GaugeControl.prototype._changeWebSocketIndicator = function(webSocketObj, indicatorElementID)
+{
+    'use strict';
+    //Check if indicator element exists or not
+    if($(indicatorElementID)[0])
+    {
+        if(webSocketObj === null)
+            $(indicatorElementID).css("color","gray");
+        else
         {
-            if(webSocketObj === null)
-                $(indicatorElementID).css("color","gray");
-            else
-            {
-                switch(webSocketObj.getReadyState()) 
-                { 
-                    case -1: //Websocket obj is undefined
-                        $(indicatorElementID).css("color","gray");
-                        break;
-                    case 0://CONNECTING
-                        $(indicatorElementID).css("color","blue");
-                        break;
-                    case 1://OPEN
-                        $(indicatorElementID).css("color","green");
-                        break;
-                    case 2://CLOSING
-                        $(indicatorElementID).css("color","orange");
-                        break;
-                    case 3://CLOSED
-                        $(indicatorElementID).css("color","red");
-                        break;
-                    default:
-                        // this never happens
-                        break;                      
-                }
+            switch(webSocketObj.getReadyState()) 
+            { 
+                case -1: //Websocket obj is undefined
+                    $(indicatorElementID).css("color","gray");
+                    break;
+                case 0://CONNECTING
+                    $(indicatorElementID).css("color","blue");
+                    break;
+                case 1://OPEN
+                    $(indicatorElementID).css("color","green");
+                    break;
+                case 2://CLOSING
+                    $(indicatorElementID).css("color","orange");
+                    break;
+                case 3://CLOSED
+                    $(indicatorElementID).css("color","red");
+                    break;
+                default:
+                    // this never happens
+                    break;                      
             }
-        }
-    },
-    /**
-     * Initial communication on Websocket open
-     * @param {type} webSocketObj
-     * @private
-     */
-    _websocketCommunicationOnOpen : function(webSocketObj)
-    {
-        'use strict';
-        if(webSocketObj.ModePrefix === "DEFI" || webSocketObj.ModePrefix === "ARDUINO")
-        {
-            for(var paramCodekey in webSocketObj.onVALpacketReceived)
-                webSocketObj.SendWSSend(paramCodekey, "true");
-            webSocketObj.SendWSInterval(localStorage.WSInterval);
-            $(this.DEFIARDUINOWSInverval_SpinnerID).val(localStorage.WSInterval);
-        }
-        else if (webSocketObj.ModePrefix === "SSM" || webSocketObj.ModePrefix === "ELM327" )
-        {
-            for(var paramCodekey in webSocketObj.onVALpacketReceived)
-            {
-                var readMode;
-                var convertedParamCodeKey;
-                if(webSocketObj.ModePrefix === "SSM")
-                {
-                    convertedParamCodeKey = this._convertSSMSwitchCodeToNumericCode(paramCodekey);
-                    readMode = this._SSM_SlowFastReadFlagList[convertedParamCodeKey];
-                }
-                else if(webSocketObj.ModePrefix === "ELM327")
-                {
-                    convertedParamCodeKey = paramCodekey;
-                    readMode = this._ELM327_SlowFastReadFlagList[paramCodekey];
-                }
-                
-                if(readMode === "Slow")
-                    webSocketObj.SendCOMRead(convertedParamCodeKey, "SLOW", "true");
-                else if(readMode === "Fast")
-                    webSocketObj.SendCOMRead(convertedParamCodeKey, "FAST", "true");
-                else if(readMode === "Slow+Fast")
-                {
-                    webSocketObj.SendCOMRead(convertedParamCodeKey, "SLOW", "true");
-                    webSocketObj.SendCOMRead(convertedParamCodeKey, "FAST", "true");
-                }
-                else
-                    this._appendDebugMessage(convertedParamCodeKey.ModePrefix, "Bug: readMode property is wrong.");
-            }
-        }
-        else if (webSocketObj.ModePrefix === "FUELTRIP")
-        {
-            //Do nothing.
-        }
-    },
-    /**
-     * Convert SSM switch code to numeric code.
-     * @param {type} paramCodeKey
-     * @private
-     */
-    _convertSSMSwitchCodeToNumericCode : function(paramCodeKey)
-    {
-        'use strict';
-        switch(paramCodeKey){
-            case "AT_Vehicle_ID" : 
-            case "Test_Mode_Connector" : 
-            case "Read_Memory_Connector" : 
-                return "Switch_P0x061";
-            break;
-
-            case "Neutral_Position_Switch" : 
-            case "Idle_Switch" : 
-            case "Intercooler_AutoWash_Switch" : 
-            case "Ignition_Switch" : 
-            case "Power_Steering_Switch" : 
-            case "Air_Conditioning_Switch" : 
-                return "Switch_P0x062";
-            break;
-
-            case "Handle_Switch" : 
-            case "Starter_Switch" : 
-            case "Front_O2_Rich_Signal" : 
-            case "Rear_O2_Rich_Signal" : 
-            case "Front_O2_2_Rich_Signal" : 
-            case "Knock_Signal_1" : 
-            case "Knock_Signal_2" : 
-            case "Electrical_Load_Signal" : 
-                return "Switch_P0x063";
-            break;
-
-            case "Crank_Position_Sensor" : 
-            case "Cam_Position_Sensor" : 
-            case "Defogger_Switch" : 
-            case "Blower_Switch" : 
-            case "Interior_Light_Switch" : 
-            case "Wiper_Switch" : 
-            case "AirCon_Lock_Signal" : 
-            case "AirCon_Mid_Pressure_Switch" : 
-                return "Switch_P0x064";
-            break;
-
-            case "AirCon_Compressor_Signal" : 
-            case "Radiator_Fan_Relay_3" : 
-            case "Radiator_Fan_Relay_1" : 
-            case "Radiator_Fan_Relay_2" : 
-            case "Fuel_Pump_Relay" : 
-            case "Intercooler_AutoWash_Relay" : 
-            case "CPC_Solenoid_Valve" : 
-            case "BlowBy_Leak_Connector" :
-                return "Switch_P0x065";
-            break;
-
-            case "PCV_Solenoid_Valve" : 
-            case "TGV_Output" : 
-            case "TGV_Drive" : 
-            case "Variable_Intake_Air_Solenoid" : 
-            case "Pressure_Sources_Change" : 
-            case "Vent_Solenoid_Valve" : 
-            case "P_S_Solenoid_Valve" : 
-            case "Assist_Air_Solenoid_Valve" : 
-                return "Switch_P0x066";
-            break;
-
-            case "Tank_Sensor_Control_Valve" : 
-            case "Relief_Valve_Solenoid_1" : 
-            case "Relief_Valve_Solenoid_2" : 
-            case "TCS_Relief_Valve_Solenoid" : 
-            case "Ex_Gas_Positive_Pressure" : 
-            case "Ex_Gas_Negative_Pressure" : 
-            case "Intake_Air_Solenoid" : 
-            case "Muffler_Control" : 
-                return "Switch_P0x067";
-            break;
-
-            case "Retard_Signal_from_AT" : 
-            case "Fuel_Cut_Signal_from_AT" : 
-            case "Ban_of_Torque_Down" : 
-            case "Request_Torque_Down_VDC" : 
-                return "Switch_P0x068";
-            break;
-
-            case "Torque_Control_Signal_1" : 
-            case "Torque_Control_Signal_2" : 
-            case "Torque_Permission_Signal" : 
-            case "EAM_Signal" : 
-            case "AT_coop_lock_up_signal" : 
-            case "AT_coop_lean_burn_signal" : 
-            case "AT_coop_rich_spike_signal" : 
-            case "AET_Signal" : 
-                return "Switch_P0x069";
-            break;
-
-            case "ETC_Motor_Relay" : 
-                return "Switch_P0x120";
-            break;
-
-            case "Clutch_Switch" : 
-            case "Stop_Light_Switch" : 
-            case "Set_Coast_Switch" : 
-            case "Rsume_Accelerate_Switch" : 
-            case "Brake_Switch" : 
-            case "Accelerator_Switch" :
-                return "Switch_P0x121";
-            break;
-            
-            default :
-                return paramCodeKey;
-            break;
         }
     }
 };
 
-//Constants
+/**
+ * Initial communication on Websocket open
+ * @param {type} webSocketObj
+ * @private
+ */
+GaugeControl.prototype._websocketCommunicationOnOpen = function(webSocketObj)
+{
+    'use strict';
+    if(webSocketObj.ModePrefix === "DEFI" || webSocketObj.ModePrefix === "ARDUINO")
+    {
+        for(var paramCodekey in webSocketObj.onVALpacketReceived)
+            webSocketObj.SendWSSend(paramCodekey, "true");
+        webSocketObj.SendWSInterval(localStorage.WSInterval);
+        $(this.DEFIARDUINOWSInverval_SpinnerID).val(localStorage.WSInterval);
+    }
+    else if (webSocketObj.ModePrefix === "SSM" || webSocketObj.ModePrefix === "ELM327" )
+    {
+        for(var paramCodekey in webSocketObj.onVALpacketReceived)
+        {
+            var readMode;
+            var convertedParamCodeKey;
+            if(webSocketObj.ModePrefix === "SSM")
+            {
+                convertedParamCodeKey = this._convertSSMSwitchCodeToNumericCode(paramCodekey);
+                readMode = this._SSM_SlowFastReadFlagList[convertedParamCodeKey];
+            }
+            else if(webSocketObj.ModePrefix === "ELM327")
+            {
+                convertedParamCodeKey = paramCodekey;
+                readMode = this._ELM327_SlowFastReadFlagList[paramCodekey];
+            }
+
+            if(readMode === "Slow")
+                webSocketObj.SendCOMRead(convertedParamCodeKey, "SLOW", "true");
+            else if(readMode === "Fast")
+                webSocketObj.SendCOMRead(convertedParamCodeKey, "FAST", "true");
+            else if(readMode === "Slow+Fast")
+            {
+                webSocketObj.SendCOMRead(convertedParamCodeKey, "SLOW", "true");
+                webSocketObj.SendCOMRead(convertedParamCodeKey, "FAST", "true");
+            }
+            else
+                this._appendDebugMessage(convertedParamCodeKey.ModePrefix, "Bug: readMode property is wrong.");
+        }
+    }
+    else if (webSocketObj.ModePrefix === "FUELTRIP")
+    {
+        //Do nothing.
+    }
+};
+
+/**
+ * Convert SSM switch code to numeric code.
+ * @param {type} paramCodeKey
+ * @private
+ */
+GaugeControl.prototype._convertSSMSwitchCodeToNumericCode = function(paramCodeKey)
+{
+    'use strict';
+    switch(paramCodeKey){
+        case "AT_Vehicle_ID" : 
+        case "Test_Mode_Connector" : 
+        case "Read_Memory_Connector" : 
+            return "Switch_P0x061";
+        break;
+
+        case "Neutral_Position_Switch" : 
+        case "Idle_Switch" : 
+        case "Intercooler_AutoWash_Switch" : 
+        case "Ignition_Switch" : 
+        case "Power_Steering_Switch" : 
+        case "Air_Conditioning_Switch" : 
+            return "Switch_P0x062";
+        break;
+
+        case "Handle_Switch" : 
+        case "Starter_Switch" : 
+        case "Front_O2_Rich_Signal" : 
+        case "Rear_O2_Rich_Signal" : 
+        case "Front_O2_2_Rich_Signal" : 
+        case "Knock_Signal_1" : 
+        case "Knock_Signal_2" : 
+        case "Electrical_Load_Signal" : 
+            return "Switch_P0x063";
+        break;
+
+        case "Crank_Position_Sensor" : 
+        case "Cam_Position_Sensor" : 
+        case "Defogger_Switch" : 
+        case "Blower_Switch" : 
+        case "Interior_Light_Switch" : 
+        case "Wiper_Switch" : 
+        case "AirCon_Lock_Signal" : 
+        case "AirCon_Mid_Pressure_Switch" : 
+            return "Switch_P0x064";
+        break;
+
+        case "AirCon_Compressor_Signal" : 
+        case "Radiator_Fan_Relay_3" : 
+        case "Radiator_Fan_Relay_1" : 
+        case "Radiator_Fan_Relay_2" : 
+        case "Fuel_Pump_Relay" : 
+        case "Intercooler_AutoWash_Relay" : 
+        case "CPC_Solenoid_Valve" : 
+        case "BlowBy_Leak_Connector" :
+            return "Switch_P0x065";
+        break;
+
+        case "PCV_Solenoid_Valve" : 
+        case "TGV_Output" : 
+        case "TGV_Drive" : 
+        case "Variable_Intake_Air_Solenoid" : 
+        case "Pressure_Sources_Change" : 
+        case "Vent_Solenoid_Valve" : 
+        case "P_S_Solenoid_Valve" : 
+        case "Assist_Air_Solenoid_Valve" : 
+            return "Switch_P0x066";
+        break;
+
+        case "Tank_Sensor_Control_Valve" : 
+        case "Relief_Valve_Solenoid_1" : 
+        case "Relief_Valve_Solenoid_2" : 
+        case "TCS_Relief_Valve_Solenoid" : 
+        case "Ex_Gas_Positive_Pressure" : 
+        case "Ex_Gas_Negative_Pressure" : 
+        case "Intake_Air_Solenoid" : 
+        case "Muffler_Control" : 
+            return "Switch_P0x067";
+        break;
+
+        case "Retard_Signal_from_AT" : 
+        case "Fuel_Cut_Signal_from_AT" : 
+        case "Ban_of_Torque_Down" : 
+        case "Request_Torque_Down_VDC" : 
+            return "Switch_P0x068";
+        break;
+
+        case "Torque_Control_Signal_1" : 
+        case "Torque_Control_Signal_2" : 
+        case "Torque_Permission_Signal" : 
+        case "EAM_Signal" : 
+        case "AT_coop_lock_up_signal" : 
+        case "AT_coop_lean_burn_signal" : 
+        case "AT_coop_rich_spike_signal" : 
+        case "AET_Signal" : 
+            return "Switch_P0x069";
+        break;
+
+        case "ETC_Motor_Relay" : 
+            return "Switch_P0x120";
+        break;
+
+        case "Clutch_Switch" : 
+        case "Stop_Light_Switch" : 
+        case "Set_Coast_Switch" : 
+        case "Rsume_Accelerate_Switch" : 
+        case "Brake_Switch" : 
+        case "Accelerator_Switch" :
+            return "Switch_P0x121";
+        break;
+
+        default :
+            return paramCodeKey;
+        break;
+    }
+};
+
 /**
  * Get available parameter code of DefiCOMWebsocket.<br>
  * DefiCOM Websocketの利用可能なParameterコード名

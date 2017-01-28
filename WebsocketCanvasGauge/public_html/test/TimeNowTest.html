@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TimeMeasuement test</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript">
+            var TESTCOUNT=10000000;
+            
+            var prevTime;
+            var nowTime;
+            var timeStep;
+            function getNowTime()
+            {
+                //nowTime = Date.now();
+                nowTime = performance.now();
+                timeStep = nowTime - prevTime;
+                prevTime = nowTime;
+            }
+            var prevCnt, nowCnt,cntStep;
+            function subtractOnly(i)
+            {
+                nowCnt = i;
+                cntStep = nowCnt - prevCnt;
+                prevCnt = nowCnt;
+            }
+            
+            function test1()
+            {
+                var i;
+
+                var elapsedBefore, elapsedAfter;
+                elapsedBefore = window.performance.now();
+                for( i = 0; i < TESTCOUNT; i++)
+                {
+                    getNowTime();
+                }
+                elapsedAfter = window.performance.now();
+
+                document.getElementById("interval1").textContent = (elapsedAfter - elapsedBefore)/TESTCOUNT*1000;
+                document.getElementById("interval1").textContent = document.getElementById("interval1").textContent + "us";
+                elapsedBefore = window.performance.now();
+                for( i = 0; i < TESTCOUNT; i++)
+                {
+                    subtractOnly();
+                }
+                elapsedAfter = window.performance.now();
+
+                document.getElementById("interval2").textContent = (elapsedAfter - elapsedBefore)/TESTCOUNT*1000;
+                document.getElementById("interval2").textContent = document.getElementById("interval2").textContent + "us";
+            }
+
+        </script>
+    </head>
+    <body>
+        <div>TODO write content</div> <br>
+        <button onclick="test1()"> test </button><br>
+        <div id="interval1">aa</div><br>
+        <div id="interval2">aa</div><br>
+    </body>
+</html>

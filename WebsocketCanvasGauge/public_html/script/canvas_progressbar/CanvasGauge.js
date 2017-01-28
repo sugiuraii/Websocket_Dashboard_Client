@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-var CanvasIndicator = function(canvas, img)
+var GanvasGauge = function(canvas, img)
 {
     'use strict';
     //private
@@ -15,12 +15,58 @@ var CanvasIndicator = function(canvas, img)
     this._canvas_height = canvas.height;
     
     this._requestAnimationFrameID;
+    this._previousAnimationTimeStamp = window.performance.now();
+    this._previousValueUpdateTimeStamp = window.performance.now();
+    this._valueUpdateInterval = 1;
+    this._value;
+    
+    Object.defineProperty(this, "value", 
+        {
+            set : function(val)
+            {
+                var nowTime = window.performance.now();
+                this._valueUpdateInterval = nowTime - this._previousValueUpdateTimeStamp;
+                this._previousValueUpdateTimeStamp = nowTime;
+                this._value = val;
+            },
+            get : function()
+            {
+                return this._value;
+            }
+        });
 };
 
-var CanvasGauge = function(canvas, img)
+GanvasGauge.prototype.drawOneTime = function()
 {
     'use strict';
-    CanvasIndicator.call(this, canvas, img);
+    this._render(true);
+};
+
+GanvasGauge.prototype.drawStart = function()
+{
+    'use strict';
+    this.drawOneTime();
+    var self = this;
+    
+    this.requestAnimationFrameID = requestAnimationFrame(function(timeStamp)
+        {
+            var frameInterval = timeStamp - self._previousAnimationTimeStamp;
+            self._previousAnimationTimeStamp = timeStamp;
+            self._render(false);
+            self.drawStart();
+        });
+};
+
+GanvasGauge.prototype.drawStop = function()
+{
+    'use strict';
+    window.cancelAnimationFrame(this.requestAnimationFrameID);
+};
+
+var CanvasGauge1D = function(canvas, img)
+{
+    'use strict';
+    GanvasGauge.call(this, canvas, img);
     //public
     this.min = 0;
     this.max = 100;
@@ -28,34 +74,11 @@ var CanvasGauge = function(canvas, img)
     this.invert_fill = false;
     this.value = this.min;
 };
-Object.setPrototypeOf(CanvasGauge.prototype, CanvasIndicator.prototype);
-
-CanvasGauge.prototype.drawOneTime = function()
-{
-    'use strict';
-    this._render();
-};
-
-CanvasGauge.prototype.drawStart = function()
-{
-    'use strict';
-    var self = this;
-    this.requestAnimationFrameID = requestAnimationFrame(function()
-        {
-            self._render();
-            self.drawStart();
-        });
-};
-
-CanvasGauge.prototype.drawStop = function()
-{
-    'use strict';
-    window.cancelAnimationFrame(this.requestAnimationFrameID);
-};
+Object.setPrototypeOf(CanvasGauge1D.prototype, GanvasGauge.prototype);
 
 var CircularCanvasProgressBar = function(canvas, img)
 {
-    CanvasGauge.call(this, canvas, img);
+    CanvasGauge1D.call(this, canvas, img);
     
     'use strict';
     // Local value and instances
@@ -75,7 +98,7 @@ var CircularCanvasProgressBar = function(canvas, img)
     this.offset_x = 0;
     this.offset_y = 0;
 };
-Object.setPrototypeOf(CircularCanvasProgressBar.prototype, CanvasGauge.prototype);
+Object.setPrototypeOf(CircularCanvasProgressBar.prototype, CanvasGauge1D.prototype);
 
 /**
  * Calculate bodunding box of pie shape. (To define redraw region).
@@ -149,7 +172,7 @@ CircularCanvasProgressBar.prototype._calcRedrawBoudingBox = function(centerX, ce
 };
 
 //Private methods
-CircularCanvasProgressBar.prototype._render = function()
+CircularCanvasProgressBar.prototype._render = function(forceRender)
 {  
     'use strict';
     var context = this._context;
@@ -169,7 +192,7 @@ CircularCanvasProgressBar.prototype._render = function()
     var previous_arcAngle = this._curr_arcAngle;
     
     // If the angle displacement (new_arcAngle - curr_arcAngle) is below angle resolution, skip redraw
-    if (Math.abs(new_arcAngle - this._curr_arcAngle) < this.angle_resolution)
+    if ((Math.abs(new_arcAngle - this._curr_arcAngle) < this.angle_resolution) && !forceRender)
         return;
     else
        //Round into angle_resolution
@@ -215,7 +238,9 @@ CircularCanvasProgressBar.prototype._render = function()
     context.closePath();
     context.clip();
     
-    context.drawImage(img, redrawBound.upperLeftX,redrawBound.upperLeftY , redrawBound.width, redrawBound.height, redrawBound.upperLeftX,redrawBound.upperLeftY , redrawBound.width, redrawBound.height);
+    var redrawMargin = CircularCanvasProgressBar.prototype.redrawMargin;
+    context.drawImage(img, redrawBound.upperLeftX - redrawMargin,redrawBound.upperLeftY - redrawMargin, redrawBound.width + 2*redrawMargin, redrawBound.height + 2*redrawMargin,
+                           redrawBound.upperLeftX - redrawMargin,redrawBound.upperLeftY - redrawMargin, redrawBound.width + 2*redrawMargin, redrawBound.height + 2*redrawMargin);
     context.restore();
     
     //Finally, update curr_arcAngle
@@ -225,7 +250,7 @@ CircularCanvasProgressBar.prototype._render = function()
 var RectangularCanvasProgressBar = function(canvas, img)
 {
     'use strict';
-    CanvasGauge.call(this, canvas, img);
+    CanvasGauge1D.call(this, canvas, img);
     
     //private
     this._curr_Barpixel = 0;
@@ -235,9 +260,9 @@ var RectangularCanvasProgressBar = function(canvas, img)
     this.invert_direction = false;
     this.pixel_resolution = 1;
 };
-Object.setPrototypeOf(RectangularCanvasProgressBar.prototype, CanvasGauge.prototype);
+Object.setPrototypeOf(RectangularCanvasProgressBar.prototype, CanvasGauge1D.prototype);
 
-RectangularCanvasProgressBar.prototype._render = function()
+RectangularCanvasProgressBar.prototype._render = function(forceRender)
 {   
     'use strict';
     //var canvas = this._canvas;
@@ -265,7 +290,7 @@ RectangularCanvasProgressBar.prototype._render = function()
         new_Barpixel = canvas_max_x*percent/100;
 
     // If the pixel displacement (new_Barpixel - curr_Barpixel) is below angle resolution, skip redraw
-    if (Math.abs(new_Barpixel - this._curr_Barpixel) < this.pixel_resolution)
+    if ((Math.abs(new_Barpixel - this._curr_Barpixel) < this.pixel_resolution) && !forceRender)
         return;
     else
         //Round new_Barpixel into pixel_resolution
@@ -379,10 +404,10 @@ RectangularCanvasProgressBar.prototype._render = function()
     this._curr_Barpixel = new_Barpixel;
 };
 
-var NeedleCanvasGauge = function(canvas, img)
+var NeedleCanvasGauge1D = function(canvas, img)
 {
     'use strict';
-    CanvasGauge.call(this, canvas, img);
+    CanvasGauge1D.call(this, canvas, img);
 
     //private
     this._curr_rotAngle = 0;
@@ -398,10 +423,10 @@ var NeedleCanvasGauge = function(canvas, img)
     this.img_pivot_x = canvas.width/2;
     this.img_pivot_y = canvas.height/2;
 };
-Object.setPrototypeOf(NeedleCanvasGauge.prototype, CanvasGauge.prototype);
+Object.setPrototypeOf(NeedleCanvasGauge1D.prototype, CanvasGauge1D.prototype);
 
 //Public methods
-NeedleCanvasGauge.prototype._render = function()
+NeedleCanvasGauge1D.prototype._render = function(forceRender)
 {
     'use strict';
     var context = this._context;
@@ -417,7 +442,7 @@ NeedleCanvasGauge.prototype._render = function()
     var previous_rotAngle = this._curr_rotAngle;
     
     // If the angle displacement (new_rotAngle - curr_rotAngle) is below angle resolution, skip redraw
-    if (Math.abs(new_rotAngle - this._curr_rotAngle) < this.angle_resolution)
+    if ((Math.abs(new_rotAngle - this._curr_rotAngle) < this.angle_resolution) && !forceRender)
         return;
     else
         //Round into angle_resolution
@@ -470,7 +495,7 @@ NeedleCanvasGauge.prototype._render = function()
  * @param {number} angle Rotation angle in radian.
  * @returns {x:number y:number} Result rotated coordinate.
  */
-NeedleCanvasGauge.prototype._rotationCoordinate = function(x, y, centerX, centerY, angle)
+NeedleCanvasGauge1D.prototype._rotationCoordinate = function(x, y, centerX, centerY, angle)
 {
     'use strict';
     var x1, y1;
@@ -499,9 +524,9 @@ NeedleCanvasGauge.prototype._rotationCoordinate = function(x, y, centerX, center
  * @param {number} imgWidth
  * @param {number} imgHeight
  * @param {number} angle
- * @returns {NeedleCanvasGauge.prototype._calcRedrawBoudingBox.result}
+ * @returns {NeedleCanvasGauge1D.prototype._calcRedrawBoudingBox.result}
  */
-NeedleCanvasGauge.prototype._calcRedrawBoudingBox = function(rotCenterX, rotCenterY, imgPivotX, imgPivotY, imgWidth, imgHeight, angle)
+NeedleCanvasGauge1D.prototype._calcRedrawBoudingBox = function(rotCenterX, rotCenterY, imgPivotX, imgPivotY, imgWidth, imgHeight, angle)
 {
     'use strict';
     //Rotated upper left
@@ -528,3 +553,9 @@ NeedleCanvasGauge.prototype._calcRedrawBoudingBox = function(rotCenterX, rotCent
     var result = {upperLeftX : minX, upperLeftY : minY, width : maxX-minX, height : maxY-minY};
     return result;
 };
+
+/**
+ * drawimg() margin of CircularCanvasProgressBar.
+ * @type Number
+ */
+CircularCanvasProgressBar.prototype.redrawMargin = 0;
