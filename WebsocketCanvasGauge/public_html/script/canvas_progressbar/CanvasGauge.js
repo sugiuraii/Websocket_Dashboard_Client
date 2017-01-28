@@ -6,6 +6,7 @@
 
 var GanvasGauge = function(canvas, img)
 {
+    this.AnimateInterpolate = true;
     'use strict';
     //private
     this._canvas = canvas;
@@ -39,7 +40,7 @@ var GanvasGauge = function(canvas, img)
 GanvasGauge.prototype.drawOneTime = function()
 {
     'use strict';
-    this._render(true);
+    this._render(true, this.value);
 };
 
 GanvasGauge.prototype.drawStart = function()
@@ -52,7 +53,7 @@ GanvasGauge.prototype.drawStart = function()
         {
             var frameInterval = timeStamp - self._previousAnimationTimeStamp;
             self._previousAnimationTimeStamp = timeStamp;
-            self._render(false);
+            self._render(false, self.value);
             self.drawStart();
         });
 };
@@ -172,14 +173,14 @@ CircularCanvasProgressBar.prototype._calcRedrawBoudingBox = function(centerX, ce
 };
 
 //Private methods
-CircularCanvasProgressBar.prototype._render = function(forceRender)
+CircularCanvasProgressBar.prototype._render = function(forceRender, val)
 {  
     'use strict';
     var context = this._context;
     var img = this._img;
 
     // Calculate arc angle from value
-    var percent = (this.value - this.min)/(this.max - this.min)*100;
+    var percent = (val - this.min)/(this.max - this.min)*100;
     if(percent < 0)
         percent = 0;
     if(percent > 100)
@@ -262,7 +263,7 @@ var RectangularCanvasProgressBar = function(canvas, img)
 };
 Object.setPrototypeOf(RectangularCanvasProgressBar.prototype, CanvasGauge1D.prototype);
 
-RectangularCanvasProgressBar.prototype._render = function(forceRender)
+RectangularCanvasProgressBar.prototype._render = function(forceRender, val)
 {   
     'use strict';
     //var canvas = this._canvas;
@@ -273,7 +274,7 @@ RectangularCanvasProgressBar.prototype._render = function(forceRender)
     var canvas_max_y = this._canvas_height;
 
     // Calculate bar pixel from value
-    var percent = (this.value - this.min)/(this.max - this.min)*100;
+    var percent = (val - this.min)/(this.max - this.min)*100;
     if(percent < 0)
         percent = 0;
     if(percent > 100)
@@ -404,7 +405,7 @@ RectangularCanvasProgressBar.prototype._render = function(forceRender)
     this._curr_Barpixel = new_Barpixel;
 };
 
-var NeedleCanvasGauge1D = function(canvas, img)
+var NeedleCanvasGauge = function(canvas, img)
 {
     'use strict';
     CanvasGauge1D.call(this, canvas, img);
@@ -423,17 +424,17 @@ var NeedleCanvasGauge1D = function(canvas, img)
     this.img_pivot_x = canvas.width/2;
     this.img_pivot_y = canvas.height/2;
 };
-Object.setPrototypeOf(NeedleCanvasGauge1D.prototype, CanvasGauge1D.prototype);
+Object.setPrototypeOf(NeedleCanvasGauge.prototype, CanvasGauge1D.prototype);
 
 //Public methods
-NeedleCanvasGauge1D.prototype._render = function(forceRender)
+NeedleCanvasGauge.prototype._render = function(forceRender, val)
 {
     'use strict';
     var context = this._context;
     var img = this._img;
 
      // Calculate arc angle from value
-    var percent = (this.value - this.min)/(this.max - this.min)*100;
+    var percent = (val - this.min)/(this.max - this.min)*100;
     if(percent < 0)
         percent = 0;
     if(percent > 100)
@@ -495,7 +496,7 @@ NeedleCanvasGauge1D.prototype._render = function(forceRender)
  * @param {number} angle Rotation angle in radian.
  * @returns {x:number y:number} Result rotated coordinate.
  */
-NeedleCanvasGauge1D.prototype._rotationCoordinate = function(x, y, centerX, centerY, angle)
+NeedleCanvasGauge.prototype._rotationCoordinate = function(x, y, centerX, centerY, angle)
 {
     'use strict';
     var x1, y1;
@@ -526,7 +527,7 @@ NeedleCanvasGauge1D.prototype._rotationCoordinate = function(x, y, centerX, cent
  * @param {number} angle
  * @returns {NeedleCanvasGauge1D.prototype._calcRedrawBoudingBox.result}
  */
-NeedleCanvasGauge1D.prototype._calcRedrawBoudingBox = function(rotCenterX, rotCenterY, imgPivotX, imgPivotY, imgWidth, imgHeight, angle)
+NeedleCanvasGauge.prototype._calcRedrawBoudingBox = function(rotCenterX, rotCenterY, imgPivotX, imgPivotY, imgWidth, imgHeight, angle)
 {
     'use strict';
     //Rotated upper left
