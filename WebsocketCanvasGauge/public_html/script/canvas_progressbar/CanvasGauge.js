@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-var GanvasGauge = function(canvas, img)
+var CanvasGauge = function(canvas, img)
 {
     this.AnimateInterpolate = true;
     'use strict';
@@ -13,69 +13,81 @@ var GanvasGauge = function(canvas, img)
     this._context = canvas.getContext('2d');
     this._img = img;
     this._canvas_width = canvas.width;
-    this._canvas_height = canvas.height;
-    
-    this._requestAnimationFrameID;
-    this._previousAnimationTimeStamp = window.performance.now();
-    this._previousValueUpdateTimeStamp = window.performance.now();
-    this._valueUpdateInterval = 1;
-    this._value;
-    
-    Object.defineProperty(this, "value", 
-        {
-            set : function(val)
-            {
-                var nowTime = window.performance.now();
-                this._valueUpdateInterval = nowTime - this._previousValueUpdateTimeStamp;
-                this._previousValueUpdateTimeStamp = nowTime;
-                this._value = val;
-            },
-            get : function()
-            {
-                return this._value;
-            }
-        });
-};
-
-GanvasGauge.prototype.drawOneTime = function()
-{
-    'use strict';
-    this._render(true, this.value);
-};
-
-GanvasGauge.prototype.drawStart = function()
-{
-    'use strict';
-    this.drawOneTime();
-    var self = this;
-    
-    this.requestAnimationFrameID = requestAnimationFrame(function(timeStamp)
-        {
-            var frameInterval = timeStamp - self._previousAnimationTimeStamp;
-            self._previousAnimationTimeStamp = timeStamp;
-            self._render(false, self.value);
-            self.drawStart();
-        });
-};
-
-GanvasGauge.prototype.drawStop = function()
-{
-    'use strict';
-    window.cancelAnimationFrame(this.requestAnimationFrameID);
+    this._canvas_height = canvas.height;     
 };
 
 var CanvasGauge1D = function(canvas, img)
 {
     'use strict';
-    GanvasGauge.call(this, canvas, img);
+    CanvasGauge.call(this, canvas, img);
     //public
     this.min = 0;
     this.max = 100;
-    
     this.invert_fill = false;
-    this.value = this.min;
+    
+    this._value = this.min;
+    this._previousValue = this._value;
+
+    this._previousValueSetTimeStamp;
+    this._valueSetTimeStamp;
+    
+    this._requestAnimationFrameID;
+    this._previousAnimationTimeStamp = window.performance.now();
+    var self = this;
+    Object.defineProperty(this, "value", 
+    {
+        set : function(val)
+        {
+            var value = Number(val);
+            var nowTime = window.performance.now();
+            self._previousValueSetTimeStamp = self._valueSetTimeStamp;
+            self._previousValue = self._value;
+            self._valueSetTimeStamp = nowTime;
+            self._value = value;
+        },
+        get : function()
+        {
+            return this._value;
+        }
+    });
+    Object.defineProperty(this, "_valueSetIntervalTime",
+    {
+        
+        get : function()
+        {
+            return self._valueSetTimeStamp - self._previousValueSetTimeStamp;
+        }
+    });
 };
-Object.setPrototypeOf(CanvasGauge1D.prototype, GanvasGauge.prototype);
+Object.setPrototypeOf(CanvasGauge1D.prototype, CanvasGauge.prototype);
+
+CanvasGauge1D.prototype.drawOneTime = function()
+{
+    'use strict';
+    this._render(true, this.value);
+};
+
+CanvasGauge1D.prototype.drawStart = function()
+{
+    'use strict';
+    //this.drawOneTime();
+    var self = this;
+    
+    this.requestAnimationFrameID = requestAnimationFrame(function(timeStamp)
+        {
+            var frameIntervalTime = timeStamp - self._previousAnimationTimeStamp;
+            var drawVal = self._previousValue + (self._value - self._previousValue)*(timeStamp - self._previousValueSetTimeStamp)/self._valueSetIntervalTime;
+            self._render(false, drawVal);
+            self._previousAnimationTimeStamp = timeStamp;
+            self.drawStart();
+        });
+};
+
+CanvasGauge1D.prototype.drawStop = function()
+{
+    'use strict';
+    window.cancelAnimationFrame(this.requestAnimationFrameID);
+};
 
 var CircularCanvasProgressBar = function(canvas, img)
 {
@@ -417,7 +429,7 @@ var NeedleCanvasGauge = function(canvas, img)
     this.offset_angle = 0;
     this.full_angle = 360;
     this.anticlockwise = false;
-    this.angle_resolution = 0.5;
+    this.angle_resolution = 0.1;
     
     this.rotation_center_x = canvas.width/2;
     this.rotation_center_y = canvas.height/2;
