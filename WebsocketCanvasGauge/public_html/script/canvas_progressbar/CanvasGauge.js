@@ -70,17 +70,31 @@ CanvasGauge1D.prototype.drawOneTime = function()
 CanvasGauge1D.prototype.drawStart = function()
 {
     'use strict';
-    //this.drawOneTime();
-    var self = this;
+    this.drawOneTime();
     
-    this.requestAnimationFrameID = requestAnimationFrame(function(timeStamp)
+    var self = this;
+    var drawOneFrame = function(timeStamp)
+    {
+        var drawVal;
+        if(self.AnimateInterpolate)
         {
-            var frameIntervalTime = timeStamp - self._previousAnimationTimeStamp;
-            var drawVal = self._previousValue + (self._value - self._previousValue)*(timeStamp - self._previousValueSetTimeStamp)/self._valueSetIntervalTime;
+            var interpolateFactor = (timeStamp - self._valueSetTimeStamp)/self._valueSetIntervalTime;
+            console.log(interpolateFactor);
+            if(interpolateFactor > 1)
+                interpolateFactor = 1;
+            drawVal = self._previousValue + (self._value - self._previousValue)*interpolateFactor;
             self._render(false, drawVal);
-            self._previousAnimationTimeStamp = timeStamp;
-            self.drawStart();
-        });
+        }
+        else
+            drawVal = self.value;
+        
+        self._render(false, drawVal);
+        
+        self._previousAnimationTimeStamp = timeStamp;
+        window.requestAnimationFrame(drawOneFrame);
+    };
+    
+    this.requestAnimationFrameID = requestAnimationFrame(drawOneFrame);
 };
 
 CanvasGauge1D.prototype.drawStop = function()
@@ -429,7 +443,7 @@ var NeedleCanvasGauge = function(canvas, img)
     this.offset_angle = 0;
     this.full_angle = 360;
     this.anticlockwise = false;
-    this.angle_resolution = 0.1;
+    this.angle_resolution = 0.01;
     
     this.rotation_center_x = canvas.width/2;
     this.rotation_center_y = canvas.height/2;
@@ -572,3 +586,49 @@ NeedleCanvasGauge.prototype._calcRedrawBoudingBox = function(rotCenterX, rotCent
  * @type Number
  */
 CircularCanvasProgressBar.prototype.redrawMargin = 0;
+
+/**
+ * Queue with averaging function.
+ * @returns {Queue}
+ */
+var MovingAverageQueue = function()
+{
+    'use strict';
+    this.StoreLength = 5;
+    this.__a = new Array();
+};
+
+MovingAverageQueue.prototype.add = function(val)
+{
+    'use strict';
+    //Discard one oldest item
+    if(this.__a.length === this.StoreLength)
+        this.__a.shift();
+    
+    this.__a.push(Number(val));
+};
+
+MovingAverageQueue.prototype.getMedian = function()
+{
+    'use strict';
+    var temp = this.__a.sort(function(a,b){return a-b;});
+    var length = temp.length;
+    var half = (temp.length/2)|0;
+    
+    if(length % 2)
+        return temp[half];
+    else
+        return (temp[half-1] + temp[half])/2;
+};
+
+MovingAverageQueue.prototype.getAverage = function()
+{
+    'use strict';
+    var i;
+    var length = this.__a.length;
+    var temp = 0;
+    for(i=0; i < length; i++)
+        temp+=this.__a[i];
+    
+    return temp/length;
+};
