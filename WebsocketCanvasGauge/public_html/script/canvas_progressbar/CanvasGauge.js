@@ -27,26 +27,32 @@ var CanvasGauge1D = function(canvas, img)
     
     this._value = this.min;
     this._previousValue = this._value;
-
-    this._previousValueSetTimeStamp;
-    this._valueSetTimeStamp;
+    this._valueSetTimeStamp = window.performance.now();
+    this._valueSetIntervalTimeArray = new MovingAverageQueue();
     
-    this._requestAnimationFrameID;
+    this._requestAnimationFrameID = null;
     this._previousAnimationTimeStamp = window.performance.now();
     var self = this;
     Object.defineProperty(this, "value", 
     {
         set : function(val)
         {
+            'use strict';
             var value = Number(val);
             var nowTime = window.performance.now();
-            self._previousValueSetTimeStamp = self._valueSetTimeStamp;
+            var previousTime = self._valueSetTimeStamp;
+            var deltaTime = Number(nowTime) - Number(previousTime);
+            if(deltaTime > 1)
+            {
+                self._valueSetIntervalTimeArray.add(Number(nowTime) - Number(previousTime));
+                self._valueSetTimeStamp = nowTime;
+            }
             self._previousValue = self._value;
-            self._valueSetTimeStamp = nowTime;
             self._value = value;
         },
         get : function()
         {
+            'use strict';
             return this._value;
         }
     });
@@ -55,7 +61,8 @@ var CanvasGauge1D = function(canvas, img)
         
         get : function()
         {
-            return self._valueSetTimeStamp - self._previousValueSetTimeStamp;
+            'use strict';
+            return self._valueSetIntervalTimeArray.getAverage();
         }
     });
 };
@@ -79,9 +86,10 @@ CanvasGauge1D.prototype.drawStart = function()
         if(self.AnimateInterpolate)
         {
             var interpolateFactor = (timeStamp - self._valueSetTimeStamp)/self._valueSetIntervalTime;
-            console.log(interpolateFactor);
             if(interpolateFactor > 1)
                 interpolateFactor = 1;
+            if(interpolateFactor < 0)
+                interpolateFactor = 0;
             drawVal = self._previousValue + (self._value - self._previousValue)*interpolateFactor;
             self._render(false, drawVal);
         }
@@ -202,6 +210,7 @@ CircularCanvasProgressBar.prototype._calcRedrawBoudingBox = function(centerX, ce
 CircularCanvasProgressBar.prototype._render = function(forceRender, val)
 {  
     'use strict';
+    var canvas = this._canvas;
     var context = this._context;
     var img = this._img;
 
@@ -254,7 +263,11 @@ CircularCanvasProgressBar.prototype._render = function(forceRender, val)
     context.save();
 
     // reset and clear canvas
-    context.clearRect(redrawBound.upperLeftX,redrawBound.upperLeftY , redrawBound.width, redrawBound.height); 
+    if(forceRender)
+        context.clearRect(0,0, canvas.width, canvas.height);
+    else
+        context.clearRect(redrawBound.upperLeftX,redrawBound.upperLeftY , redrawBound.width, redrawBound.height); 
+    
     context.beginPath();
     context.arc(circle_center_x, circle_center_y, radius, Math.PI/180*start_angle, Math.PI/180*end_angle, anticlockwise);
     if(inner_radius > 0)
@@ -266,8 +279,12 @@ CircularCanvasProgressBar.prototype._render = function(forceRender, val)
     context.clip();
     
     var redrawMargin = CircularCanvasProgressBar.prototype.redrawMargin;
-    context.drawImage(img, redrawBound.upperLeftX - redrawMargin,redrawBound.upperLeftY - redrawMargin, redrawBound.width + 2*redrawMargin, redrawBound.height + 2*redrawMargin,
-                           redrawBound.upperLeftX - redrawMargin,redrawBound.upperLeftY - redrawMargin, redrawBound.width + 2*redrawMargin, redrawBound.height + 2*redrawMargin);
+    if(forceRender)
+        context.drawImage(img, 0, 0, canvas.width, canvas.height);
+    else
+        context.drawImage(img, redrawBound.upperLeftX - redrawMargin,redrawBound.upperLeftY - redrawMargin, redrawBound.width + 2*redrawMargin, redrawBound.height + 2*redrawMargin,
+                               redrawBound.upperLeftX - redrawMargin,redrawBound.upperLeftY - redrawMargin, redrawBound.width + 2*redrawMargin, redrawBound.height + 2*redrawMargin);
+                               
     context.restore();
     
     //Finally, update curr_arcAngle
@@ -594,7 +611,7 @@ CircularCanvasProgressBar.prototype.redrawMargin = 0;
 var MovingAverageQueue = function()
 {
     'use strict';
-    this.StoreLength = 5;
+    this.StoreLength = 3;
     this.__a = new Array();
 };
 
@@ -615,6 +632,9 @@ MovingAverageQueue.prototype.getMedian = function()
     var length = temp.length;
     var half = (temp.length/2)|0;
     
+    if (length === 0)
+        return 1;
+    
     if(length % 2)
         return temp[half];
     else
@@ -629,6 +649,9 @@ MovingAverageQueue.prototype.getAverage = function()
     var temp = 0;
     for(i=0; i < length; i++)
         temp+=this.__a[i];
+    
+    if (length === 0)
+        return 1;
     
     return temp/length;
 };
