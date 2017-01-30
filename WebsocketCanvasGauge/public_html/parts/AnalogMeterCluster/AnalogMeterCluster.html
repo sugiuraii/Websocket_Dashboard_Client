@@ -77,18 +77,35 @@ and open the template in the editor.
                 _gearpos_label_dom = $("#gearpos_label").get(0);
             }
             
-            value_update = function()
+            var valueUpdate = new function()
             {
-                _tacho_bar.value = Math.round(tacho/90)*90;
-                _tacho_needle.value = tacho;
-                _speed_needle.value = speed;
-                _watertemp_bar.value = watertemp;
-                _boost_needle.value = boost;
-                updatValueTextLabel(fuel, _fuel_label_dom, 1);
-                updatValueTextLabel(trip, _trip_label_dom, 1);
-                updatValueTextLabel(gas_milage, _gas_milage_label_dom, 1);
-                updatValueTextLabel(speed, _speed_label_dom, 0);
-                updateStringTextLabel(calc_gear_pos(tacho, speed, neutral_sw), _gearpos_label_dom);
+                this.tacho = function(){
+                    _tacho_bar.value = Math.round(tacho/90)*90;
+                    _tacho_needle.value = tacho;
+                };
+                this.boost = function()
+                {
+                    _boost_needle.value = boost;
+                };
+                this.speed = function()
+                {
+                    _speed_needle.value = speed;
+                    updatValueTextLabel(speed, _speed_label_dom, 0);
+                };
+                this.neutralSwitch = function()
+                {
+                    updateStringTextLabel(calc_gear_pos(tacho, speed, neutral_sw), _gearpos_label_dom);                    
+                };
+                this.waterTemp = function()
+                {
+                    _watertemp_bar.value = watertemp;
+                };
+                this.gasMilage = function()
+                {
+                    updatValueTextLabel(fuel, _fuel_label_dom, 1);
+                    updatValueTextLabel(trip, _trip_label_dom, 1);
+                    updatValueTextLabel(gas_milage, _gas_milage_label_dom, 1);
+                };
             };
             
             onload = function() {

@@ -32,16 +32,19 @@ var CanvasGauge1D = function(canvas, img)
     
     this._requestAnimationFrameID = null;
     this._previousAnimationTimeStamp = window.performance.now();
+    
     var self = this;
     Object.defineProperty(this, "value", 
     {
         set : function(val)
         {
             'use strict';
+            //Store time stamp rate for interpolation animation.
             var value = Number(val);
             var nowTime = window.performance.now();
             var previousTime = self._valueSetTimeStamp;
             var deltaTime = Number(nowTime) - Number(previousTime);
+            //Detect value update rate faster than 1ms is invalid.
             if(deltaTime > 1)
             {
                 self._valueSetIntervalTimeArray.add(Number(nowTime) - Number(previousTime));
@@ -58,7 +61,6 @@ var CanvasGauge1D = function(canvas, img)
     });
     Object.defineProperty(this, "_valueSetIntervalTime",
     {
-        
         get : function()
         {
             'use strict';
