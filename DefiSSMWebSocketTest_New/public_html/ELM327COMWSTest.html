@@ -10,12 +10,12 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <script src="js/libs/jquery/jquery.js"></script>
-        <script src="js/SSMCOM_WSTest.js"></script>
+        <script src="js/WebSocketTest.js"></script>
         <script>
-            var ssm_ws = new SSMCOM_Websocket();
-            ssm_ws.ModePrefix = "ELM327";
-            ssm_ws.onVALpacketReceived = function(val)
+            var elm327_ws = new ELM327COM_Websocket();
+            elm327_ws.onVALpacketReceived = function(val)
             {
+                $('#interval').text(elm327_ws.ValPacketIntervalTime.toFixed(2));
                 //clear
                 $('#div_val_data').html("");
                 for (var key in val)
@@ -23,19 +23,19 @@ and open the template in the editor.
                     $('#div_val_data').append(key + " : " + val[key] + "<br>" );
                 }
             };
-            ssm_ws.onERRpacketReceived = function(msg)
+            elm327_ws.onERRpacketReceived = function(msg)
             {
                 $('#div_err_data').append(msg + "<br>");
             };
-            ssm_ws.onRESpacketReceived = function(msg)
+            elm327_ws.onRESpacketReceived = function(msg)
             {
                 $('#div_res_data').append(msg + "<br>");
             };
-            ssm_ws.onWebsocketError = function(msg)
+            elm327_ws.onWebsocketError = function(msg)
             {
                 $('#div_ws_message').append(msg + "<br>");
             };
-            ssm_ws.onWebsocketOpen = function()
+            elm327_ws.onWebsocketOpen = function()
             {
                 $('#div_ws_message').append('* Connection open<br/>');
 
@@ -44,7 +44,7 @@ and open the template in the editor.
                 $('#connectButton').attr("disabled", "disabled");
                 $('#disconnectButton').removeAttr("disabled");  
             };
-            ssm_ws.onWebsocketClose = function()
+            elm327_ws.onWebsocketClose = function()
             {
                 $('#div_ws_message').append('* Connection closed<br/>');
                 
@@ -56,28 +56,28 @@ and open the template in the editor.
             
             function connectWebSocket()
             {
-                ssm_ws.URL = $("#serverURL_box").val();
-                ssm_ws.Connect();
+                elm327_ws.URL = $("#serverURL_box").val();
+                elm327_ws.Connect();
             };
             
             function disconnectWebSocket()
             {
-                ssm_ws.Close();
+                elm327_ws.Close();
             };
             
             function input_SSM_COM_READ()
             {
-                ssm_ws.SendSSMCOMRead($('#ssmcomcode_select').val(), $('#ssmcode_readmode').val(), $('#ssmcode_flag').val());
+                elm327_ws.SendSSMCOMRead($('#ssmcomcode_select').val(), $('#ssmcode_readmode').val(), $('#ssmcode_flag').val());
             };
             
             function input_SSMCOM_SLOWREAD_INTERVAL()
             {
-                ssm_ws.SendSSMSlowreadInterval($('#interval_SSMCOM_SLOWREAD_INTERVAL').val());
+                elm327_ws.SendSSMSlowreadInterval($('#interval_SSMCOM_SLOWREAD_INTERVAL').val());
             };
         </script>
     </head>
     <body>
-        <div><h2>DefiSSMCOM WebSocket Test</h2></div>
+        <div><h2>ELM327COM WebSocket Test</h2></div>
         <hr>
         Server URL : <input type="text" required="required" id="serverURL_box" /> 
          <input type="button" id="connectButton" value="Connect" onclick="connectWebSocket()"/>
@@ -151,7 +151,7 @@ and open the template in the editor.
              </li>
          </ul>
          
-        <h4>SSMCOM_SLOWREAD_INTERVAL</h4>
+        <h4>ELM327COM_SLOWREAD_INTERVAL</h4>
          <ul>
              <li>
                 <input type="number"  id="interval_SSMCOM_SLOWREAD_INTERVAL">
@@ -164,6 +164,7 @@ and open the template in the editor.
          <hr>
          
          <h3>VAL packet</h3>
+         <p><b>Interval time: </b><span id="interval">0</span> msec</p>
          <div id="div_val_data"></div>
          <hr>
          <h3>ERR packet</h3>
