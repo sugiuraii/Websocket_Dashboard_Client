@@ -10,11 +10,12 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <script src="js/libs/jquery/jquery.js"></script>
-        <script src="js/DefiCOM_WSTest.js"></script>
+        <script src="js/WebSocketTest.js"></script>
         <script>
             var defi_ws = new DefiCOM_Websocket();
             defi_ws.onVALpacketReceived = function(val)
             {
+                $('#interval').text(defi_ws.ValPacketIntervalTime.toFixed(2));
                 //clear
                 $('#div_val_data').html("");
                 for (var key in val)
@@ -120,6 +121,7 @@ and open the template in the editor.
          <hr>
          
          <h3>VAL packet</h3>
+         <p><b>Interval time: </b><span id="interval">0</span> msec</p>
          <div id="div_val_data"></div>
          <hr>
          <h3>ERR packet</h3>
