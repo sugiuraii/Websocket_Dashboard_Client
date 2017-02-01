@@ -61,9 +61,26 @@ var DefiSSMWebsocketCommon = function()
     this.ModePrefix;
 
     this.RecordIntervalTimeIsEnabled = true;
+    
+    /**
+     * Timestamp of previous arrival of VAL packet.
+     * @private 
+     */
     this._valPacketPreviousTimeStamp = window.performance.now();
-    this.ValPacketIntervalTime = 0;
-
+    /**
+     * VAL packet interval time.
+     * @private
+     */
+    this._valPacketIntervalTime = 0;
+    
+    var self = this;
+    Object.defineProperty(this, "ValPacketIntervalTime", 
+    {
+        get : function()
+        {
+            return self._valPacketIntervalTime;
+        }
+    });
     this.onVALpacketReceived = function(val){};
 };
 Object.setPrototypeOf(DefiSSMWebsocketCommon.prototype, WebsocketCommon.prototype);
@@ -78,7 +95,7 @@ DefiSSMWebsocketCommon.prototype._parseIncomingMessage = function(message){
             if(this.RecordIntervalTimeIsEnabled)
             {
                 var nowTime = window.performance.now();
-                this.ValPacketIntervalTime = nowTime - Number(this._valPacketPreviousTimeStamp);
+                this._valPacketIntervalTime = nowTime - Number(this._valPacketPreviousTimeStamp);
                 this._valPacketPreviousTimeStamp = nowTime;
             };
             this.onVALpacketReceived(received_json_object.val);
