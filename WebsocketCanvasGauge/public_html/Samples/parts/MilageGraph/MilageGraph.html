@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="../../../script/canvas_progressbar/CanvasGauge.js"></script>
+        <script src="../../../script/libs/jquery/jquery.js"></script>
+        <style>
+            @font-face {
+                font-family: 'FreeSans';
+                font-style: normal;
+                src: url(../../../Fonts/GNU-Freefonts/FreeSansBold.otf) format('opentype');
+            }
+            div.meter{
+                position:relative;
+                width:1280px;
+                height:660px;
+                background-image: url('./MilageGraph_Back.png')
+            }
+            div.tripfuel_label
+            {
+                position:absolute;
+                width: 200px;
+                height: 200px;
+                text-align: right;
+                margin: 0 auto; 
+                font-size: 65px;
+                letter-spacing: -0.06em;
+                color: white;
+                font-family:'FreeSans';
+                text-shadow: 0px 0px 20px #fff;
+                z-index : 5;
+            }
+            div.gasmilage_label
+            {
+                position:absolute;
+                width: 450px;
+                height: 150px;
+                text-align: right;
+                margin: 0 auto; 
+                font-size: 120px;
+                letter-spacing: -0.06em;
+                color: white;
+                font-family:'FreeSans';
+                text-shadow: 0px 0px 20px #fff;
+            }
+        </style>
+        <script>
+            var _milage_bar_0;
+            var _milage_bar_5;
+            var _milage_bar_10;
+            var _milage_bar_15;
+            var _milage_bar_20;
+            var _milage_bar_25;
+            var _milage_bar_30;
+            
+            var _fuel_label_dom;
+            var _trip_label_dom;
+            var _gasmilage_label_dom;
+            
+            this.milage_0 = 10.0;
+            this.milage_5 = 9.3;
+            this.milage_10 = 21.0;
+            this.milage_15 = 19.3;
+            this.milage_20 = 15.3;
+            this.milage_25 = 8.3;
+            this.milage_30 = 20.0;
+            
+            this.total_fuel = 9.05;
+            this.total_trip = 2108.3;
+            this.total_gasmilage = 12.05;
+            
+            function initialize()
+            {
+                textlayer_initialize();
+                milage_bar_initialize();
+            }
+            
+            function textlayer_initialize()
+            { 
+            }
+            
+            function milage_bar_initialize()
+            {
+                // labels
+                _fuel_label_dom = $("#fuel_label").get(0);
+                _trip_label_dom = $("#trip_label").get(0);
+                _gasmilage_label_dom = $("#gasmilage_label").get(0);
+                
+                // MilageBar_0
+                var milage_canvas_0 = document.getElementById("milagebar_0");
+                var milage_image_0 = new Image();
+                milage_image_0.src = "MilageGraph_valueBar2.png";
+                _milage_bar_0 = new RectangularCanvasProgressBar(milage_canvas_0,milage_image_0);
+                _milage_bar_0.vertical = true;
+                _milage_bar_0.invert_direction = false;
+                _milage_bar_0.min = 0;
+                _milage_bar_0.max = 20;       
+                milage_image_0.onload = function(){
+                    _milage_bar_0.drawStart();
+                };
+                
+                // MilageBar_5
+                var milage_canvas_5 = document.getElementById("milagebar_5");
+                var milage_image_5 = new Image();
+                milage_image_5.src = "MilageGraph_valueBar2.png";
+                _milage_bar_5 = new RectangularCanvasProgressBar(milage_canvas_5,milage_image_5);
+                _milage_bar_5.vertical = true;
+                _milage_bar_5.invert_direction = false;
+                _milage_bar_5.min = 0;
+                _milage_bar_5.max = 20;                
+                milage_image_5.onload = function(){
+                    _milage_bar_5.drawStart();
+                };
+                
+                // MilageBar_10
+                var milage_canvas_10 = document.getElementById("milagebar_10");
+                var milage_image_10 = new Image();
+                milage_image_10.src = "MilageGraph_valueBar2.png";
+                _milage_bar_10 = new RectangularCanvasProgressBar(milage_canvas_10,milage_image_10);
+                _milage_bar_10.vertical = true;
+                _milage_bar_10.invert_direction = false;
+                _milage_bar_10.min = 0;
+                _milage_bar_10.max = 20;                
+                milage_image_10.onload = function(){
+                    _milage_bar_10.drawStart();
+                };
+                
+                // MilageBar_15
+                var milage_canvas_15 = document.getElementById("milagebar_15");
+                var milage_image_15 = new Image();
+                milage_image_15.src = "MilageGraph_valueBar2.png";
+                _milage_bar_15 = new RectangularCanvasProgressBar(milage_canvas_15,milage_image_15);
+                _milage_bar_15.vertical = true;
+                _milage_bar_15.invert_direction = false;
+                _milage_bar_15.min = 0;
+                _milage_bar_15.max = 20;                
+                milage_image_15.onload = function(){
+                    _milage_bar_15.drawStart();
+                };
+                
+                // MilageBar_20
+                var milage_canvas_20 = document.getElementById("milagebar_20");
+                var milage_image_20 = new Image();
+                milage_image_20.src = "MilageGraph_valueBar2.png";
+                _milage_bar_20 = new RectangularCanvasProgressBar(milage_canvas_20,milage_image_20);
+                _milage_bar_20.vertical = true;
+                _milage_bar_20.invert_direction = false;
+                _milage_bar_20.min = 0;
+                _milage_bar_20.max = 20;                
+                milage_image_20.onload = function(){
+                    _milage_bar_20.drawStart();
+                };
+                
+                // MilageBar_25
+                var milage_canvas_25 = document.getElementById("milagebar_25");
+                var milage_image_25 = new Image();
+                milage_image_25.src = "MilageGraph_valueBar2.png";
+                _milage_bar_25 = new RectangularCanvasProgressBar(milage_canvas_25,milage_image_25);
+                _milage_bar_25.vertical = true;
+                _milage_bar_25.invert_direction = false;
+                _milage_bar_25.min = 0;
+                _milage_bar_25.max = 20;                
+                milage_image_25.onload = function(){
+                    _milage_bar_25.drawStart();
+                };
+                
+                // MilageBar_30
+                var milage_canvas_30 = document.getElementById("milagebar_30");
+                var milage_image_30 = new Image();
+                milage_image_30.src = "MilageGraph_valueBar2.png";
+                _milage_bar_30 = new RectangularCanvasProgressBar(milage_canvas_30,milage_image_30);
+                _milage_bar_30.vertical = true;
+                _milage_bar_30.invert_direction = false;
+                _milage_bar_30.min = 0;
+                _milage_bar_30.max = 20;                
+                milage_image_30.onload = function(){
+                    _milage_bar_30.drawStart();
+                };
+            }
+            
+            function value_update()
+            {
+                _milage_bar_0.value = milage_0;
+                _milage_bar_5.value = milage_5;
+                _milage_bar_10.value = milage_10;
+                _milage_bar_15.value = milage_15;
+                _milage_bar_20.value = milage_20;
+                _milage_bar_25.value = milage_25;
+                _milage_bar_30.value = milage_30;
+                
+                if(parseFloat(this.total_fuel).toFixed(2) !== _fuel_label_dom.textContent)
+                    _fuel_label_dom.textContent = parseFloat(this.total_fuel).toFixed(2);
+                if(parseFloat(this.total_trip).toFixed(1) !== _trip_label_dom.textContent)
+                    _trip_label_dom.textContent = parseFloat(this.total_trip).toFixed(1);
+                if(parseFloat(this.total_gasmilage).toFixed(1) !== _gasmilage_label_dom.textContent)
+                    _gasmilage_label_dom.textContent = parseFloat(this.total_gasmilage).toFixed(1);
+            }
+            
+            onload = function() {
+                initialize();
+            };
+    </script>
+    </head>
+    <body>
+        <div class="meter">          
+            <canvas id="milagebar_0" width="80" height="480" style="position:absolute;z-index:1;top:34px;left:822px"></canvas>
+            <canvas id="milagebar_5" width="60" height="480" style="position:absolute;z-index:1;top:34px;left:720px"></canvas>
+            <canvas id="milagebar_10" width="60" height="480" style="position:absolute;z-index:1;top:34px;left:605px"></canvas>
+            <canvas id="milagebar_15" width="60" height="480" style="position:absolute;z-index:1;top:34px;left:490px"></canvas>
+            <canvas id="milagebar_20" width="60" height="480" style="position:absolute;z-index:1;top:34px;left:375px"></canvas>
+            <canvas id="milagebar_25" width="60" height="480" style="position:absolute;z-index:1;top:34px;left:260px"></canvas>
+            <canvas id="milagebar_30" width="60" height="480" style="position:absolute;z-index:1;top:34px;left:145px"></canvas>
+
+            <div class="tripfuel_label" style="left:1000px;top:140px" id="trip_label">2295.5</div>
+            <div class="tripfuel_label" style="left:1000px;top:255px" id="fuel_label">10.05</div>
+            <div class="gasmilage_label"  style="left:800px;top:370px" id="gasmilage_label">10.0</div>
+
+            
+        </div>
+    </body>
+</html>
+

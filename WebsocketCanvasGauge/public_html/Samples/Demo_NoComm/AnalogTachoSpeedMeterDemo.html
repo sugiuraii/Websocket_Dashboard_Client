@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>AnalogGagueCluster Demo</title>
+        <link rel="stylesheet" href="../css/default.css" type="text/css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="../../script/libs/jquery/jquery.js"></script>
+        <script src="../../script/meterpanel-demonstration.js"></script>
+        <script>
+            var gaugeFrame1;
+            var tachoDemoSignal = new GaugeDemonstrationSignalGenerator();
+            tachoDemoSignal.Min = 0;
+            tachoDemoSignal.Max = 9000;
+            tachoDemoSignal.Delay = 5000;
+            tachoDemoSignal.ValueChangeCycle = 60;
+            tachoDemoSignal.ValueUpDelta = 250;
+            tachoDemoSignal.ValueDownDelta = 2500;
+            tachoDemoSignal.ValueSetFunction = function(value)
+            {
+                gaugeFrame1.tacho = value;
+                gaugeFrame1.valueUpdate.tacho();
+            };
+            
+            var speedDemoSignal = new GaugeDemonstrationSignalGenerator();
+            speedDemoSignal.Min = 0;
+            speedDemoSignal.Max = 280;
+            speedDemoSignal.Delay = 10000;
+            speedDemoSignal.ValueChangeCycle = 120;
+            speedDemoSignal.ValueUpDelta = 4;
+            speedDemoSignal.ValueDownDelta = 20;
+            speedDemoSignal.ValueSetFunction = function(value)
+            {
+                gaugeFrame1.speed = value;
+                gaugeFrame1.neutral_sw = false;
+                gaugeFrame1.valueUpdate.speed();
+                gaugeFrame1.valueUpdate.neutralSwitch();
+            };
+            
+            var waterTempDemoSignal = new GaugeDemonstrationSignalGenerator();
+            waterTempDemoSignal.Min = 60;
+            waterTempDemoSignal.Max = 130;
+            waterTempDemoSignal.Delay = 9000;
+            waterTempDemoSignal.ValueChangeCycle = 500;
+            waterTempDemoSignal.ValueUpDelta = 2;
+            waterTempDemoSignal.ValueDownDelta = 20;
+            waterTempDemoSignal.ValueSetFunction = function(value)
+            {
+                gaugeFrame1.watertemp = value;
+                gaugeFrame1.valueUpdate.waterTemp();
+            };
+           
+            var boostDemoSignal = new GaugeDemonstrationSignalGenerator();
+            boostDemoSignal.Min = -1.0;
+            boostDemoSignal.Max = 2.0;
+            boostDemoSignal.Delay = 8000;
+            boostDemoSignal.ValueChangeCycle = 30;
+            boostDemoSignal.ValueUpDelta = 0.1;
+            boostDemoSignal.ValueDownDelta = 0.2;
+            boostDemoSignal.ValueSetFunction = function(value)
+            {
+                gaugeFrame1.boost = value;
+                gaugeFrame1.valueUpdate.boost();
+            };
+           
+            onload = function()
+            {
+                gaugeFrame1 = $("#gauge_frame1")[0].contentWindow;
+                tachoDemoSignal.Start();
+                speedDemoSignal.Start();
+                boostDemoSignal.Start();
+                waterTempDemoSignal.Start();
+            };            
+        </script>
+        <style>
+            iframe.meter { 
+                    position:relative;
+                    border: none;
+                    z-index:1;
+                    /*
+                    -webkit-transform:scale(1.2,1.2);
+                    -moz-transform:scale(1.2,1.2);
+                    -ms-transform:scale(1.2,1.2);
+                    transform:scale(1.1,1.1);
+                    */
+                    
+                    -webkit-transform-origin: 0 0;
+                    -moz-transform-origin: 0 0;
+                    -ms-transform-origin: 0 0;
+                    transform-origin: 0 0;
+                }
+        </style>
+    </head>
+    <body> 
+        <center>
+            <iframe class="meter" id="gauge_frame1" src="../parts/AnalogMeterCluster/AnalogMeterCluster.html" scrolling="no" width="1060" height="600" seamless> </iframe><br>
+        </center>
+    </body>
+</html>

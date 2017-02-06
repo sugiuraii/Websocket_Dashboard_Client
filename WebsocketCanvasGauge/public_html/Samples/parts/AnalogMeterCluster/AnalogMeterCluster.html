@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="../../../script/canvas_progressbar/CanvasGauge.js"></script>
+        <script src="../../../script/libs/jquery/jquery.js"></script>
+        <script src="../scripts/partscommon.js"></script>
+        <style>
+            @font-face {
+            font-family: 'Audiowide';
+            font-style: normal;
+            src: url(../../../Fonts/AudioWide/Audiowide-Regular.ttf) format('truetype');
+            }
+            @font-face {
+            font-family: 'DSEG-Classic';
+            src: url(../../../Fonts/DSEG_v030/DSEG14Classic-BoldItalic.ttf) format('truetype');
+            }
+            div.meter{
+                position:relative;
+            }
+            div.BigLCD_Text
+            {
+                position:absolute;
+                color: black;
+                font-family:'DSEG-Classic';
+                width:200px;
+            }
+            div.LCD_Text
+            {
+                position:absolute;
+                color: black;
+                font-family:'DSEG-Classic';
+                width:200px;
+            }
+        </style>
+        <script>
+            var _tacho_bar;
+            var _tacho_needle;
+            var _speed_needle;
+            var _watertemp_bar;
+            var _boost_needle;
+            
+            var _fuel_label_dom;
+            var _trip_label_dom;
+            var _gas_milage_label_dom;
+            var _speed_label_dom;
+            var _gearpos_label_dom;
+            
+            this.tacho = 0;
+            this.speed = 0;
+            this.watertemp = 0;
+            this.trip = 0.0;
+            this.fuel = 0.00;
+            this.gas_milage = 0.00;
+            this.boost = -1.0;
+            this.neutral_sw = false;
+            
+            function initialize()
+            {
+                _tacho_bar = initializeCircularCanvasProgressBar("tacho_bar","AnalogTachoMeter_Bar.png", 200, 170, 0, 9000, 90, 270,false);
+                _watertemp_bar = initializeCircularCanvasProgressBar("watertemp_bar","AnalogSpeedMeter_Bar.png", 160, 120 ,60,140,165,120,false);
+                _tacho_needle = initializeNeedleCanvasGauge("tacho_needle","AnalogTachoMeter_Needle.png",0,9000,90,270,false,15,15);
+                _speed_needle = initializeNeedleCanvasGauge("speed_needle","AnalogSpeedMeter_Needle.png",0,280,75,210,false,15,15);
+                _boost_needle = initializeNeedleCanvasGauge("boost_needle","BoostMeter_Needle.png",-1.0,2.0,30,90,true,90,15);
+                
+                _fuel_label_dom = $("#fuel_label").get(0);
+                _trip_label_dom = $("#trip_label").get(0);
+                _gas_milage_label_dom = $("#gas_milage_label").get(0);
+                _speed_label_dom = $("#speed_label").get(0);
+                _gearpos_label_dom = $("#gearpos_label").get(0);
+            }
+            
+            var valueUpdate = new function()
+            {
+                this.tacho = function(){
+                    _tacho_bar.value = Math.round(tacho/90)*90;
+                    _tacho_needle.value = tacho;
+                };
+                this.boost = function()
+                {
+                    _boost_needle.value = boost;
+                };
+                this.speed = function()
+                {
+                    _speed_needle.value = speed;
+                    updatValueTextLabel(speed, _speed_label_dom, 0);
+                };
+                this.neutralSwitch = function()
+                {
+                    updateStringTextLabel(calc_gear_pos(tacho, speed, neutral_sw), _gearpos_label_dom);                    
+                };
+                this.waterTemp = function()
+                {
+                    _watertemp_bar.value = watertemp;
+                };
+                this.gasMilage = function()
+                {
+                    updatValueTextLabel(fuel, _fuel_label_dom, 1);
+                    updatValueTextLabel(trip, _trip_label_dom, 1);
+                    updatValueTextLabel(gas_milage, _gas_milage_label_dom, 1);
+                };
+            };
+            
+            onload = function() {
+                initialize();
+            };
+    </script>
+    </head>
+    <body>
+        <div id="tachometer" style="position:absolute;top:0px;left:345px;z-index:1">          
+            <img src="AnalogTachoMeter_Base.png" width="600" height="600" alt="" style="position:absolute;z-index:0">
+            <canvas id="tacho_bar" width="600" height="600" style="position:absolute;z-index:1;"></canvas>
+            <canvas id="tacho_needle" width="600" height="600" style="position:absolute;z-index:2;"></canvas>
+            <img src="AnalogTachoMeter_NeedleCap.png" width="600" height="600" alt="" style="position:absolute;z-index:3">
+            <div id="gas_milage_label" class="LCD_Text" style="top:323px;left:285px;text-align: right;font-size:35px;z-index:1">0.0</div>
+            <div id="trip_label" class="LCD_Text" style="top:367px;left:300px;text-align: right;font-size:32px;z-index:1">0.0</div>
+            <div id="fuel_label" class="LCD_Text" style="top:405px;left:300px;text-align: right;font-size:32px;z-index:1">0.0</div>
+            <div id="gearpos_label_back" class="BigLCD_Text" style="top:430px;left:205px;text-align: right;font-size:110px;color:grey;z-index:1">~</div>
+            <div id="gearpos_label" class="BigLCD_Text" style="top:430px;left:205px;text-align: right;font-size:110px;z-index:1">N</div>
+        </div>
+        <div id="speedmeter" style="position:absolute;top:0px;left:0px;z-index:0">          
+            <img src="AnalogSpeedMeter_Base.png" width="600" height="600" alt="" style="position:absolute;z-index:0">
+            <canvas id="watertemp_bar" width="600" height="600" style="position:absolute;z-index:1;"></canvas>
+            <canvas id="speed_needle" width="600" height="600" style="position:absolute;z-index:2;"></canvas>
+            <img src="AnalogSpeedMeter_NeedleCap.png" width="600" height="600" alt="" style="position:absolute;z-index:3">
+            <div id="speed_label_back" class="BigLCD_Text" style="top:378px;left:150px;text-align: right;font-size:55px;color:grey;z-index:1">~~~</div>
+            <div id="speed_label" class="BigLCD_Text" style="top:378px;left:150px;text-align: right;font-size:55px;z-index:1">0</div>
+            
+        </div>
+        <div id="boostmeter" style="position:absolute;top:80px;left:615px;z-index:0">          
+            <img src="BoostMeter_Base.png" width="441" height="441" alt="" style="position:absolute;z-index:0">
+            <canvas id="boost_needle" width="441" height="441" style="position:absolute;z-index:1;"></canvas>
+        </div>
+
+    </body>
+</html>
+

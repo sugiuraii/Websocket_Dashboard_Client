@@ -6,56 +6,59 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>LED tachometer demo</title>
+        <title>AnalogGagueCluster Demo</title>
         <link rel="stylesheet" href="./css/default.css" type="text/css">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        <script src="./script/libs/jquery/jquery.js"></script>
-        <script src="./script/websocket/DefiSSMCOMWebsocketClient.js"></script>
-        <script src="./script/meterpanel-common.js"></script>
+        <script src="../script/libs/jquery/jquery.js"></script>
+        <script src="../script/websocket/DefiSSMCOMWebsocketClient.js"></script>
+        <script src="../script/meterpanel-common.js"></script>
         <script>
             var gaugeFrame1;
             var gaugeControl = new GaugeControl();
             gaugeControl.addDebugMessageWindow();
             gaugeControl.addControlPanel();
-            
+
             gaugeControl.EnableDefiWebSocket();
-            gaugeControl.EnableSSMWebSocket();
-            gaugeControl.EnableFUELTRIPWebSocket();
-            
-            gaugeControl.RegisterDefiParameterCode("Engine_Speed",function(value)
+            gaugeControl.RegisterDefiParameterCode("Manifold_Absolute_Pressure", function(value)
+            {
+                gaugeFrame1.boost = value;
+                gaugeFrame1.valueUpdate.boost();
+            });
+            gaugeControl.RegisterDefiParameterCode("Engine_Speed", function(value)
             {
                 gaugeFrame1.tacho = value;
-                gaugeFrame1.value_update();
+                gaugeFrame1.valueUpdate.tacho();
             });
             
-            gaugeControl.RegisterSSMParameterCode("Coolant_Temperature","Slow",function(value)
+            gaugeControl.EnableSSMWebSocket();
+            gaugeControl.RegisterSSMParameterCode("Coolant_Temperature","Slow", function(value)
             {
                 gaugeFrame1.watertemp = value;
-                gaugeFrame1.value_update();
+                gaugeFrame1.valueUpdate.waterTemp();
             });
-            gaugeControl.RegisterSSMParameterCode("Vehicle_Speed","Slow+Fast",function(value)
+            gaugeControl.RegisterSSMParameterCode("Vehicle_Speed","Slow+Fast", function(value)
             {
                 gaugeFrame1.speed = value;
-                gaugeFrame1.value_update();
+                gaugeFrame1.valueUpdate.speed();
             });
-            gaugeControl.RegisterSSMParameterCode("Neutral_Position_Switch","Slow+Fast",function(value)
+            gaugeControl.RegisterSSMParameterCode("Neutral_Position_Switch","Slow+Fast", function(value)
             {
                 if(value.toLowerCase() === "false")
                     gaugeFrame1.neutral_sw = false;
                 else
                     gaugeFrame1.neutral_sw = true;
 
-                gaugeFrame1.value_update();
+                gaugeFrame1.valueUpdate.neutralSwitch();
             });
-            
+            gaugeControl.EnableFUELTRIPWebSocket();
             gaugeControl.RegisterMOMENTFUELTRIPPacketRecivedEvent(function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
             {
                 gaugeFrame1.fuel = total_gas;
                 gaugeFrame1.trip = total_trip;
                 gaugeFrame1.gas_milage = total_gasmilage;
-                gaugeFrame1.value_update();
-            });            
+                gaugeFrame1.valueUpdate.gasMilage();
+            });
             onload = function()
             {
                 gaugeFrame1 = $("#gauge_frame1")[0].contentWindow;
@@ -83,7 +86,7 @@ and open the template in the editor.
     </head>
     <body> 
         <center>
-            <iframe class="meter" id="gauge_frame1" src="./parts/LEDTachoMeter/LEDTachoMeter.html" scrolling="no" width="1200" height="600" seamless> </iframe><br>
+            <iframe class="meter" id="gauge_frame1" src="./parts/AnalogMeterCluster/AnalogMeterCluster.html" scrolling="no" width="1060" height="600" seamless> </iframe><br>
         </center>
     </body>
 </html>
