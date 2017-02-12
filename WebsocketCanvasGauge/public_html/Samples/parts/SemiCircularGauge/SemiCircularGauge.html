@@ -161,13 +161,13 @@ and open the template in the editor.
                 _redzone_bar1.offset_y = 0;
                 
                 redzone_img.onload = function(){
-                    _redzone_bar1.drawOneTime();
+                    _redzone_bar1.drawOneTimeSkipClear();
                 };
             }
             
             function yellowzone_bar_initialize()
             {
-                var yellowzone_canvas = document.getElementById("yellowzone_bar1");
+                var yellowzone_canvas = document.getElementById("redzone_bar1");
                 var yellowzone_img = new Image();
                 yellowzone_img.src = "SemiCircular_Gauge1_Yellowzone_Bar.png";
 
@@ -189,13 +189,13 @@ and open the template in the editor.
                 _yellowzone_bar1.offset_y = 0;
                 
                 yellowzone_img.onload = function(){
-                    _yellowzone_bar1.drawOneTime();
+                    _yellowzone_bar1.drawOneTimeSkipClear();
                 };
             }
             
             function greenzone_bar_initialize()
             {
-                var greenzone_canvas = document.getElementById("greenzone_bar1");
+                var greenzone_canvas = document.getElementById("redzone_bar1");
                 var greenzone_img = new Image();
                 greenzone_img.src = "SemiCircular_Gauge1_Greenzone_Bar.png";
 
@@ -217,7 +217,7 @@ and open the template in the editor.
                 _greenzone_bar1.offset_y = 0;
                 
                 greenzone_img.onload = function(){
-                    _greenzone_bar1.drawOneTime();
+                    _greenzone_bar1.drawOneTimeSkipClear();
                 };
             }
             
@@ -267,8 +267,6 @@ and open the template in the editor.
     </head>
     <body>
         <div class="meter">          
-            <canvas id="greenzone_bar1" width="799" height="584" style="position:absolute;z-index:1"></canvas>
-            <canvas id="yellowzone_bar1" width="799" height="584" style="position:absolute;z-index:1"></canvas>
             <canvas id="redzone_bar1" width="799" height="584" style="position:absolute;z-index:1"></canvas>
             <img src="SemiCircular_Gauge1_Grid.png" alt="" style="position:absolute;z-index:2">
             <canvas id="value_bar1" width="799" height="584" style="position:absolute;z-index:3"></canvas>
