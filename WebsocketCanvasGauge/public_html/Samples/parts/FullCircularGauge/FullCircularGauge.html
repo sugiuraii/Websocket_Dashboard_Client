@@ -109,7 +109,7 @@ and open the template in the editor.
             this.yellowzone_full_angle = 45;
 
             this.invert_fill = false;
-            
+            this.AnimateInterpolate = true;
             this.value_label_rounded = 1;
             
             this.redzone_enable = true;
@@ -240,6 +240,7 @@ and open the template in the editor.
 
                 _value_bar1 = new CircularCanvasProgressBar(value_canvas,value_img);
                 // Properties and Default values
+                _value_bar1.AnimateInterpolate = AnimateInterpolate;
                 _value_bar1.offset_angle = 90;
                 _value_bar1.full_angle = 270;
                 _value_bar1.anticlockwise = false;

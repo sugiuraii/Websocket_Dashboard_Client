@@ -40,10 +40,10 @@ and open the template in the editor.
             };
             
             var waterTempDemoSignal = new GaugeDemonstrationSignalGenerator();
-            waterTempDemoSignal.Min = 60;
-            waterTempDemoSignal.Max = 130;
+            waterTempDemoSignal.Min = 90;
+            waterTempDemoSignal.Max = 110;
             waterTempDemoSignal.Delay = 9000;
-            waterTempDemoSignal.ValueChangeCycle = 500;
+            waterTempDemoSignal.ValueChangeCycle = 15000;
             waterTempDemoSignal.ValueUpDelta = 2;
             waterTempDemoSignal.ValueDownDelta = 20;
             waterTempDemoSignal.ValueSetFunction = function(value)
@@ -71,7 +71,7 @@ and open the template in the editor.
             throttleDemoSignal.Max = 100;
             throttleDemoSignal.Delay = 11000;
             throttleDemoSignal.ValueChangeCycle = 300;
-            throttleDemoSignal.ValueUpDelta = 2;
+            throttleDemoSignal.ValueUpDelta = 5;
             throttleDemoSignal.ValueDownDelta = 20;
             throttleDemoSignal.ValueSetFunction = function(value)
             {
@@ -80,10 +80,10 @@ and open the template in the editor.
             };
             
             var batteryVoltageDemoSignal = new GaugeDemonstrationSignalGenerator();
-            batteryVoltageDemoSignal.Min = 11;
+            batteryVoltageDemoSignal.Min = 12;
             batteryVoltageDemoSignal.Max = 15;
             batteryVoltageDemoSignal.Delay = 12000;
-            batteryVoltageDemoSignal.ValueChangeCycle = 500;
+            batteryVoltageDemoSignal.ValueChangeCycle = 15000;
             batteryVoltageDemoSignal.ValueUpDelta = 0.1;
             batteryVoltageDemoSignal.ValueDownDelta = 1;
             batteryVoltageDemoSignal.ValueSetFunction = function(value)
@@ -172,6 +172,7 @@ and open the template in the editor.
             function initializeGaugeWater() 
             {
                 var gauge_id = "#frame_watertemp";
+                $(gauge_id)[0].contentWindow.AnimateInterpolate = false;
                 $(gauge_id)[0].contentWindow.value_max = 150;
                 $(gauge_id)[0].contentWindow.value_min = 50;
                 $(gauge_id)[0].contentWindow.title_str = "WATER TEMP";
@@ -204,6 +205,7 @@ and open the template in the editor.
             function initializeGaugeVoltage() 
             {
                 var gauge_id = "#frame_volt";
+                $(gauge_id)[0].contentWindow.AnimateInterpolate = false;
                 $(gauge_id)[0].contentWindow.value_max = 15;
                 $(gauge_id)[0].contentWindow.value_min = 11;
                 $(gauge_id)[0].contentWindow.title_str = "BATTERY VOLT";
