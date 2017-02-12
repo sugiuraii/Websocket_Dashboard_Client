@@ -13,7 +13,33 @@ var CanvasGauge = function(canvas, img)
     this._context = canvas.getContext('2d');
     this._img = img;
     this._canvas_width = canvas.width;
-    this._canvas_height = canvas.height;     
+    this._canvas_height = canvas.height;
+    this._drawStart = false;
+    
+    var self = this;
+    Object.defineProperty(this, "drawStatus",
+    {
+        get : function()
+        {
+            return self._drawStart;
+        }
+    });
+    
+    Object.defineProperty(this, "Canvas", 
+    {
+        get : function()
+        {
+            return self._canvas;
+        }
+    });
+    
+    Object.defineProperty(this, "Context",
+    {
+        get : function()
+        {
+            return self._context;
+        }
+    });
 };
 
 var CanvasGauge1D = function(canvas, img)
@@ -73,13 +99,20 @@ Object.setPrototypeOf(CanvasGauge1D.prototype, CanvasGauge.prototype);
 CanvasGauge1D.prototype.drawOneTime = function()
 {
     'use strict';
-    this._render(true, this.value);
+    this._render(true, false, this.value);
+};
+
+CanvasGauge1D.prototype.drawOneTimeSkipClear = function()
+{
+    'use strict';
+    this._render(true, true, this.value);
 };
 
 CanvasGauge1D.prototype.drawStart = function()
 {
     'use strict';
     this.drawOneTime();
+    this._drawStart = true;
     
     var self = this;
     var drawOneFrame = function(timeStamp)
@@ -93,12 +126,12 @@ CanvasGauge1D.prototype.drawStart = function()
             if(interpolateFactor < 0)
                 interpolateFactor = 0;
             drawVal = self._previousValue + (self._value - self._previousValue)*interpolateFactor;
-            self._render(false, drawVal);
+            self._render(false, false, drawVal);
         }
         else
             drawVal = self.value;
         
-        self._render(false, drawVal);
+        self._render(false, false, drawVal);
         
         self._previousAnimationTimeStamp = timeStamp;
         window.requestAnimationFrame(drawOneFrame);
@@ -111,6 +144,7 @@ CanvasGauge1D.prototype.drawStop = function()
 {
     'use strict';
     window.cancelAnimationFrame(this.requestAnimationFrameID);
+    this._drawStart = false;
 };
 
 var CircularCanvasProgressBar = function(canvas, img)
@@ -209,7 +243,7 @@ CircularCanvasProgressBar.prototype._calcRedrawBoudingBox = function(centerX, ce
 };
 
 //Private methods
-CircularCanvasProgressBar.prototype._render = function(forceRender, val)
+CircularCanvasProgressBar.prototype._render = function(forceRender, skipClear, val)
 {  
     'use strict';
     var canvas = this._canvas;
@@ -265,10 +299,13 @@ CircularCanvasProgressBar.prototype._render = function(forceRender, val)
     context.save();
 
     // reset and clear canvas
-    if(forceRender)
-        context.clearRect(0,0, canvas.width, canvas.height);
-    else
-        context.clearRect(redrawBound.upperLeftX,redrawBound.upperLeftY , redrawBound.width, redrawBound.height); 
+    if(!skipClear)
+    {
+        if(forceRender)
+            context.clearRect(0,0, canvas.width, canvas.height);
+        else
+            context.clearRect(redrawBound.upperLeftX,redrawBound.upperLeftY , redrawBound.width, redrawBound.height); 
+    }
     
     context.beginPath();
     context.arc(circle_center_x, circle_center_y, radius, Math.PI/180*start_angle, Math.PI/180*end_angle, anticlockwise);
@@ -308,9 +345,11 @@ var RectangularCanvasProgressBar = function(canvas, img)
 };
 Object.setPrototypeOf(RectangularCanvasProgressBar.prototype, CanvasGauge1D.prototype);
 
-RectangularCanvasProgressBar.prototype._render = function(forceRender, val)
+RectangularCanvasProgressBar.prototype._render = function(forceRender, skipClear, val)
 {   
     'use strict';
+    var skipClearByArg = skipClear;
+    
     //var canvas = this._canvas;
     var context = this._context;
     var img = this._img;
@@ -434,7 +473,7 @@ RectangularCanvasProgressBar.prototype._render = function(forceRender, val)
     context.save();
 
     // reset and clear canvas
-    if(!skip_clear)
+    if(!skip_clear && !skipClearByArg)
         context.clearRect(redraw_start_x,redraw_start_y,redraw_width,redraw_height);
     if(!skip_draw)
     {
@@ -472,7 +511,7 @@ var NeedleCanvasGauge = function(canvas, img)
 Object.setPrototypeOf(NeedleCanvasGauge.prototype, CanvasGauge1D.prototype);
 
 //Public methods
-NeedleCanvasGauge.prototype._render = function(forceRender, val)
+NeedleCanvasGauge.prototype._render = function(forceRender, skipClear, val)
 {
     'use strict';
     var context = this._context;
@@ -517,7 +556,8 @@ NeedleCanvasGauge.prototype._render = function(forceRender, val)
 
     // Clear previous frame with calculating bounding box
     var clearRegionBoundingBox = this._calcRedrawBoudingBox(rotCenterX, rotCenterY, imgPivotX, imgPivotY, imgWidth, imgHeight, previousActualRotAngle);
-    context.clearRect(clearRegionBoundingBox.upperLeftX, clearRegionBoundingBox.upperLeftY, clearRegionBoundingBox.width, clearRegionBoundingBox.height);
+    if(!skipClear)
+        context.clearRect(clearRegionBoundingBox.upperLeftX, clearRegionBoundingBox.upperLeftY, clearRegionBoundingBox.width, clearRegionBoundingBox.height);
 
     //実際の画像変換とは逆順に定義していることに注意。
     context.translate(rotCenterX, rotCenterY);
