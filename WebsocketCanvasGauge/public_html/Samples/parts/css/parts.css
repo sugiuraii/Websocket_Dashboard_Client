@@ -1,0 +1,24 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 2017/02/14, 8:56:56
+    Author     : kuniaki
+*/
+@font-face {
+    font-family: 'FreeSans-Bold';
+    font-style: normal;
+    src: url(../fonts/GNU-Freefonts/FreeSansBold.otf) format('opentype');
+}
+@font-face {
+    font-family: 'Audiowide-Regular';
+    font-style: normal;
+    src: url(../fonts/AudioWide/Audiowide-Regular.ttf) format('truetype');
+}
+@font-face {
+font-family: 'DSEG14Classic';
+font-style: normal;
+src: url(../fonts/DSEG_v030/DSEG14Classic-BoldItalic.ttf) format('truetype');
+}
