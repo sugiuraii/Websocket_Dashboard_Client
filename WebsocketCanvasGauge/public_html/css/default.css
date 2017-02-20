@@ -21,7 +21,6 @@ body:before {
 }
 body {
     background-color: black;
-    background-image: url("../img/metal_mesh/side-slanting-mesh.png");
 } 
 
 button.button1 {
