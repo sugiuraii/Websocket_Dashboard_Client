@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+       <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="../../script/canvas_progressbar/CustomProgressBar_canvas.js"></script>
+        <script src="../../script/libs/jquery/jquery.js"></script>
+        <script src="../scripts/partscommon.js"></script>
+        <style>
+            @font-face {
+                font-family: 'NimbusSansL';
+                font-style: normal;
+                src: url(../../Fonts/nimbus-sans/NimbusSanL-Bol.otf) format('opentype');
+            }
+            @font-face {
+                font-family: 'Audiowide-Regular';
+                font-style: normal;
+                src: url(../../Fonts/AudioWide/Audiowide-Regular.ttf) format('truetype');
+            }
+            div.meter{
+                position:relative;
+            }
+            div.speed_label
+            {
+                position:absolute;
+                padding:0;
+                width: 600px;
+                height: 320px;
+                text-align: right;
+                margin: 0 auto; 
+                font-size: 340px;
+                letter-spacing: -0.06em;
+                color: white;
+                font-family:'NimbusSansL';
+                text-shadow: 0px 0px 20px #fff;
+                z-index : 2;
+            }
+            div.gear_label
+            {
+                position:absolute;
+                width: 200px;
+                height: 200px;
+                text-align: right;
+                margin: 0 auto; 
+                font-size: 180px;
+                color: white;
+                font-family:'Audiowide-Regular';
+                text-shadow: 0px 0px 20px #fff;
+                z-index : 2;
+            }
+        </style>
+        <script>
+            var _tacho_bar;
+            
+            this.tacho = 0;
+            this.speed = 0;            
+            this.neutral_sw = true;
+            
+            function initialize()
+            {
+                _tacho_bar = customprogressbar_initialize("tacho_bar","DigiTachoBar.png",0, 9000, false, false);
+            }
+            
+            value_update = function()
+            {
+                _tacho_bar.value = tacho;
+                _tacho_bar.draw();
+                updatValueTextLabel(speed, "#speed_label", 0);
+                var gearpos = calc_gear_pos(tacho, speed, neutral_sw);
+                updateStringTextLabel(calc_gear_pos(tacho, speed, neutral_sw), "#gearpos_label");
+            };
+            
+            onload = function() {
+                initialize();
+            };
+        </script>
+    </head>
+    <body>
+        <div class="meter">
+            <img src="DigiTachoBack.png" alt="" style="position:absolute;z-index:0">
+            <canvas id="tacho_bar" width="1154" height="492" style="position:absolute;z-index:1;top:13px;left:20px"></canvas>
+            <div id="speed_label" class="speed_label" style="top:200px;left:370px;text-align: right">0</div>
+            <div id="gearpos_label" class="gear_label" style="top:10px;left:25px;text-align: center">N</div>
+        </div>
+    </body>
+</html>

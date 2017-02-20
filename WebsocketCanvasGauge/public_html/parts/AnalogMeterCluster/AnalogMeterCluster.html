@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="../../script/canvas_progressbar/CircularProgressBar_canvas.js"></script>
+        <script src="../../script/canvas_progressbar/NeedleGauge_canvas.js"></script>
+        <script src="../../script/libs/jquery/jquery.js"></script>
+        <script src="../scripts/partscommon.js"></script>
+        <style>
+            @font-face {
+            font-family: 'Audiowide';
+            font-style: normal;
+            src: url(../../Fonts/AudioWide/Audiowide-Regular.ttf) format('truetype');
+            }
+            @font-face {
+            font-family: 'DSEG-Classic';
+            src: url(../../Fonts/DSEG_v030/DSEG14Classic-BoldItalic.ttf) format('truetype');
+            }
+            div.meter{
+                position:relative;
+            }
+            div.BigLCD_Text
+            {
+                position:absolute;
+                color: black;
+                font-family:'DSEG-Classic';
+                width:200px;
+            }
+            div.LCD_Text
+            {
+                position:absolute;
+                color: black;
+                font-family:'DSEG-Classic';
+                width:200px;
+            }
+        </style>
+        <script>
+            var _tacho_bar;
+            var _tacho_needle;
+            var _speed_needle;
+            var _watertemp_bar;
+            var _boost_needle;
+            
+            this.tacho = 0;
+            this.speed = 0;
+            this.watertemp = 0;
+            this.trip = 0.0;
+            this.fuel = 0.00;
+            this.gas_milage = 0.00;
+            this.boost = -1.0;
+            this.neutral_sw = false;
+            
+            function initialize()
+            {
+                _tacho_bar = circularprogressbar_initialize("tacho_bar","AnalogTachoMeter_Bar.png",0, 9000, 90, 270,false);
+                _watertemp_bar = circularprogressbar_initialize("watertemp_bar","AnalogSpeedMeter_Bar.png",60,140,165,120,false);
+                _tacho_needle = needlegauge_initialize("tacho_needle","AnalogTachoMeter_Needle.png",0,9000,90,270,false);
+                _speed_needle = needlegauge_initialize("speed_needle","AnalogSpeedMeter_Needle.png",0,280,75,210,false);
+                _boost_needle = needlegauge_initialize("boost_needle","BoostMeter_Needle.png",-1.0,2.0,30,90,true);
+            }
+            
+            value_update = function()
+            {
+                _tacho_bar.value = Math.round(tacho/90)*90;
+                _tacho_needle.value = tacho;
+                _speed_needle.value = speed;
+                _watertemp_bar.value = watertemp;
+                _boost_needle.value = boost;
+
+                _tacho_bar.draw();
+                _tacho_needle.draw();
+                _speed_needle.draw();
+                _watertemp_bar.draw();
+                _boost_needle.draw();
+                
+                updatValueTextLabel(fuel, "#fuel_label", 1);
+                updatValueTextLabel(trip, "#trip_label", 1);
+                updatValueTextLabel(gas_milage, "#gas_milage_label", 1);
+                updatValueTextLabel(speed, "#speed_label", 0);
+                updateStringTextLabel(calc_gear_pos(tacho, speed, neutral_sw), "#gearpos_label");
+            };
+            
+            onload = function() {
+                initialize();
+            };
+    </script>
+    </head>
+    <body>
+        <div id="tachometer" style="position:absolute;top:0px;left:345px;z-index:1">          
+            <img src="AnalogTachoMeter_Base.png" width="600" height="600" alt="" style="position:absolute;z-index:0">
+            <canvas id="tacho_bar" width="600" height="600" style="position:absolute;z-index:1;"></canvas>
+            <canvas id="tacho_needle" width="600" height="600" style="position:absolute;z-index:2;"></canvas>
+            <img src="AnalogTachoMeter_NeedleCap.png" width="600" height="600" alt="" style="position:absolute;z-index:3">
+            <div id="gas_milage_label" class="LCD_Text" style="top:323px;left:285px;text-align: right;font-size:35px;z-index:1">0.0</div>
+            <div id="trip_label" class="LCD_Text" style="top:367px;left:300px;text-align: right;font-size:32px;z-index:1">0.0</div>
+            <div id="fuel_label" class="LCD_Text" style="top:405px;left:300px;text-align: right;font-size:32px;z-index:1">0.0</div>
+            <div id="gearpos_label_back" class="BigLCD_Text" style="top:430px;left:205px;text-align: right;font-size:110px;color:grey;z-index:1">~</div>
+            <div id="gearpos_label" class="BigLCD_Text" style="top:430px;left:205px;text-align: right;font-size:110px;z-index:1">N</div>
+        </div>
+        <div id="speedmeter" style="position:absolute;top:0px;left:0px;z-index:0">          
+            <img src="AnalogSpeedMeter_Base.png" width="600" height="600" alt="" style="position:absolute;z-index:0">
+            <canvas id="watertemp_bar" width="600" height="600" style="position:absolute;z-index:1;"></canvas>
+            <canvas id="speed_needle" width="600" height="600" style="position:absolute;z-index:2;"></canvas>
+            <img src="AnalogSpeedMeter_NeedleCap.png" width="600" height="600" alt="" style="position:absolute;z-index:3">
+            <div id="speed_label_back" class="BigLCD_Text" style="top:378px;left:150px;text-align: right;font-size:55px;color:grey;z-index:1">~~~</div>
+            <div id="speed_label" class="BigLCD_Text" style="top:378px;left:150px;text-align: right;font-size:55px;z-index:1">0</div>
+            
+        </div>
+        <div id="boostmeter" style="position:absolute;top:80px;left:615px;z-index:0">          
+            <img src="BoostMeter_Base.png" width="441" height="441" alt="" style="position:absolute;z-index:0">
+            <canvas id="boost_needle" width="441" height="441" style="position:absolute;z-index:1;"></canvas>
+        </div>
+
+    </body>
+</html>
+

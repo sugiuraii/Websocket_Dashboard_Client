@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="../script/libs/jquery/jquery.js"></script>
+        <script>
+            
+            initialize_gauge = function()
+            {
+                $("#gauge_frame1")[0].contentWindow.value_max = 3.0;
+                $("#gauge_frame1")[0].contentWindow.value_min = -1.0;
+                $("#gauge_frame1")[0].contentWindow.title_str = "BOOST";
+                $("#gauge_frame1")[0].contentWindow.unit_str = "kgF/cm2";
+                $("#gauge_frame1")[0].contentWindow.scale_str1 ="-1.0";
+                $("#gauge_frame1")[0].contentWindow.scale_str2 ="0";
+                $("#gauge_frame1")[0].contentWindow.scale_str3 = "1.0";
+                $("#gauge_frame1")[0].contentWindow.scale_str4 = "2.0";
+                $("#gauge_frame1")[0].contentWindow.scale_str5 = "3.0";
+                $("#gauge_frame1")[0].contentWindow.redzone_offset_angle = 315;
+                $("#gauge_frame1")[0].contentWindow.redzone_full_angle = 45;
+                $("#gauge_frame1")[0].contentWindow.value_label_rounded = 1;
+                $("#gauge_frame1")[0].contentWindow.invert_fill = false;
+                $("#gauge_frame1")[0].contentWindow.initialize();
+            };
+            
+            function onTestClick()
+            {
+                $("#gauge_frame1")[0].contentWindow.value = 1.5;
+                $("#gauge_frame1")[0].contentWindow.value_update();
+            };
+            
+            onload = function()
+            {
+                initialize_gauge();
+            }
+            
+        </script>
+        <style>
+            iframe.meter { 
+                    position:static;
+                    border: none;
+                    -webkit-transform:scale(0.5,0.5);
+                    -moz-transform:scale(0.5,0.5);
+                    -ms-transform:scale(0.5,0.5);
+                    transform:scale(0.5,0.5);
+                    -webkit-transform-origin: 0 0;
+                    -moz-transform-origin: 0 0;
+                    -ms-transform-origin: 0 0;
+                    transform-origin: 0 0;
+                }
+        </style>
+    </head>
+    <body>
+        <input type="button" id="testButton" value="Test" onclick="onTestClick()"/>
+        <br>
+        <iframe class="meter" id="gauge_frame1" src="../parts/SemiCircularGauge/SemiCircularGauge.html" scrolling="no" width="799" height="584" seamless> </iframe><br>
+    </body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="../script/libs/jquery/jquery.js"></script>
+        <script>
+            
+            initialize_gauge = function()
+            {
+                
+            };
+            
+            function onTestClick()
+            {
+                $("#gauge_frame1")[0].contentWindow.tacho = 2050;
+                $("#gauge_frame1")[0].contentWindow.speed = 80;
+                //$("#gauge_frame1")[0].contentWindow.gearpos = 3;
+                $("#gauge_frame1")[0].contentWindow.neutral_sw = false;
+                $("#gauge_frame1")[0].contentWindow.value_update();
+            };
+            
+            onload = function()
+            {
+            }
+                 
+            
+        </script>
+        <style>
+            iframe.meter { 
+                    position:static;
+                    border: none;
+                }
+        </style>
+    </head>
+    <body>
+        <input type="button" id="testButton" value="Test" onclick="onTestClick()"/>
+        <br>
+        <iframe class="meter" id="gauge_frame1" src="../parts/DigiTachoBar/DigiTachoBar.html" scrolling="no" width="1200" height="606" seamless> </iframe><br>
+    </body>
+</html>

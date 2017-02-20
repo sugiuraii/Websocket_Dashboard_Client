@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="script/jquery.js"></script>
+        <script src="script/basic_parts/SVG_CustomProgressBar.js"></script>
+        <script src="script/basic_parts/SVG_CircularCustomProgressBar.js"></script>
+        <style>
+            @font-face {
+                font-family: 'Coolvetica';
+                src: url('./Font/Coolvetica-Regular.ttf');
+            }
+            .numeric_label
+            {
+                position:absolute;
+                width: 100px;
+                height: 30px;
+                top:70px;
+                left:70px;
+                text-align: center;
+                margin: 0 auto; 
+                font-size: 60px;
+                color: white;
+                font-family:'Coolvetica';
+                text-shadow: 0px 0px 10px #fff;
+            }
+            .title_label
+            {
+                position:absolute;
+                width: 240px;
+                height: 40px;
+                top:145px;
+                left:0px;
+                text-align: center;
+                margin: 0 auto; 
+                font-size: 24px;
+                color: white;
+                font-family:'Coolvetica';
+                //text-shadow: 0px 0px 20px #fff;
+            }
+            .unit_label
+            {
+                position:absolute;
+                width: 240px;
+                height: 40px;
+                top:120px;
+                left:0px;
+                text-align: center;
+                margin: 0 auto; 
+                font-size: 26px;
+                color: white;
+                font-family:'Coolvetica';
+                text-shadow: 0px 0px 20px #fff;
+            }
+            .scale_label
+            {
+                position:absolute;
+                width: 54px;
+                height: 40px;
+                margin: 0 auto; 
+                font-size: 28px;
+                color: white;
+                font-family:'Coolvetica';
+                text-shadow: 0px 0px 20px #fff;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            var _svg_obj_value;
+            var _svg_obj_redzone;
+                        
+            var value_max = 120;
+            var value_min = 0;
+            var title_str = "WATER TEMP";
+            var unit_str = "C";
+            var scale_str1 ="0";
+            var scale_str2 ="30";
+            var scale_str3 = "60";
+            var scale_str4 = "90";
+            var scale_str5 = "120";
+            var redzone_offset_angle = "315";
+            var redzone_full_angle = "45";
+            var value_label_rounded = 0;
+            
+            function background_initialize()
+            {
+                _svg_obj_redzone.offset_angle = redzone_offset_angle;
+                _svg_obj_redzone.full_angle = redzone_full_angle;
+                _svg_obj_redzone.update();
+
+                _svg_obj_value.max = value_max;
+                _svg_obj_value.min = value_min;
+                _svg_obj_value.update();
+
+                $("#title_label").text(title_str);
+                $("#unit_label").text(unit_str);
+                $("#scale_label1").text(scale_str1);
+                $("#scale_label2").text(scale_str2);
+                $("#scale_label3").text(scale_str3);
+                $("#scale_label4").text(scale_str4);
+                $("#scale_label5").text(scale_str5);   
+            };
+            
+            onload = function()
+            {
+                // ValueProgressBar
+                _svg_obj_value = new CircularCustomProgressBar_svg("svg_test1","layer6");
+                _svg_obj_value.circle_center_x = 122+178.9375;
+                _svg_obj_value.circle_center_y = 115+157;
+                _svg_obj_value.circle_radius_x = 80;
+                _svg_obj_value.circle_radius_y = 80;
+                _svg_obj_value.offset_angle = 180;
+                _svg_obj_value.full_angle = 180;
+                _svg_obj_value.anticlockwise = false;
+
+                //Redzonebar
+                _svg_obj_redzone = new CircularCustomProgressBar_svg("svg_test1","layer5");
+                _svg_obj_redzone.circle_center_x = 122+178.9375;
+                _svg_obj_redzone.circle_center_y = 115+157;
+                _svg_obj_redzone.circle_radius_x = 120;
+                _svg_obj_redzone.circle_radius_y = 120;
+                _svg_obj_redzone.value = 100;
+                _svg_obj_redzone.anticlockwise = false;
+                
+                background_initialize();
+            };
+
+            function set_value(new_value)
+            {
+               _svg_obj_value.value = new_value;
+               _svg_obj_value.update();
+               $("#num_label1").text(parseFloat(new_value).toFixed(value_label_rounded));
+            };
+        </script>
+        <object id="svg_test1" data="./SemiCircular_Gauge1.svg" type="image/svg+xml" width="240" height="175" style="position: absolute; left: 0px; bottom: 0px; z-index:0"></object>
+        <div class="numeric_label" id="num_label1">0.0</div>
+        <div class="title_label" id="title_label">WATER TEMP</div>
+        <div class="unit_label" id="unit_label">C</div>
+        <div class="scale_label" id="scale_label1" style="top:115px;left:10px;text-align: center;">0</div>
+        <div class="scale_label" id="scale_label2" style="top:30px;left:0px;text-align: right;">20</div>
+        <div class="scale_label" id="scale_label3" style="top:0px;left:92px;text-align: Center;">40</div>
+        <div class="scale_label" id="scale_label4" style="top:30px;left:187px;text-align: Left;">60</div>
+        <div class="scale_label" id="scale_label5" style="top:115px;left:180px;text-align: center;">80</div>
+    </body>
+</html>
