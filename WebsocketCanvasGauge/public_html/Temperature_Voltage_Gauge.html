@@ -1,117 +1,99 @@
 <!DOCTYPE html>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+Copyright (c) 2017, Sugiura. K
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 -->
 <html>
     <head>
         <title>WaterTemp/Batt Voltage</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./css/default.css" type="text/css">
         <script src="./script/libs/jquery/jquery.js"></script>
         <script src="./script/websocket/SSMCOMWebsocket.js"></script>
+        <script src="./script/meterpanel-common.js"></script>
         <script>
-            var ssm_ws = new SSMCOM_Websocket();
-            ssm_ws.onVALpacketReceived = function(val)
+            var gaugeFrameWaterTemp;
+            var gaugeFrameBatteryVoltage;
+            
+            var gaugeControl = new GaugeControl();
+            gaugeControl.addDebugMessageWindow();
+            gaugeControl.addControlPanel();
+            
+            gaugeControl.EnableSSMWebSocket();
+            gaugeControl.RegisterSSMParameterCode("Coolant_Temperature","Slow",function(value)
             {
-                for (var key in val)
-                {
-                    if(key === "Coolant_Temperature")
-                    {
-                        $("#gauge_frame1")[0].contentWindow.value = val[key];
-                        $("#gauge_frame1")[0].contentWindow.value_update();
-                    }
-                    else if (key === "Battery_Voltage")
-                    {
-                        $("#gauge_frame2")[0].contentWindow.value = val[key];
-                        $("#gauge_frame2")[0].contentWindow.value_update();
-                    }
-                }
-            };
-            ssm_ws.onERRpacketReceived = function(msg)
+                gaugeFrameWaterTemp.value = value;
+                gaugeFrameWaterTemp.value_update();
+            });
+            gaugeControl.RegisterSSMParameterCode("Battery_Voltage","Slow",function(value)
             {
-                $('#div_message').append(msg + "<br>");
-            };
-            ssm_ws.onRESpacketReceived = function(msg)
-            {
-                $('#div_message').append(msg + "<br>");
-            };
-            ssm_ws.onWebsocketError = function(msg)
-            {
-                $('#div_message').append(msg + "<br>");
-            };
-            ssm_ws.onWebsocketOpen = function()
-            {
-                $('#div_message').append('* Connection started<br/>');
-                setTimeout(
-                function(){
-                //ssm_ws.SendSSMCOMRead("Coolant_Temperature","FAST","true");
-                //ssm_ws.SendSSMCOMRead("Battery_Voltage","FAST","true");
-                ssm_ws.SendSSMCOMRead("Coolant_Temperature","SLOW","true");
-                ssm_ws.SendSSMCOMRead("Battery_Voltage","SLOW","true");
-                },5000);
-            };
-            ssm_ws.onWebsocketClose = function()
-            {
-                $('#div_message').append('* Connection closed<br/>');
-            };
+                gaugeFrameBatteryVoltage.value = value;
+                gaugeFrameBatteryVoltage.value_update();
+            });
             initialize_gauge1 = function()
             {
-                var gauge_id = "#gauge_frame1";
-                $(gauge_id)[0].contentWindow.value_max = 150;
-                $(gauge_id)[0].contentWindow.value_min = 50;
-                $(gauge_id)[0].contentWindow.title_str = "WATER TEMP";
-                $(gauge_id)[0].contentWindow.unit_str = "C";
-                $(gauge_id)[0].contentWindow.scale_str1 ="50";
-                $(gauge_id)[0].contentWindow.scale_str2 ="75";
-                $(gauge_id)[0].contentWindow.scale_str3 = "100";
-                $(gauge_id)[0].contentWindow.scale_str4 = "125";
-                $(gauge_id)[0].contentWindow.scale_str5 = "150";
-                $(gauge_id)[0].contentWindow.redzone_offset_angle = 292.5;
-                $(gauge_id)[0].contentWindow.redzone_full_angle = 67.5;
-                $(gauge_id)[0].contentWindow.value_label_rounded = 0;
-                $(gauge_id)[0].contentWindow.initialize();
+                var targetGauge = gaugeFrameWaterTemp;
+                targetGauge.value_max = 150;
+                targetGauge.value_min = 50;
+                targetGauge.title_str = "WATER TEMP";
+                targetGauge.unit_str = "C";
+                targetGauge.scale_str1 ="50";
+                targetGauge.scale_str2 ="75";
+                targetGauge.scale_str3 = "100";
+                targetGauge.scale_str4 = "125";
+                targetGauge.scale_str5 = "150";
+                targetGauge.redzone_offset_angle = 292.5;
+                targetGauge.redzone_full_angle = 67.5;
+                targetGauge.value_label_rounded = 0;
+                targetGauge.initialize();
             };
             
             initialize_gauge2 = function()
             {
-                var gauge_id = "#gauge_frame2";
-                $(gauge_id)[0].contentWindow.value_max = 15;
-                $(gauge_id)[0].contentWindow.value_min = 11;
-                $(gauge_id)[0].contentWindow.title_str = "BATTERY VOLT";
-                $(gauge_id)[0].contentWindow.unit_str = "V";
-                $(gauge_id)[0].contentWindow.scale_str1 ="11";
-                $(gauge_id)[0].contentWindow.scale_str2 ="12";
-                $(gauge_id)[0].contentWindow.scale_str3 = "13";
-                $(gauge_id)[0].contentWindow.scale_str4 = "14";
-                $(gauge_id)[0].contentWindow.scale_str5 = "15";
-                $(gauge_id)[0].contentWindow.redzone_offset_angle = 337.5;
-                $(gauge_id)[0].contentWindow.redzone_full_angle = 22.5;
-                $(gauge_id)[0].contentWindow.value_label_rounded = 1;
-                $(gauge_id)[0].contentWindow.initialize();
-            };
-            
-            
-            function onTestClick()
-            {
-                $("#gauge_frame1")[0].contentWindow.value = 75;
-                $("#gauge_frame1")[0].contentWindow.value_update();
-                $("#gauge_frame2")[0].contentWindow.value = 11.2;
-                $("#gauge_frame2")[0].contentWindow.value_update();
-            };
-            
-            function connectWebSocket()
-            {
-                ssm_ws.URL = "ws://"+location.hostname+":2013/";
-                ssm_ws.Connect();
-            };
-            
+                var targetGauge = gaugeFrameBatteryVoltage;
+                targetGauge.value_max = 15;
+                targetGauge.value_min = 11;
+                targetGauge.title_str = "BATTERY VOLT";
+                targetGauge.unit_str = "V";
+                targetGauge.scale_str1 ="11";
+                targetGauge.scale_str2 ="12";
+                targetGauge.scale_str3 = "13";
+                targetGauge.scale_str4 = "14";
+                targetGauge.scale_str5 = "15";
+                targetGauge.redzone_offset_angle = 337.5;
+                targetGauge.redzone_full_angle = 22.5;
+                targetGauge.value_label_rounded = 1;
+                targetGauge.initialize();
+            };            
             onload = function()
             {
+                gaugeFrameWaterTemp = $("#gauge_frame1")[0].contentWindow;
+                gaugeFrameBatteryVoltage = $("#gauge_frame2")[0].contentWindow;
                 initialize_gauge1();
                 initialize_gauge2();
-                connectWebSocket();
+                gaugeControl.ConnectWebSocket();
             };
             
         </script>
@@ -134,6 +116,5 @@ and open the template in the editor.
     
     <iframe class="meter" style="top:10px" id="gauge_frame1" src="./parts/SemiCircularGauge/SemiCircularGauge.html" scrolling="no" width="799" height="584" seamless> </iframe>
     <iframe class="meter" style="top:240px" id="gauge_frame2" src="./parts/SemiCircularGauge/SemiCircularGauge.html" scrolling="no" width="799" height="584" seamless> </iframe>
-    <div id="div_message" style="position:absolute;top:500px"></div>
     </body>
 </html>

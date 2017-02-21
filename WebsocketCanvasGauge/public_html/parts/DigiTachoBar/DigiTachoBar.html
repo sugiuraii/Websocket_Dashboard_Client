@@ -1,22 +1,42 @@
 <!DOCTYPE html>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+Copyright (c) 2017, Sugiura. K
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 -->
 <html>
     <head>
         <title>TODO supply a title</title>
-       <meta charset="UTF-8">
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        <script src="../../script/canvas_progressbar/CustomProgressBar_canvas.js"></script>
+        <script src="../../script/canvas_progressbar/CanvasGauge.js"></script>
         <script src="../../script/libs/jquery/jquery.js"></script>
         <script src="../scripts/partscommon.js"></script>
         <style>
             @font-face {
-                font-family: 'NimbusSansL';
+                font-family: 'FreeSans';
                 font-style: normal;
-                src: url(../../Fonts/nimbus-sans/NimbusSanL-Bol.otf) format('opentype');
+                src: url(../../Fonts/GNU-Freefonts/FreeSansBold.otf) format('opentype');
             }
             @font-face {
                 font-family: 'Audiowide-Regular';
@@ -24,20 +44,26 @@ and open the template in the editor.
                 src: url(../../Fonts/AudioWide/Audiowide-Regular.ttf) format('truetype');
             }
             div.meter{
-                position:relative;
+                position:absolute;
+                top:0;
+                left:0;
+                width:1200px;
+                height:606px;
+                background-image: url('./DigiTachoBack.png')
             }
             div.speed_label
             {
+                display:inline;
+                vertical-align: middle;
                 position:absolute;
-                padding:0;
                 width: 600px;
-                height: 320px;
+                height: 300px;
+                line-height: 300px;
                 text-align: right;
-                margin: 0 auto; 
-                font-size: 340px;
+                font-size: 330px;
                 letter-spacing: -0.06em;
                 color: white;
-                font-family:'NimbusSansL';
+                font-family:'FreeSans';
                 text-shadow: 0px 0px 20px #fff;
                 z-index : 2;
             }
@@ -46,8 +72,8 @@ and open the template in the editor.
                 position:absolute;
                 width: 200px;
                 height: 200px;
-                text-align: right;
-                margin: 0 auto; 
+                line-height: 200px;
+                text-align: center;
                 font-size: 180px;
                 color: white;
                 font-family:'Audiowide-Regular';
@@ -57,6 +83,8 @@ and open the template in the editor.
         </style>
         <script>
             var _tacho_bar;
+            var _speed_label_dom;
+            var _gearpos_label_dom;
             
             this.tacho = 0;
             this.speed = 0;            
@@ -64,16 +92,17 @@ and open the template in the editor.
             
             function initialize()
             {
-                _tacho_bar = customprogressbar_initialize("tacho_bar","DigiTachoBar.png",0, 9000, false, false);
+                _tacho_bar = initializeRectangularCanvasProgressBar("tacho_bar","DigiTachoBar.png",0, 9000, false, false);
+                _speed_label_dom = $("#speed_label").get(0);
+                _gearpos_label_dom = $("#gearpos_label").get(0);
             }
             
             value_update = function()
             {
                 _tacho_bar.value = tacho;
-                _tacho_bar.draw();
-                updatValueTextLabel(speed, "#speed_label", 0);
+                updatValueTextLabel(speed, _speed_label_dom, 0);
                 var gearpos = calc_gear_pos(tacho, speed, neutral_sw);
-                updateStringTextLabel(calc_gear_pos(tacho, speed, neutral_sw), "#gearpos_label");
+                updateStringTextLabel(gearpos, _gearpos_label_dom);
             };
             
             onload = function() {
@@ -83,10 +112,9 @@ and open the template in the editor.
     </head>
     <body>
         <div class="meter">
-            <img src="DigiTachoBack.png" alt="" style="position:absolute;z-index:0">
             <canvas id="tacho_bar" width="1154" height="492" style="position:absolute;z-index:1;top:13px;left:20px"></canvas>
-            <div id="speed_label" class="speed_label" style="top:200px;left:370px;text-align: right">0</div>
-            <div id="gearpos_label" class="gear_label" style="top:10px;left:25px;text-align: center">N</div>
+            <div id="speed_label" class="speed_label" style="top:320px;left:360px">0</div>
+            <div id="gearpos_label" class="gear_label" style="top:25px;left:30px;">N</div>
         </div>
     </body>
 </html>

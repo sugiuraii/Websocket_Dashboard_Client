@@ -1,67 +1,88 @@
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (c) 2017, Sugiura K.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
-function customprogressbar_initialize(canvas_id, canvas_img_name, value_min, value_max, vertical, invert_direction)
+function initializeRectangularCanvasProgressBar(canvas_id, canvas_img_name, value_min, value_max, vertical, invert_direction)
 {
-    var customprogressbar_canvas = document.getElementById(canvas_id);
-    var customprogressbar_img = new Image();
-    customprogressbar_img.src = canvas_img_name;
+    var canvas = document.getElementById(canvas_id);
+    var img = new Image();
+    img.src = canvas_img_name;
 
-    var customprogressbarobj = new CustomProgressBar_canvas(customprogressbar_canvas, customprogressbar_img);
-    customprogressbarobj.vertical = vertical;
-    customprogressbarobj.invert_direction = invert_direction;
-    customprogressbarobj.min = value_min;
-    customprogressbarobj.max = value_max;
-    customprogressbarobj.pixel_resolution = 16;
+    var progressbarObj = new RectangularCanvasProgressBar(canvas, img);
+    progressbarObj.vertical = vertical;
+    progressbarObj.invert_direction = invert_direction;
+    progressbarObj.min = value_min;
+    progressbarObj.max = value_max;
+    progressbarObj.pixel_resolution = 16;
 
-    customprogressbar_img.onload = function(){
-        customprogressbarobj.draw();
+    img.onload = function(){
+        progressbarObj.drawStart();
     };
-
-    return customprogressbarobj;
+    
+    return progressbarObj;
 }
 
-function circularprogressbar_initialize(canvas_id, canvas_img_name, value_min, value_max, offset_angle, full_angle, anticlockwise)
+function initializeCircularCanvasProgressBar(canvas_id, canvas_img_name, value_min, value_max, offset_angle, full_angle, anticlockwise)
 {
-    var canvas_elem = document.getElementById(canvas_id);
-    var image_elem = new Image();
-    image_elem.src = canvas_img_name;
+    var canvas = document.getElementById(canvas_id);
+    var img = new Image();
+    img.src = canvas_img_name;
 
-    var canvas_obj = new CircularProgressBar_canvas(canvas_elem,image_elem);
-    canvas_obj.offset_angle = offset_angle;
-    canvas_obj.full_angle = full_angle;
-    canvas_obj.angle_resolution = 3;
-    canvas_obj.anticlockwise = anticlockwise;
-    canvas_obj.min = value_min;
-    canvas_obj.max = value_max;
-    image_elem.onload = function(){
-        canvas_obj.draw();
+    var progressbarObj = new CircularCanvasProgressBar(canvas, img);
+    progressbarObj.offset_angle = offset_angle;
+    progressbarObj.full_angle = full_angle;
+    progressbarObj.angle_resolution = 3;
+    progressbarObj.anticlockwise = anticlockwise;
+    progressbarObj.min = value_min;
+    progressbarObj.max = value_max;
+    
+    img.onload = function(){
+        progressbarObj.drawStart();
     };
 
-    return canvas_obj;
+    return progressbarObj;
 }
 
-function needlegauge_initialize(canvas_id, canvas_img_name, value_min, value_max, offset_angle, full_angle, anticlockwise)
+function initializeNeedleCanvasGauge(canvas_id, canvas_img_name, value_min, value_max, offset_angle, full_angle, anticlockwise)
 {
-    var canvas_elem = document.getElementById(canvas_id);
-    var image_elem = new Image();
-    image_elem.src = canvas_img_name;
+    var canvas = document.getElementById(canvas_id);
+    var img = new Image();
+    img.src = canvas_img_name;
 
-    var canvas_obj = new NeedleGauge_canvas(canvas_elem,image_elem);
-    canvas_obj.offset_angle = offset_angle;
-    canvas_obj.full_angle = full_angle;
-    canvas_obj.anticlockwise = anticlockwise;
-    canvas_obj.min = value_min;
-    canvas_obj.max = value_max;
+    var gaugeObj = new NeedleCanvasGauge(canvas,img);
+    gaugeObj.offset_angle = offset_angle;
+    gaugeObj.full_angle = full_angle;
+    gaugeObj.anticlockwise = anticlockwise;
+    gaugeObj.min = value_min;
+    gaugeObj.max = value_max;
 
-    image_elem.onload = function(){
-        canvas_obj.draw();
+    img.onload = function(){
+        gaugeObj.drawStart();
     };
 
-    return canvas_obj;
+    return gaugeObj;
 }
 
 function calc_gear_pos(tacho, speed, neutral_sw)
@@ -93,14 +114,14 @@ function calc_gear_pos(tacho, speed, neutral_sw)
         return "-";  
 };
 
-function updatValueTextLabel(value, elementID, parseDigit)
+function updatValueTextLabel(value, element_dom, parseDigit)
 {
-    if(parseFloat(value).toFixed(parseDigit) !== $(elementID).text())
-        $(elementID).text(parseFloat(value).toFixed(parseDigit));
+    if(parseFloat(value).toFixed(parseDigit) !== element_dom.textContent)
+        element_dom.textContent = parseFloat(value).toFixed(parseDigit);
 };
 
-function updateStringTextLabel(string, elementID)
+function updateStringTextLabel(string, element_dom)
 {
-    if(string !== $(elementID).text())
-        $(elementID).text(string);
+    if(string !== element_dom.textContent)
+        element_dom.textContent = string;
 };

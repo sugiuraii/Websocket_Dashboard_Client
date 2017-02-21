@@ -1,8 +1,28 @@
 <!DOCTYPE html>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+Copyright (c) 2017, Sugiura. K
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 -->
 <html>
     <head>
@@ -15,22 +35,21 @@ and open the template in the editor.
         <script src="./script/meterpanel-common.js"></script>
 
         <script>
-            var defi_ws = null;
-            var ssm_ws = null;
-            var fueltrip_ws = new FUELTRIP_Websocket();
+            var gaugeFrame;
+            var gaugeControl = new GaugeControl();
+            gaugeControl.EnableFUELTRIPWebSocket();
+            gaugeControl.addDebugMessageWindow();
+            gaugeControl.addControlPanel();
             
-            setMeterDefault(defi_ws, ssm_ws, fueltrip_ws);
-            
-            fueltrip_ws.onMomentFUELTRIPpacketReceived = function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
+            gaugeControl.RegisterMOMENTFUELTRIPPacketRecivedEvent(function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
             {
-                $("#gauge_frame1")[0].contentWindow.total_fuel = total_gas;
-                $("#gauge_frame1")[0].contentWindow.total_trip = total_trip;
-                $("#gauge_frame1")[0].contentWindow.total_gasmilage = total_gasmilage;
-                $("#gauge_frame1")[0].contentWindow.milage_0 = moment_gasmilage;
-                $("#gauge_frame1")[0].contentWindow.value_update();
-            };
-            
-            fueltrip_ws.onSectFUELTRIPpacketReceived = function(sect_span, sect_trip, sect_gas, sect_gasmilage)
+                gaugeFrame.total_fuel = total_gas;
+                gaugeFrame.total_trip = total_trip;
+                gaugeFrame.total_gasmilage = total_gasmilage;
+                gaugeFrame.milage_0 = moment_gasmilage;
+                gaugeFrame.value_update();
+            });
+            gaugeControl.RegisterSECTFUELTRIPPacketRecivedEvent(function(sect_span, sect_trip, sect_gas, sect_gasmilage)
             {
                 var num_sects = sect_gasmilage.length;
                 var i;
@@ -40,56 +59,36 @@ and open the template in the editor.
                 {
                     sect_gasmilage_zerofill.unshift(0);
                 }
-                $("#gauge_frame1")[0].contentWindow.milage_30 = sect_gasmilage_zerofill[0];
-                $("#gauge_frame1")[0].contentWindow.milage_25 = sect_gasmilage_zerofill[1];
-                $("#gauge_frame1")[0].contentWindow.milage_20 = sect_gasmilage_zerofill[2];
-                $("#gauge_frame1")[0].contentWindow.milage_15 = sect_gasmilage_zerofill[3];
-                $("#gauge_frame1")[0].contentWindow.milage_10 = sect_gasmilage_zerofill[4];
-                $("#gauge_frame1")[0].contentWindow.milage_5 = sect_gasmilage_zerofill[5];              
-                $("#gauge_frame1")[0].contentWindow.value_update();
-            };
-            
-            fueltrip_ws.onWebsocketOpen = function()
-            {
-                $('#div_message').append('* Connection started<br/>');
-                setTimeout(
-                function(){
-                fueltrip_ws.SendSectSpan(300);
-                fueltrip_ws.SendSectStoreMax(6);
-                },5000);
-            };
-            fueltrip_ws.onWebsocketClose = function()
-            {
-                $('#div_message').append('* Connection closed<br/>');
-                $('#div_message').append('Reconnect after 5sec...<br/>');
-                setTimeout(
-                function(){
-                    fueltrip_ws.Connect();
-                }, 5000);                
-            };
+                gaugeFrame.milage_30 = sect_gasmilage_zerofill[0];
+                gaugeFrame.milage_25 = sect_gasmilage_zerofill[1];
+                gaugeFrame.milage_20 = sect_gasmilage_zerofill[2];
+                gaugeFrame.milage_15 = sect_gasmilage_zerofill[3];
+                gaugeFrame.milage_10 = sect_gasmilage_zerofill[4];
+                gaugeFrame.milage_5 = sect_gasmilage_zerofill[5];              
+                gaugeFrame.value_update();
+            });
             
             initialize_gauge = function()
             {
-                var gauge_id = "#gauge_frame1";
-                $(gauge_id)[0].contentWindow.milage_0 = 0;
-                $(gauge_id)[0].contentWindow.milage_5 = 0;
-                $(gauge_id)[0].contentWindow.milage_10 = 0;
-                $(gauge_id)[0].contentWindow.milage_15 = 0;
-                $(gauge_id)[0].contentWindow.milage_20 = 0;
-                $(gauge_id)[0].contentWindow.milage_25 = 0;
-                $(gauge_id)[0].contentWindow.milage_30 = 0;
-                $(gauge_id)[0].contentWindow.total_trip = 0;
-                $(gauge_id)[0].contentWindow.total_fuel = 0;
-                $(gauge_id)[0].contentWindow.total_gasmilage = 0;
+                gaugeFrame.milage_0 = 0;
+                gaugeFrame.milage_5 = 0;
+                gaugeFrame.milage_10 = 0;
+                gaugeFrame.milage_15 = 0;
+                gaugeFrame.milage_20 = 0;
+                gaugeFrame.milage_25 = 0;
+                gaugeFrame.milage_30 = 0;
+                gaugeFrame.total_trip = 0;
+                gaugeFrame.total_fuel = 0;
+                gaugeFrame.total_gasmilage = 0;
                 
-                $(gauge_id)[0].contentWindow.initialize();
+                gaugeFrame.initialize();
             };
                         
             onload = function()
             {
+                gaugeFrame = $("#gauge_frame1")[0].contentWindow;
                 initialize_gauge();
-                connectWebSocket(defi_ws, ssm_ws, fueltrip_ws);
-                setInterval("checkWebsocketStatus(defi_ws, ssm_ws, fueltrip_ws)", 1000);
+                gaugeControl.ConnectWebSocket();
             };
             
         </script>
@@ -113,15 +112,5 @@ and open the template in the editor.
         <center>
             <iframe class="meter" style="top:10px" id="gauge_frame1" src="./parts/MilageGraph/MilageGraph.html" scrolling="no" width="1280" height="660" seamless> </iframe>
         </center>
-        <br>
-        <div class="debug_message" id="div_message"></div>
-        <div class="websocket_statusBox" style="position:absolute;top:160px;right:0px">
-            <div style="color:white">Websocket Status</div> 
-            <div id="fueltrip_status" style="color: red">FUELTRIP</div>
-        </div>
-        
-        <button id="button_reset" class="button1" onclick="reset_fuel_trip()" style="position:absolute;top:0px;right:0px">Reset</button>
-        <button id="button_debug" class="button1" onclick="show_debug_msg()" style="position:absolute;top:80px;right:0px">Debug</button>
-
     </body>
 </html>

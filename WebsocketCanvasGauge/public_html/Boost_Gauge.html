@@ -1,83 +1,74 @@
 <!DOCTYPE html>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+Copyright (c) 2017, Sugiura. K
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 -->
 <html>
     <head>
         <title>Boost gauge demo</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./css/default.css" type="text/css">
         <script src="./script/libs/jquery/jquery.js"></script>
         <script src="./script/websocket/DefiCOMWebsocket.js"></script>
+        <script src="./script/meterpanel-common.js"></script>
         <script>
-            var defi_ws = new DefiCOM_Websocket();
-            defi_ws.onVALpacketReceived = function(val)
+            var gaugeFrame1;
+            var gaugeControl = new GaugeControl();
+            gaugeControl.addDebugMessageWindow();
+            gaugeControl.addControlPanel();
+
+            gaugeControl.EnableDefiWebSocket();
+            gaugeControl.RegisterDefiParameterCode("Manifold_Absolute_Pressure",function(val)
             {
-                for (var key in val)
-                {
-                    if(key === "Boost")
-                    {
-                        $("#gauge_frame1")[0].contentWindow.value = val[key];
-                        $("#gauge_frame1")[0].contentWindow.value_update();
-                    }
-                }
-            };
-            defi_ws.onERRpacketReceived = function(msg)
-            {
-                $('#div_message').append(msg + "<br>");
-            };
-            defi_ws.onRESpacketReceived = function(msg)
-            {
-                $('#div_message').append(msg + "<br>");
-            };
-            defi_ws.onWebsocketError = function(msg)
-            {
-                $('#div_message').append(msg + "<br>");
-            };
-            defi_ws.onWebsocketOpen = function()
-            {
-                $('#div_message').append('* Connection started<br/>');
-                setTimeout(
-                function(){
-                defi_ws.SendDefiWSSend("Boost","true");
-                },5000);
-            };
-            defi_ws.onWebsocketClose = function()
-            {
-                $('#div_message').append('* Connection closed<br/>');
-            };
+                gaugeFrame1.value = val;
+                gaugeFrame1.value_update();
+            });
             initialize_gauge1 = function()
             {
                 var gauge_id = "#gauge_frame1";
-                $(gauge_id)[0].contentWindow.value_max = 2.0;
-                $(gauge_id)[0].contentWindow.value_min = -1.0;
-                $(gauge_id)[0].contentWindow.title_str = "TURBO BOOST";
-                $(gauge_id)[0].contentWindow.unit_str = "x100Pa";
-                $(gauge_id)[0].contentWindow.scale_str1 ="-1.0";
-                $(gauge_id)[0].contentWindow.scale_str2 ="-0.5";
-                $(gauge_id)[0].contentWindow.scale_str3 = "0";
-                $(gauge_id)[0].contentWindow.scale_str4 = "0.5";
-                $(gauge_id)[0].contentWindow.scale_str5 = "1.0";
-                $(gauge_id)[0].contentWindow.scale_str6 = "1.5";
-                $(gauge_id)[0].contentWindow.scale_str7 = "2.0";
-                $(gauge_id)[0].contentWindow.redzone_offset_angle = 315;
-                $(gauge_id)[0].contentWindow.redzone_full_angle = 45;
-                $(gauge_id)[0].contentWindow.value_label_rounded = 1;
-                $(gauge_id)[0].contentWindow.initialize();
+                gaugeFrame1 = $(gauge_id)[0].contentWindow;
+                gaugeFrame1.value_max = 2.0;
+                gaugeFrame1.value_min = -1.0;
+                gaugeFrame1.title_str = "TURBO BOOST";
+                gaugeFrame1.unit_str = "x100Pa";
+                gaugeFrame1.scale_str1 ="-1.0";
+                gaugeFrame1.scale_str2 ="-0.5";
+                gaugeFrame1.scale_str3 = "0";
+                gaugeFrame1.scale_str4 = "0.5";
+                gaugeFrame1.scale_str5 = "1.0";
+                gaugeFrame1.scale_str6 = "1.5";
+                gaugeFrame1.scale_str7 = "2.0";
+                gaugeFrame1.redzone_offset_angle = 315;
+                gaugeFrame1.redzone_full_angle = 45;
+                gaugeFrame1.value_label_rounded = 1;
+                gaugeFrame1.initialize();
             };
-            
-            function connectWebSocket()
-            {
-                defi_ws.URL = "ws://"+location.hostname+":2012/";
-                defi_ws.Connect();
-            };
-            
             onload = function()
             {
                 initialize_gauge1();
-                connectWebSocket();
+                gaugeControl.ConnectWebSocket();
             };
             
         </script>
@@ -98,6 +89,5 @@ and open the template in the editor.
     </head>
     <body>
     <iframe class="meter" style="top:10px" id="gauge_frame1" src="./parts/FullCircularGauge/FullCircularGauge.html" scrolling="no" width="799" height="794" seamless> </iframe>
-    <div id="div_message" style="position:absolute;top:500px"></div>
     </body>
 </html>

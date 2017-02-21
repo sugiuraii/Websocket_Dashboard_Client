@@ -1,8 +1,28 @@
 <!DOCTYPE html>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+Copyright (c) 2017, Sugiura. K
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 -->
 <html>
     <head>
@@ -16,106 +36,60 @@ and open the template in the editor.
         <script src="./script/websocket/FUELTRIPWebsocket.js"></script>
         <script src="./script/meterpanel-common.js"></script>
         <script>
-            var defi_ws = new DefiCOM_Websocket();
-            var ssm_ws = new SSMCOM_Websocket();
-            var fueltrip_ws = new FUELTRIP_Websocket();
+            var gaugeControl = new GaugeControl();
+            gaugeControl.addDebugMessageWindow();
+            gaugeControl.addControlPanel();
             
-            setMeterDefault(defi_ws, ssm_ws, fueltrip_ws);
+            gaugeControl.EnableDefiWebSocket();
+            gaugeControl.EnableSSMWebSocket();
+            gaugeControl.EnableFUELTRIPWebSocket();
             
-            defi_ws.onVALpacketReceived = function(val)
+            gaugeControl.RegisterDefiParameterCode("Manifold_Absolute_Pressure",function(value)
             {
-                for (var key in val)
-                {
-                    if(key === "Boost")
-                    {
-                        $("#frame_boost")[0].contentWindow.value = val[key];
-                    }
-                    else if(key === "Tacho")
-                    {
-                        $("#frame_tacho")[0].contentWindow.tacho = val[key];
-                    }
-                }
+                $("#frame_boost")[0].contentWindow.value = value;
                 $("#frame_boost")[0].contentWindow.value_update();
-                $("#frame_tacho")[0].contentWindow.value_update();
-            };
-            defi_ws.onWebsocketOpen = function()
+            });
+            gaugeControl.RegisterDefiParameterCode("Engine_Speed",function(value)
             {
-                appendDebugMessage("Defi", "Connection started");
-                setTimeout(
-                function(){
-                defi_ws.SendDefiWSSend("Boost","true");
-                defi_ws.SendDefiWSSend("Tacho","true");
-                defi_ws.SendDefiWSInterval(localStorage.defiWSInterval);
-                $("#spinner_defiWSinterval").val(localStorage.defiWSInterval);
-                },5000);
-            };            
-            ssm_ws.onVALpacketReceived = function(val)
-            {
-                for (var key in val)
-                {
-                    if(key === "Coolant_Temperature")
-                    {
-                        $("#frame_watertemp")[0].contentWindow.value = val[key];
-                    }
-                    else if (key === "Vehicle_Speed")
-                    {
-                        $("#frame_tacho")[0].contentWindow.speed = val[key];
-                        
-                    }
-                    else if(key === "Neutral_Position_Switch")
-                    {
-                        if(val[key].toLowerCase() === "false")
-                            $("#frame_tacho")[0].contentWindow.neutral_sw = false;
-                        else
-                            $("#frame_tacho")[0].contentWindow.neutral_sw = true;
-                    }
-                    else if (key === "Battery_Voltage")
-                    {
-                        $("#frame_volt")[0].contentWindow.value = val[key];
-                    }
-                    else if (key === "Throttle_Opening_Angle")
-                    {
-                        $("#frame_throttle")[0].contentWindow.value = val[key];
-                    }
-                    else if (key === "Air_Fuel_Sensor_1")
-                    {
-                        $("#frame_AF")[0].contentWindow.value = val[key]*14.7;
-                    }
-                }
+                $("#frame_tacho")[0].contentWindow.tacho = value;
                 $("#frame_tacho")[0].contentWindow.value_update();
+            });
+            
+            gaugeControl.RegisterSSMParameterCode("Coolant_Temperature","Slow",function(value)
+            {
+                $("#frame_watertemp")[0].contentWindow.value = value;
                 $("#frame_watertemp")[0].contentWindow.value_update();
+            });
+            gaugeControl.RegisterSSMParameterCode("Vehicle_Speed","Slow+Fast",function(value)
+            {
+                $("#frame_tacho")[0].contentWindow.speed = value;
+                $("#frame_tacho")[0].contentWindow.value_update();
+            });
+            gaugeControl.RegisterSSMParameterCode("Neutral_Position_Switch","Slow+Fast",function(value)
+            {
+                if(value.toLowerCase() === "false")
+                    $("#frame_tacho")[0].contentWindow.neutral_sw = false;
+                else
+                    $("#frame_tacho")[0].contentWindow.neutral_sw = true;
+                
+                $("#frame_tacho")[0].contentWindow.value_update();
+            });
+            gaugeControl.RegisterSSMParameterCode("Battery_Voltage","Slow",function(value)
+            {
+                $("#frame_volt")[0].contentWindow.value = value;
                 $("#frame_volt")[0].contentWindow.value_update();
+            });
+            gaugeControl.RegisterSSMParameterCode("Throttle_Opening_Angle","Slow+Fast",function(value)
+            {
+                $("#frame_throttle")[0].contentWindow.value = value;
                 $("#frame_throttle")[0].contentWindow.value_update();
+            });
+            gaugeControl.RegisterSSMParameterCode("Air_Fuel_Sensor_1","Slow+Fast",function(value)
+            {
+                $("#frame_AF")[0].contentWindow.value = value*14.7;
                 $("#frame_AF")[0].contentWindow.value_update();
-            };
-            ssm_ws.onWebsocketOpen = function()
-            {
-                appendDebugMessage("SSM", "Connection started");
-                setTimeout(
-                function(){
-                ssm_ws.SendSSMCOMRead("Coolant_Temperature","SLOW","true");
-                ssm_ws.SendSSMCOMRead("Battery_Voltage","SLOW","true");
-                ssm_ws.SendSSMCOMRead("Vehicle_Speed","FAST","true");
-                ssm_ws.SendSSMCOMRead("Vehicle_Speed","SLOW","true");
-                ssm_ws.SendSSMCOMRead("Switch_P0x062","FAST","true");
-                ssm_ws.SendSSMCOMRead("Switch_P0x062","SLOW","true");
-                ssm_ws.SendSSMCOMRead("Throttle_Opening_Angle","FAST","true");
-                ssm_ws.SendSSMCOMRead("Throttle_Opening_Angle","SLOW","true");
-                ssm_ws.SendSSMCOMRead("Air_Fuel_Sensor_1","FAST","true");
-                ssm_ws.SendSSMCOMRead("Air_Fuel_Sensor_1","SLOW","true");
-                },5000);
-            };
-
-            fueltrip_ws.onWebsocketOpen = function()
-            {
-                appendDebugMessage("FUELTRIP", "Connection started");
-                setTimeout(
-                function(){
-                fueltrip_ws.SendSectSpan(300);
-                fueltrip_ws.SendSectStoreMax(6);
-                },5000);
-            };
-            fueltrip_ws.onMomentFUELTRIPpacketReceived = function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
+            });
+            gaugeControl.RegisterMOMENTFUELTRIPPacketRecivedEvent(function(moment_gasmilage, total_gas, total_trip, total_gasmilage)
             {
                 var gauge_id = "#frame_gasmilage";
                 $(gauge_id)[0].contentWindow.total_fuel = total_gas;
@@ -123,9 +97,8 @@ and open the template in the editor.
                 $(gauge_id)[0].contentWindow.total_gasmilage = total_gasmilage;
                 $(gauge_id)[0].contentWindow.milage_0 = moment_gasmilage;
                 $(gauge_id)[0].contentWindow.value_update();
-            };
-            
-            fueltrip_ws.onSectFUELTRIPpacketReceived = function(sect_span, sect_trip, sect_gas, sect_gasmilage)
+            });
+            gaugeControl.RegisterSECTFUELTRIPPacketRecivedEvent(function(sect_span, sect_trip, sect_gas, sect_gasmilage)
             {
                 var num_sects = sect_gasmilage.length;
                 var i;
@@ -143,7 +116,7 @@ and open the template in the editor.
                 $(gauge_id)[0].contentWindow.milage_10 = sect_gasmilage_zerofill[4];
                 $(gauge_id)[0].contentWindow.milage_5 = sect_gasmilage_zerofill[5];              
                 $(gauge_id)[0].contentWindow.value_update();
-            };                          
+            });
             
             function initializeGaugeBoost()
             {
@@ -328,16 +301,8 @@ and open the template in the editor.
                 initializeGaugeVoltage();
                 initializeGaugeThrottle();
                 initializeGaugeFuelTrip();
-                connectWebSocket(defi_ws, ssm_ws, fueltrip_ws);
-                setInterval("checkWebsocketStatus(defi_ws, ssm_ws, fueltrip_ws)", 1000);
+                gaugeControl.ConnectWebSocket();
             };
-            
-            function onDefiWSIntervalChange()
-            {
-                var interval = $("#spinner_defiWSinterval").val();
-                defi_ws.SendDefiWSInterval(interval);
-                localStorage.defiWSInterval = interval;
-            }
             
         </script>
         <style>
@@ -358,17 +323,5 @@ and open the template in the editor.
         <iframe class="meter" style="top:0px;left:905px;transform:scale(0.35)" id="frame_watertemp" src="./parts/SemiCircularGauge/SemiCircularGauge.html" scrolling="no" width="799" height="584" seamless> </iframe>
         <iframe class="meter" style="top:205px;left:905px;transform:scale(0.35)" id="frame_volt" src="./parts/SemiCircularGauge/SemiCircularGauge.html" scrolling="no" width="799" height="584" seamless> </iframe>
         <iframe class="meter" style="top:410px;left:905px;transform:scale(0.35)" id="frame_throttle" src="./parts/SemiCircularGauge/SemiCircularGauge.html" scrolling="no" width="799" height="584" seamless> </iframe>
-
-        <br>
-        <div class="debug_message" id="div_message" ></div>
-        <button id="button_reset" class="button1" onclick="reset_fuel_trip()" style="position:absolute;top:0px;right:0px">Reset</button>
-        <button id="button_debug" class="button1" onclick="show_debug_msg()" style="position:absolute;top:80px;right:0px">Debug</button>
-        <div class="websocket_statusBox" style="position:absolute;top:160px;right:0px">
-            <div style="color:white">Websocket Status</div> 
-            <div id="defi_status" style="color: red">Defi</div>
-            <div id="ssm_status" style="color: red">SSM</div>
-            <div id="fueltrip_status" style="color: red">FUELTRIP</div>
-            <div style="color:white">DefiWSInterval<br><input style="background:black;color:white" id="spinner_defiWSinterval" type="number" min="0" max="10" step="1" value ="0" onchange="onDefiWSIntervalChange()"/> </div>
-        </div>
     </body>
 </html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2017, Sugiura. K
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+-->
+<html>
+    <head>
+        <title>Simple Text Meter</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,height=device-height">
+        <link rel="stylesheet" href="./css/default.css" type="text/css">
+        <script src="./script/libs/jquery/jquery.js"></script>
+        <script src="./script/websocket/DefiCOMWebsocket.js"></script>
+        <script src="./script/websocket/SSMCOMWebsocket.js"></script>
+        <script src="./script/websocket/FUELTRIPWebsocket.js"></script>
+        <script src="./script/meterpanel-common.js"></script>
+        <script>
+            var gaugeControl = new GaugeControl();
+            gaugeControl.addDebugMessageWindow();
+            gaugeControl.addControlPanel();
+            
+            gaugeControl.EnableDefiWebSocket();
+            gaugeControl.EnableSSMWebSocket();
+            gaugeControl.RegisterDefiParameterCode(gaugeControl.DefiParameterCode.Manifold_Absolute_Pressure, function(value)
+            {
+                $("#BoostText").text(parseFloat(value).toFixed(2));
+            });
+            
+            gaugeControl.RegisterDefiParameterCode(gaugeControl.DefiParameterCode.Engine_Speed, function(value)
+            {
+                $("#TachoText").text(parseFloat(value).toFixed(0));                
+            });
+            
+            gaugeControl.RegisterSSMParameterCode(gaugeControl.SSMParameterCode.Vehicle_Speed, gaugeControl.ReadMode.SlowAndFast , function(value)
+            {
+                $("#SpeedText").text(parseFloat(value).toFixed(0));
+            });
+            gaugeControl.RegisterSSMParameterCode(gaugeControl.SSMParameterCode.Coolant_Temperature,gaugeControl.ReadMode.Slow ,function(value)
+            {
+                $("#WaterTempText").text(parseFloat(value).toFixed(0));                
+            });
+            gaugeControl.RegisterSSMParameterCode(gaugeControl.SSMParameterCode.Battery_Voltage,gaugeControl.ReadMode.Slow ,function(value)
+            {
+                $("#BatteryText").text(parseFloat(value).toFixed(2));                
+            });
+            gaugeControl.RegisterSSMParameterCode(gaugeControl.SSMParameterCode.Air_Fuel_Sensor_1,gaugeControl.ReadMode.SlowAndFast,function(value)
+            {
+                $("#AFText").text(parseFloat(value*14).toFixed(1));                
+            });
+
+            onload = function()
+            {
+                gaugeControl.ConnectWebSocket();
+            };
+        </script>
+        <style>
+            @font-face {
+                font-family: 'Audiowide';
+                font-style: normal;
+                src: url(./Fonts/AudioWide/Audiowide-Regular.ttf) format('truetype');
+            }
+            @font-face {
+                font-family: 'DSEG14';
+                font-style: normal;
+                src: url(./Fonts/DSEG_v030/DSEG14Classic-Bold.ttf) format('truetype');
+            }
+
+            .meterTable{
+            width: 100vw;
+            height: 100vh;
+            border-collapse: collapse;
+            border-right: 1px solid #999;
+
+            }
+            .meterTable th{
+            font-family:'Audiowide';
+            width: 33%;
+            height: 25%;
+            text-align: center;
+            vertical-align: top;
+            color: #fff;
+            background-color: #555;
+            border-left: 5px solid #ff6633; 
+            border-top: 1px solid #fff;
+            font-size: 4vw
+            }
+            .meterTable td{
+            font-family:'DSEG14';
+            width: 33%;
+            height: 25%;
+            text-align : center;
+            color: #fff;
+            background-color: #000;
+            border-bottom: 1px solid #999;
+            border-left: 1px solid #999;
+            font-size: 8vw
+            }
+        </style>
+    </head>
+    <body>
+        <table class="meterTable">
+            <tbody>
+                <tr>
+                    <th>
+                        Boost<br>[kgf/cm2]
+                    </th>
+                    <th>
+                        Tacho<br>[rpm]
+                    </th>
+                    <th>
+                        Speed<br>[km/h]
+                    </th>
+                </tr>
+                <tr>
+                    <td id="BoostText"></td>
+                    <td id="TachoText"></td>
+                    <td id="SpeedText"></td>
+                </tr>
+                <tr>
+                    <th>
+                        WaterTemp<br>[degC]
+                    </th>
+                    <th>
+                        Battery<br>[V]
+                    </th>
+                    <th>
+                        A/F
+                    </th>
+                </tr>
+                <tr>
+                    <td id="WaterTempText"></td>
+                    <td id="BatteryText"></td>
+                    <td id="AFText"></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

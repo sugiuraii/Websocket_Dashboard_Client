@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2017, Sugiura. K
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+-->
+<html>
+    <head>
+        <title>ELM327COM WebSocket Test</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="js/libs/jquery/jquery.js"></script>
+        <script src="js/WebSocketTest.js"></script>
+        <script>
+            var elm327_ws = new ELM327COM_Websocket();
+            elm327_ws.onVALpacketReceived = function(val)
+            {
+                $('#interval').text(elm327_ws.ValPacketIntervalTime.toFixed(2));
+                //clear
+                $('#div_val_data').html("");
+                for (var key in val)
+                {
+                    $('#div_val_data').append(key + " : " + val[key] + "<br>" );
+                }
+            };
+            elm327_ws.onERRpacketReceived = function(msg)
+            {
+                $('#div_err_data').append(msg + "<br>");
+            };
+            elm327_ws.onRESpacketReceived = function(msg)
+            {
+                $('#div_res_data').append(msg + "<br>");
+            };
+            elm327_ws.onWebsocketError = function(msg)
+            {
+                $('#div_ws_message').append(msg + "<br>");
+            };
+            elm327_ws.onWebsocketOpen = function()
+            {
+                $('#div_ws_message').append('* Connection open<br/>');
+
+                $('#sendmessagecontent_box').removeAttr("disabled");
+                $('#sendButton').removeAttr("disabled");
+                $('#connectButton').attr("disabled", "disabled");
+                $('#disconnectButton').removeAttr("disabled");  
+            };
+            elm327_ws.onWebsocketClose = function()
+            {
+                $('#div_ws_message').append('* Connection closed<br/>');
+                
+                $('#sendmessagecontent_box').attr("disabled", "disabled");
+                $('#sendButton').attr("disabled", "disabled");
+                $('#connectButton').removeAttr("disabled");
+                $('#disconnectButton').attr("disabled", "disabled");
+            };
+            
+            function connectWebSocket()
+            {
+                elm327_ws.URL = $("#serverURL_box").val();
+                elm327_ws.Connect();
+            };
+            
+            function disconnectWebSocket()
+            {
+                elm327_ws.Close();
+            };
+            
+            function input_SSM_COM_READ()
+            {
+                elm327_ws.SendSSMCOMRead($('#ssmcomcode_select').val(), $('#ssmcode_readmode').val(), $('#ssmcode_flag').val());
+            };
+            
+            function input_SSMCOM_SLOWREAD_INTERVAL()
+            {
+                elm327_ws.SendSSMSlowreadInterval($('#interval_SSMCOM_SLOWREAD_INTERVAL').val());
+            };
+        </script>
+    </head>
+    <body>
+        <div><h2>ELM327COM WebSocket Test</h2></div>
+        <hr>
+        Server URL : <input type="text" required="required" id="serverURL_box" /> 
+         <input type="button" id="connectButton" value="Connect" onclick="connectWebSocket()"/>
+         <input type="button" id="disconnectButton" value="Disconnect" onclick="disconnectWebSocket()"/><br>
+         <hr>
+        
+         <h4>ELM327_COM_READ</h4>
+         <ul>
+             <li>OBDIICode<br>
+                <select id="ssmcomcode_select">
+                    <option value="Engine_Load">Engine_Load</option>
+                    <option value="Coolant_Temperature">Coolant_Temperature</option>
+                    <option value="Air_Fuel_Correction_1">Air_Fuel_Correction_1</option>
+                    <option value="Air_Fuel_Learning_1">Air_Fuel_Learning_1</option>
+                    <option value="Air_Fuel_Correction_2">Air_Fuel_Correction_2</option>
+                    <option value="Air_Fuel_Learning_2">Air_Fuel_Learning_2</option>
+                    <option value="Fuel_Tank_Pressure">Fuel_Tank_Pressure</option>
+                    <option value="Manifold_Absolute_Pressure">Manifold_Absolute_Pressure</option>
+                    <option value="Engine_Speed">Engine_Speed</option>
+                    <option value="Vehicle_Speed">Vehicle_Speed</option>
+                    <option value="Ignition_Timing">Ignition_Timing</option>
+                    <option value="Intake_Air_Temperature">Intake_Air_Temperature</option>
+                    <option value="Mass_Air_Flow">Mass_Air_Flow</option>
+                    <option value="Throttle_Opening_Angle">Throttle_Opening_Angle</option>
+                    <option value="Run_time_since_engine_start">Run_time_since_engine_start</option>
+                    <option value="Distance_traveled_with_MIL_on">Distance_traveled_with_MIL_on</option>
+                    <option value="Fuel_Rail_Pressure">Fuel_Rail_Pressure</option>
+                    <option value="Fuel_Rail_Pressure_diesel">Fuel_Rail_Pressure_diesel</option>
+                    <option value="Commanded_EGR">Commanded_EGR</option>
+                    <option value="EGR_Error">EGR_Error</option>
+                    <option value="Commanded_evaporative_purge">Commanded_evaporative_purge</option>
+                    <option value="Fuel_Level_Input">Fuel_Level_Input</option>
+                    <option value="Number_of_warmups_since_codes_cleared">Number_of_warmups_since_codes_cleared</option>
+                    <option value="Distance_traveled_since_codes_cleared">Distance_traveled_since_codes_cleared</option>
+                    <option value="Evap_System_Vapor_Pressure">Evap_System_Vapor_Pressure</option>
+                    <option value="Atmospheric_Pressure">Atmospheric_Pressure</option>
+                    <option value="Catalyst_TemperatureBank_1_Sensor_1">Catalyst_TemperatureBank_1_Sensor_1</option>
+                    <option value="Catalyst_TemperatureBank_2_Sensor_1">Catalyst_TemperatureBank_2_Sensor_1</option>
+                    <option value="Catalyst_TemperatureBank_1_Sensor_2">Catalyst_TemperatureBank_1_Sensor_2</option>
+                    <option value="Catalyst_TemperatureBank_2_Sensor_2">Catalyst_TemperatureBank_2_Sensor_2</option>
+                    <option value="Battery_Voltage">Battery_Voltage</option>
+                    <option value="Absolute_load_value">Absolute_load_value</option>
+                    <option value="Command_equivalence_ratio">Command_equivalence_ratio</option>
+                    <option value="Relative_throttle_position">Relative_throttle_position</option>
+                    <option value="Ambient_air_temperature">Ambient_air_temperature</option>
+                    <option value="Absolute_throttle_position_B">Absolute_throttle_position_B</option>
+                    <option value="Absolute_throttle_position_C">Absolute_throttle_position_C</option>
+                    <option value="Accelerator_pedal_position_D">Accelerator_pedal_position_D</option>
+                    <option value="Accelerator_pedal_position_E">Accelerator_pedal_position_E</option>
+                    <option value="Accelerator_pedal_position_F">Accelerator_pedal_position_F</option>
+                    <option value="Commanded_throttle_actuator">Commanded_throttle_actuator</option>
+                    <option value="Time_run_with_MIL_on">Time_run_with_MIL_on</option>
+                    <option value="Time_since_trouble_codes_cleared">Time_since_trouble_codes_cleared</option>
+                    <option value="Ethanol_fuel_percent">Ethanol_fuel_percent</option>
+                </select>
+             </li>
+             <li>Read_mode<br>
+                <select id="ssmcode_readmode">
+                    <option value="FAST">FAST</option>
+                    <option value="SLOW">SLOW</option>
+                </select>
+             </li>
+             <li>Flag<br>
+                <select id="ssmcode_flag">
+                    <option value="true">true</option>
+                    <option value="false">false</option>
+                </select>
+             </li>
+             <li>
+                 <input type="button" id="button_SSM_COM_READ" value="input SSM_COM_READ" onclick="input_SSM_COM_READ()"/>
+             </li>
+         </ul>
+         
+        <h4>ELM327COM_SLOWREAD_INTERVAL</h4>
+         <ul>
+             <li>
+                <input type="number"  id="interval_SSMCOM_SLOWREAD_INTERVAL">
+             </li>
+            <li>
+                 <input type="button" id="button_SSMCOM_SLOWREAD_INTERVAL" value="input SSMCOM_SLOWREAD_INTERVAL" onclick="input_SSMCOM_SLOWREAD_INTERVAL()"/>
+             </li>
+         </ul>
+                  
+         <hr>
+         
+         <h3>VAL packet</h3>
+         <p><b>Interval time: </b><span id="interval">0</span> msec</p>
+         <div id="div_val_data"></div>
+         <hr>
+         <h3>ERR packet</h3>
+         <div id="div_err_data"></div>
+         <hr>
+         <h3>RES packet</h3>
+         <div id="div_res_data"></div>
+         <hr>
+         <h3>Websocket message</h3>
+         <div id="div_ws_message"></div>
+         <hr>
+    </body>
+</html>

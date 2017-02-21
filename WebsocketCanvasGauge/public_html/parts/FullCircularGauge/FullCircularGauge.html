@@ -1,24 +1,47 @@
 <!DOCTYPE html>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+Copyright (c) 2017, Sugiura. K
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 -->
 <html>
     <head>
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        <script src="../../script/canvas_progressbar/CircularProgressBar_canvas.js"></script>
+        <script src="../../script/canvas_progressbar/CanvasGauge.js"></script>
         <script src="../../script/libs/jquery/jquery.js"></script>
         <style>
             @font-face {
-                font-family: 'NimbusSansL';
+                font-family: 'FreeSans';
                 font-style: normal;
-                src: url(../../Fonts/nimbus-sans/NimbusSanL-Bol.otf) format('opentype');
+                src: url(../../Fonts/GNU-Freefonts/FreeSansBold.otf) format('opentype');
             }
             div.meter{
                 position:relative;
+                width:799px;
+                height:794px;
+                background-image: url('./FullCircularGauge_Back.png');
             }
             div.numeric_label
             {
@@ -32,7 +55,7 @@ and open the template in the editor.
                 font-size: 150px;
                 letter-spacing: -0.06em;
                 color: white;
-                font-family:'NimbusSansL';
+                font-family:'FreeSans';
                 text-shadow: 0px 0px 20px #fff;
                 z-index : 5;
             }
@@ -47,7 +70,7 @@ and open the template in the editor.
                 margin: 0 auto; 
                 font-size: 80px;
                 color: white;
-                font-family:'NimbusSansL';
+                font-family:'FreeSans';
                 text-shadow: 0px 0px 20px #fff;
             }
             div.unit_label
@@ -61,7 +84,7 @@ and open the template in the editor.
                 margin: 0 auto; 
                 font-size: 54px;
                 color: white;
-                font-family:'NimbusSansL';
+                font-family:'FreeSans';
                 text-shadow: 0px 0px 20px #fff;
                 z-index : 5;
             }
@@ -74,7 +97,7 @@ and open the template in the editor.
                 font-size: 70px;
                 letter-spacing: -0.05em;
                 color: white;
-                font-family:'NimbusSansL';
+                font-family:'FreeSans';
                 text-shadow: 0px 0px 20px #fff;
             }
         </style>
@@ -84,6 +107,8 @@ and open the template in the editor.
             var _greenzone_bar1;
             
             var _value_bar1;
+            
+            var _num_label;
             
             this.value_max = 2.0;
             this.value_min = -1.0;
@@ -111,7 +136,7 @@ and open the template in the editor.
             this.yellowzone_enable = false;
             this.greenzone_enable = false;
             
-            this.angle_resolution = 1;
+            this.angle_resolution = 0.5;
             
             this.value=0.5;
 
@@ -147,7 +172,7 @@ and open the template in the editor.
                 var redzone_img = new Image();
                 redzone_img.src = "FullCircularGauge_RedZone_Bar.png";
 
-                _redzone_bar1 = new CircularProgressBar_canvas(redzone_canvas,redzone_img);
+                _redzone_bar1 = new CircularCanvasProgressBar(redzone_canvas,redzone_img);
                 // Properties and Default values
                 _redzone_bar1.offset_angle = redzone_offset_angle;
                 _redzone_bar1.full_angle = redzone_full_angle;
@@ -165,7 +190,7 @@ and open the template in the editor.
                 _redzone_bar1.offset_y = 0;
                 
                 redzone_img.onload = function(){
-                    _redzone_bar1.draw();
+                   _redzone_bar1.drawOneTime();
                 };
             }
             
@@ -175,7 +200,7 @@ and open the template in the editor.
                 var greenzone_img = new Image();
                 greenzone_img.src = "FullCircularGauge_GreenZone_Bar.png";
 
-                _greenzone_bar1 = new CircularProgressBar_canvas(greenzone_canvas,greenzone_img);
+                _greenzone_bar1 = new CircularCanvasProgressBar(greenzone_canvas,greenzone_img);
                 // Properties and Default values
                 _greenzone_bar1.offset_angle = greenzone_offset_angle;
                 _greenzone_bar1.full_angle = greenzone_full_angle;
@@ -193,7 +218,7 @@ and open the template in the editor.
                 _greenzone_bar1.offset_y = 0;
                 
                 greenzone_img.onload = function(){
-                    _greenzone_bar1.draw();
+                    _greenzone_bar1.drawOneTime();
                 };
             }
             
@@ -203,7 +228,7 @@ and open the template in the editor.
                 var yellowzone_img = new Image();
                 yellowzone_img.src = "FullCircularGauge_YellowZone_Bar.png";
 
-                _yellowzone_bar1 = new CircularProgressBar_canvas(yellowzone_canvas,yellowzone_img);
+                _yellowzone_bar1 = new CircularCanvasProgressBar(yellowzone_canvas,yellowzone_img);
                 // Properties and Default values
                 _yellowzone_bar1.offset_angle = yellowzone_offset_angle;
                 _yellowzone_bar1.full_angle = yellowzone_full_angle;
@@ -221,7 +246,7 @@ and open the template in the editor.
                 _yellowzone_bar1.offset_y = 0;
                 
                 yellowzone_img.onload = function(){
-                    _yellowzone_bar1.draw();
+                    _yellowzone_bar1.drawOneTime();
                 };
             }
             
@@ -231,7 +256,7 @@ and open the template in the editor.
                 var value_img = new Image();
                 value_img.src = "FullCircularGauge_ValueBar.png";
 
-                _value_bar1 = new CircularProgressBar_canvas(value_canvas,value_img);
+                _value_bar1 = new CircularCanvasProgressBar(value_canvas,value_img);
                 // Properties and Default values
                 _value_bar1.offset_angle = 90;
                 _value_bar1.full_angle = 270;
@@ -251,7 +276,7 @@ and open the template in the editor.
                 _value_bar1.angle_resolution = this.angle_resolution;
                 
                 value_img.onload = function(){
-                    _value_bar1.draw();
+                    _value_bar1.drawStart();
                 };
                 
             }
@@ -259,20 +284,18 @@ and open the template in the editor.
             function value_update()
             {
                 _value_bar1.value = value;
-                _value_bar1.draw();
-                if(parseFloat(this.value).toFixed(value_label_rounded) !== $("#num_label1").text())
-                    $("#num_label1").text(parseFloat(this.value).toFixed(value_label_rounded)); 
+                var parsedVal = parseFloat(this.value).toFixed(value_label_rounded);
+                if(parsedVal !== _num_label_dom.textContent)
+                    _num_label_dom.textContent = parsedVal;
             }
             
             onload = function() {
-                //initialize();
-                //value_update();
+                _num_label_dom = $("#num_label1").get(0);
             };
     </script>
     </head>
     <body>
         <div class="meter">          
-            <img src="FullCircularGauge_Back.png" alt="" style="position:absolute;z-index:0">
             <canvas id="greenzone_bar1" width="799" height="794" style="position:absolute;z-index:1"></canvas>
             <canvas id="yellowzone_bar1" width="799" height="794" style="position:absolute;z-index:1"></canvas>
             <canvas id="redzone_bar1" width="799" height="794" style="position:absolute;z-index:1"></canvas>
