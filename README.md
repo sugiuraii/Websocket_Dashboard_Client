@@ -1,2 +1,1 @@
-# Websocket_Dashboard_Client
-Javascript/Canvas/Websocket client of DefiSSMCOM
+# This repository is obsolete. Recent code is avaliable on [sugiuraii/WebSocketGaugeClientNeo](https://github.com/sugiuraii/WebSocketGaugeClientNeo)
